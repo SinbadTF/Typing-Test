@@ -1,0 +1,157 @@
+body {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+.lesson-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.lesson-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.lesson-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    color: #adb5bd;
+}
+
+.keyboard {
+    margin: 30px auto;
+    max-width: 800px;
+    background: rgba(35, 35, 35, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.key {
+    width: 50px;
+    height: 50px;
+    background: rgba(25, 25, 25, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-size: 1.2rem;
+    transition: all 0.1s ease;
+}
+
+.key.active {
+    background: linear-gradient(45deg, #007bff, #00ff88);
+    color: white;
+    transform: translateY(2px);
+    box-shadow: 0 0 15px rgba(0,123,255,0.5);
+}
+
+.key.space {
+    width: 300px;
+}
+
+.typing-area {
+    background: rgba(35, 35, 35, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+.text-display {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    min-height: 100px;
+    color: #adb5bd;
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    background: rgba(25, 25, 25, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Add other existing styles from the previous lesson.css */
+.text-display .current {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #fff;
+}
+
+.text-display .correct {
+    color: #28a745;
+}
+
+.text-display .incorrect {
+    color: #dc3545;
+    text-decoration: underline;
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    background: rgba(25, 25, 25, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.lesson-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #007bff, #00ff88);
+    border: none;
+}
+
+.btn-primary:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
