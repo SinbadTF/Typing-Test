@@ -25,6 +25,7 @@ function getLessons($pdo, $level) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Function to check if the previous lesson is completed by AHH
 function isPreviousLessonCompleted($lessons, $currentLessonNumber) {
     if ($currentLessonNumber <= 1) return true;
     foreach ($lessons as $lesson) {
