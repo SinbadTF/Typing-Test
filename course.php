@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'config/database.php';
 
-// Update the getLessons function
+// လျှောက်ရေးပါသည်
 function getLessons($pdo, $level) {
     $stmt = $pdo->prepare("SELECT l.*, 
         (SELECT lp.status FROM lesson_progress lp 
