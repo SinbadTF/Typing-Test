@@ -1,3 +1,4 @@
+/*Adding commend by Htet Mon Myint*/
 <?php
 session_start();
 require_once 'config/database.php';
