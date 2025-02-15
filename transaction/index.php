@@ -1,3 +1,13 @@
+<?php
+session_start();
+require_once '../config/database.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -145,8 +155,7 @@
         transform: scale(1.1) rotate(2deg);
         filter: brightness(1.4) drop-shadow(0 20px 30px rgba(0,123,255,0.5));
     }
-        transition: all 0.3s ease;
-    }
+        
     .preview-image {
         border-radius: 15px;
         background: rgba(35, 35, 35, 0.7);
@@ -180,7 +189,10 @@
                 </div>
             <?php elseif ($_GET['status'] === 'error'): ?>
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                    Error submitting transaction. Please try again.
+                    <?php 
+                        $error_message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : 'Error submitting transaction. Please try again.';
+                        echo $error_message;
+                    ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
@@ -206,8 +218,8 @@
             </div>
             
             <form action="process.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                 
-
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
