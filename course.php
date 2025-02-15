@@ -55,17 +55,36 @@ $advancedLessons = getLessons($pdo, 'advanced');
             padding-bottom: 50px;
         }
         .navbar {
-            background: rgba(25, 25, 25, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    background: rgba(25, 25, 25, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+        /* Adjust main content spacing */
+
         .course-section {
             padding: 80px 0;
             max-width: 1000px;
             margin: 0 auto;
         }
+        .section-title {
+            top: 100px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+  
         .level-card {
             background: rgba(35, 35, 35, 0.95);
             border-radius: 20px;
@@ -147,15 +166,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
             background: rgba(40, 167, 69, 0.1);
             color: #28a745;
         }
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            background: linear-gradient(45deg, #007bff, #00ff88);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-        }
+    
         .lesson-stats {
     margin-bottom: 10px;
     font-size: 0.9rem;
@@ -197,144 +208,211 @@ $advancedLessons = getLessons($pdo, 'advanced');
     background: rgba(108, 117, 125, 0.1);
     color: #6c757d;
 }
+
+.course-container {
+    display: flex;
+    gap: 2rem;
+    padding: 0px;
+    flex-direction: row;
+}
+
+/* Adjust level navigation positioning */
+.level-nav {
+    position: sticky;
+    top: 100px; /* Position below fixed navbar */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: fit-content;
+}
+
+
+.level-btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(35, 35, 35, 0.95);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.level-btn:hover {
+    background: rgba(45, 45, 45, 0.95);
+    transform: translateX(5px);
+}
+
+.lessons-container {
+    flex: 1;
+}
+
+.level-section {
+    margin-bottom: 2rem;
+    scroll-margin-top: 20px;
+}
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
 
-    <div class="container">
-        <div class="course-section">
-            <h1 class="section-title">Typing Course</h1>
-            
-            <!-- Basic Level -->
-            <div class="level-card">
-                <div class="level-header">
-                    <div class="level-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h2 class="level-title">Basic Level</h2>
-                </div>
-                
-                <!-- Modify the lesson card section in each level -->
-                <div class="lesson-grid">
-                    <?php foreach($basicLessons as $lesson): 
-                        $isLocked = !isPreviousLessonCompleted($basicLessons, $lesson['lesson_number']);
-                    ?>
-                    <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
-                        <?php if (!$isLocked): ?>
-                        <a href="lesson.php?level=basic&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
-                           class="lesson-link">
-                        <?php endif; ?>
-                            <div class="lesson-number">
-                                <?php echo $lesson['lesson_number']; ?>
-                                <?php if ($isLocked): ?>
-                                    <i class="fas fa-lock"></i>
-                                <?php endif; ?>
-                            </div>
-                            <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
-                            <?php if ($lesson['best_wpm']): ?>
-                            <div class="lesson-stats">
-                                <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
-                                <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
-                            </div>
-                            <?php endif; ?>
-                            <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
-                                <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
-                            </div>
-                        <?php if (!$isLocked): ?>
-                        </a>
-                        <?php endif; ?>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-                
+        <h1 class="section-title">Typing Course</h1>
+        <div class="container">
+        <div class="course-container">
+            <!-- Left Column: Navigation -->
+            <div class="level-nav">
+                <button class="level-btn" data-level="basic">Basic Level</button>
+                <button class="level-btn" data-level="intermediate">Intermediate Level</button>
+                <button class="level-btn" data-level="advanced">Advanced Level</button>
             </div>
 
-            <!-- Intermediate Level -->
-            <!-- Replace the Intermediate Level section -->
-            <div class="level-card">
-                <div class="level-header">
-                    <div class="level-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h2 class="level-title">Intermediate Level</h2>
-                </div>
-                <div class="lesson-grid">
-                    <?php foreach($intermediateLessons as $lesson): 
-                        $isLocked = !isPreviousLessonCompleted($intermediateLessons, $lesson['lesson_number']);
-                    ?>
-                    <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
-                        <?php if (!$isLocked): ?>
-                        <a href="lesson.php?level=intermediate&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
-                           class="lesson-link">
-                        <?php endif; ?>
-                            <div class="lesson-number">
-                                <?php echo $lesson['lesson_number']; ?>
-                                <?php if ($isLocked): ?>
-                                    <i class="fas fa-lock"></i>
+            <!-- Right Column: Lessons -->
+            <div class="lessons-container">
+                <div id="basic-level" class="level-section">
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h2 class="level-title">Basic Level</h2>
+                        </div>
+                        
+                        <!-- Modify the lesson card section in each level -->
+                        <div class="lesson-grid">
+                            <?php foreach($basicLessons as $lesson): 
+                                $isLocked = !isPreviousLessonCompleted($basicLessons, $lesson['lesson_number']);
+                            ?>
+                            <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
+                                <?php if (!$isLocked): ?>
+                                <a href="lesson.php?level=basic&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
+                                   class="lesson-link">
+                                <?php endif; ?>
+                                    <div class="lesson-number">
+                                        <?php echo $lesson['lesson_number']; ?>
+                                        <?php if ($isLocked): ?>
+                                            <i class="fas fa-lock"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
+                                    <?php if ($lesson['best_wpm']): ?>
+                                    <div class="lesson-stats">
+                                        <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
+                                        <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
+                                    </div>
+                                    <?php endif; ?>
+                                    <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
+                                        <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
+                                    </div>
+                                <?php if (!$isLocked): ?>
+                                </a>
                                 <?php endif; ?>
                             </div>
-                            <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
-                            <?php if ($lesson['best_wpm']): ?>
-                            <div class="lesson-stats">
-                                <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
-                                <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
-                            </div>
-                            <?php endif; ?>
-                            <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
-                                <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
-                            </div>
-                        <?php if (!$isLocked): ?>
-                        </a>
-                        <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                        
                     </div>
-                    <?php endforeach; ?>
                 </div>
-            </div>
 
-            <!-- Advanced Level -->
-            <div class="level-card">
-                <div class="level-header">
-                    <div class="level-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <h2 class="level-title">Advanced Level</h2>
-                </div>
-                <div class="lesson-grid">
-                    <?php foreach($advancedLessons as $lesson): 
-                        $isLocked = !isPreviousLessonCompleted($advancedLessons, $lesson['lesson_number']);
-                    ?>
-                    <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
-                        <?php if (!$isLocked): ?>
-                        <a href="lesson.php?level=advanced&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
-                           class="lesson-link">
-                        <?php endif; ?>
-                            <div class="lesson-number">
-                                <?php echo $lesson['lesson_number']; ?>
-                                <?php if ($isLocked): ?>
-                                    <i class="fas fa-lock"></i>
+                <div id="intermediate-level" class="level-section">
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h2 class="level-title">Intermediate Level</h2>
+                        </div>
+                        <div class="lesson-grid">
+                            <?php foreach($intermediateLessons as $lesson): 
+                                $isLocked = !isPreviousLessonCompleted($intermediateLessons, $lesson['lesson_number']);
+                            ?>
+                            <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
+                                <?php if (!$isLocked): ?>
+                                <a href="lesson.php?level=intermediate&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
+                                   class="lesson-link">
+                                <?php endif; ?>
+                                    <div class="lesson-number">
+                                        <?php echo $lesson['lesson_number']; ?>
+                                        <?php if ($isLocked): ?>
+                                            <i class="fas fa-lock"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
+                                    <?php if ($lesson['best_wpm']): ?>
+                                    <div class="lesson-stats">
+                                        <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
+                                        <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
+                                    </div>
+                                    <?php endif; ?>
+                                    <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
+                                        <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
+                                    </div>
+                                <?php if (!$isLocked): ?>
+                                </a>
                                 <?php endif; ?>
                             </div>
-                            <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
-                            <?php if ($lesson['best_wpm']): ?>
-                            <div class="lesson-stats">
-                                <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
-                                <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
-                            </div>
-                            <?php endif; ?>
-                            <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
-                                <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
-                            </div>
-                        <?php if (!$isLocked): ?>
-                        </a>
-                        <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                    <?php endforeach; ?>
+                </div>
+
+                <div id="advanced-level" class="level-section">
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h2 class="level-title">Advanced Level</h2>
+                        </div>
+                        <div class="lesson-grid">
+                            <?php foreach($advancedLessons as $lesson): 
+                                $isLocked = !isPreviousLessonCompleted($advancedLessons, $lesson['lesson_number']);
+                            ?>
+                            <div class="lesson-card <?php echo $isLocked ? 'locked' : ''; ?>">
+                                <?php if (!$isLocked): ?>
+                                <a href="lesson.php?level=advanced&lesson=<?php echo $lesson['lesson_number']; ?>&id=<?php echo $lesson['id']; ?>" 
+                                   class="lesson-link">
+                                <?php endif; ?>
+                                    <div class="lesson-number">
+                                        <?php echo $lesson['lesson_number']; ?>
+                                        <?php if ($isLocked): ?>
+                                            <i class="fas fa-lock"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
+                                    <?php if ($lesson['best_wpm']): ?>
+                                    <div class="lesson-stats">
+                                        <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
+                                        <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
+                                    </div>
+                                    <?php endif; ?>
+                                    <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">
+                                        <?php echo $isLocked ? 'Locked' : ($lesson['status'] ? ucfirst($lesson['status']) : 'Start'); ?>
+                                    </div>
+                                <?php if (!$isLocked): ?>
+                                </a>
+                                <?php endif; ?>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.querySelectorAll('.level-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const level = button.getAttribute('data-level');
+            document.getElementById(`${level}-level`).scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+    </script>
 </body>
 </html>
