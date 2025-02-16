@@ -80,6 +80,18 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         .words {
             user-select: none;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            min-height: 120px;
+            max-height: 150px !important;
+            overflow-y: auto !important;
+            position: relative;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(38, 40, 43, 0.5);
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .letter {
@@ -465,6 +477,26 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             align-items: center;
             gap: 8px;
         }
+
+        /* Add scrollbar styling */
+        .words::-webkit-scrollbar {
+            width: 8px !important;
+            display: block !important;
+        }
+
+        .words::-webkit-scrollbar-track {
+            background: rgba(38, 40, 43, 0.95);
+            border-radius: 4px;
+        }
+
+        .words::-webkit-scrollbar-thumb {
+            background: #646669;
+            border-radius: 4px;
+        }
+
+        .words::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
+        }
     </style>
 </head>
 <body>
@@ -497,7 +529,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         <div class="typing-area">
             <div class="words" id="words"></div>
-            <input type="text" class="input-field" id="input-field" autofocus>
+            <input type="text" class="input-field" id="input-field">
         </div>
 
         <div class="keyboard">
@@ -532,7 +564,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="key" data-key="p">p</div>
                 <div class="key" data-key="[">[</div>
                 <div class="key" data-key="]">]</div>
-                <div class="key" data-key="\">\</div>
+                <div class="key" data-key="\">]\</div>
             </div>
             <div class="keyboard-row">
                 <div class="key caps special" data-key="CapsLock">caps</div>
@@ -595,9 +627,109 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             document.getElementById('capsWarning').classList.remove('show');
         }
     });
+        // Get the lesson text from the database as a plain string
         const lessonText = <?php echo json_encode($lesson['content']); ?>;
-        const lessonId = <?php echo $lesson['id']; ?>;
-        const userId = <?php echo $_SESSION['user_id']; ?>;
+        
+        // Initialize variables
+        let isTyping = false;
+        let currentIndex = 0;
+        let startTime;
+        let timer;
+        let totalChars = 0;
+        let mistakes = 0;
+        let lastScrollPosition = 0;
+        let typedCharCount = 0; // New counter for typed characters
+        const CHARS_BEFORE_SCROLL = 40; // Scroll every 20 characters typed
+
+        // Initialize the words container with the lesson text
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordsContainer = document.getElementById('words');
+            const inputField = document.getElementById('input-field');
+            
+            // Force scroll settings
+            wordsContainer.style.overflowY = 'auto';
+            wordsContainer.style.maxHeight = '150px';
+            
+            // Handle focus properly
+            setTimeout(() => {
+                inputField.focus();
+            }, 100);
+        });
+
+        // Add updateTimer function
+        function updateTimer() {
+            const timeElapsed = Math.round((new Date() - startTime) / 1000);
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            document.getElementById('time').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Add updateStats function
+        function updateStats() {
+            const timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
+            const wpm = Math.round((currentIndex / 5) / timeElapsed);
+            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+            
+            document.getElementById('wpm').textContent = wpm || 0;
+            document.getElementById('accuracy').textContent = `${accuracy || 100}%`;
+        }
+
+        document.getElementById('input-field').addEventListener('input', (e) => {
+            if (!isTyping) {
+                startTime = new Date();
+                isTyping = true;
+                timer = setInterval(updateTimer, 1000);
+            }
+
+            const letters = document.querySelectorAll('.letter');
+            const typed = e.target.value;
+
+            if (typed && currentIndex < letters.length) {
+                totalChars++;
+                typedCharCount++; // Increment typed character count
+                const current = letters[currentIndex];
+                
+                if (typed === current.textContent) {
+                    current.classList.add('correct');
+                } else {
+                    mistakes++;
+                    current.classList.add('incorrect');
+                }
+
+
+
+                current.classList.remove('current');
+                
+                if (letters[currentIndex + 1]) {
+                    letters[currentIndex + 1].classList.add('current');
+                    
+                    // Scroll based on number of characters typed
+                    if (typedCharCount % CHARS_BEFORE_SCROLL === 0) {
+                        const wordsContainer = document.getElementById('words');
+                        wordsContainer.scrollBy({
+                            top: 25, // Small scroll amount
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+
+                currentIndex++;
+                updateStats();
+                e.target.value = '';
+
+                if (currentIndex >= letters.length) {
+                    clearInterval(timer);
+                    const nextBtn = document.getElementById('next-btn');
+                    if (nextBtn) nextBtn.style.display = 'inline-block';
+                }
+            }
+        });
+
+        // Handle focus when clicking anywhere on the typing area
+        document.querySelector('.typing-area').addEventListener('click', () => {
+            document.getElementById('input-field').focus();
+        });
     </script>
     <script src="assets/js/lesson.js"></script>
 </body>
