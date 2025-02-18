@@ -646,11 +646,53 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             const wordsContainer = document.getElementById('words');
             const inputField = document.getElementById('input-field');
             
-            // Force scroll settings
+            // Initialize text content
+            const text = lessonText.split('').map(char => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.className = 'letter';
+                return span;
+            });
+            
+            wordsContainer.innerHTML = '';
+            text.forEach(span => wordsContainer.appendChild(span));
+            
+            // Set initial current letter
+            if (text.length > 0) {
+                text[0].classList.add('current');
+            }
+            
+            // Handle backspace key
+            inputField.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && currentIndex > 0) {
+                    e.preventDefault();
+                    currentIndex--;
+                    
+                    const letters = document.querySelectorAll('.letter');
+                    const current = letters[currentIndex];
+                    const next = letters[currentIndex + 1];
+                    
+                    // Remove classes from current letter
+                    current.classList.remove('correct', 'incorrect');
+                    current.classList.add('current');
+                    
+                    // Remove current class from next letter
+                    if (next) {
+                        next.classList.remove('current');
+                    }
+                    
+                    // Update stats
+                    if (current.classList.contains('incorrect')) {
+                        mistakes--;
+                    }
+                    totalChars--;
+                    updateStats();
+                }
+            });
+            
             wordsContainer.style.overflowY = 'auto';
             wordsContainer.style.maxHeight = '150px';
             
-            // Handle focus properly
             setTimeout(() => {
                 inputField.focus();
             }, 100);
