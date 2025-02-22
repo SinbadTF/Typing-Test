@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -175,12 +178,18 @@
         <?php if (isset($_GET['status'])): ?>
             <?php if ($_GET['status'] === 'success'): ?>
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                    Transaction submitted successfully! We will process your payment shortly.
+                    <?php 
+                        echo isset($_SESSION['success']) ? htmlspecialchars($_SESSION['success']) : 'Transaction submitted successfully!';
+                        unset($_SESSION['success']);
+                    ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php elseif ($_GET['status'] === 'error'): ?>
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                    Error submitting transaction. Please try again.
+                    <?php 
+                        echo isset($_SESSION['error']) ? htmlspecialchars($_SESSION['error']) : 'Error submitting transaction. Please try again.';
+                        unset($_SESSION['error']);
+                    ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
@@ -205,12 +214,11 @@
                 </p>
             </div>
             
-            <form action="process.php" method="POST" enctype="multipart/form-data">
-                
-
+            <form action="process.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="invalid-feedback">Please enter your full name</div>
                 </div>
 
                 <div class="mb-3">
@@ -218,18 +226,18 @@
                     <input type="tel" class="form-control" id="phone" name="phone" 
                            pattern="^(\+959|09)\d{9,11}$" 
                            title="Phone number must start with +959 or 09" required>
-                    <div id="phoneError" class="text-danger mt-1" style="font-size: 0.875rem;"></div>
+                    <div class="invalid-feedback">Please enter a valid phone number</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="amount" class="form-label">Amount (MMK)</label>
-                    <input type="number" class="form-control" id="amount" name="amount" required>
+                    <input type="number" class="form-control" id="amount" name="amount" value="10000" readonly required>
                 </div>
 
                 <div class="mb-3">
                     <label for="screenshot" class="form-label">Transaction Screenshot</label>
                     <input type="file" class="form-control" id="screenshot" name="screenshot" accept="image/*" required>
-                    <img id="preview" class="preview-image">
+                    <div class="invalid-feedback">Please upload your transaction screenshot</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Submit Transaction</button>

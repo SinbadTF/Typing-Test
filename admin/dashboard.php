@@ -189,7 +189,7 @@ $avgWPM = round($stmt->fetch()['avg_wpm'], 1);
                         <i class="fas fa-book"></i>
                         <span>Manage Lessons</span>
                     </a>
-                    <a href="transactions.php" class="dashboard-item">
+                    <a href="../admin/transactions.php" class="dashboard-item">
                         <i class="fas fa-money-bill-wave"></i>
                         <span>View Transactions</span>
                     </a>
