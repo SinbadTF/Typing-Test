@@ -25,6 +25,32 @@ if (!$lesson) {
 $stmt = $pdo->prepare("SELECT id, lesson_number FROM lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
 $stmt->execute([$level, $lessonNumber]);
 $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Get user's completed lessons
+$stmt = $pdo->prepare("SELECT completed_lessons FROM users WHERE user_id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch();
+$completedLessons = isset($user['completed_lessons']) ? explode(',', $user['completed_lessons']) : [];
+
+// Define lessons
+$lessons = [
+    1 => [
+        'title' => 'Home Row Keys',
+        'description' => 'Learn the basic home row keys position',
+        'link' => 'lesson1.php'
+    ],
+    2 => [
+        'title' => 'Upper Row Keys',
+        'description' => 'Practice typing with upper row keys',
+        'link' => 'lesson2.php'
+    ],
+    3 => [
+        'title' => 'Lower Row Keys',
+        'description' => 'Master the lower row keys',
+        'link' => 'lesson3.php'
+    ],
+    // Add more lessons as needed
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">

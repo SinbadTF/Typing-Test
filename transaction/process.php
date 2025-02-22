@@ -2,73 +2,47 @@
 session_start();
 require_once '../config/database.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_POST['user_id'];
-    $name = $_POST['name'];
-    $phone = $_POST['phone'];
-    $amount = $_POST['amount'];
-    
-    // Handle file upload
-    $screenshot = $_FILES['screenshot'];
-    $screenshot_path = '';
-    
-    if ($screenshot['error'] === 0) {
-        $upload_dir = '../uploads/transactions/';
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        $filename = uniqid() . '_' . time() . '_' . $screenshot['name'];
-        $target_path = $upload_dir . $filename;
-        
-        // Update the screenshot path storage
-        if (move_uploaded_file($screenshot['tmp_name'], $target_path)) {
-            // Store the path relative to the root directory
-            $screenshot_path = 'uploads/transactions/' . $filename;
-        }
-    }
-    
     try {
-        // Validate inputs
-        if (empty($user_id) || empty($name) || empty($phone) || empty($amount)) {
-            throw new Exception("All fields are required");
+        // Get form data
+        $name = $_POST['name'];
+        $phone = $_POST['phone'];
+        $amount = $_POST['amount'];
+        $user_id = $_SESSION['user_id'];
+
+        // Handle file upload
+        $screenshot = $_FILES['screenshot'];
+        $fileName = time() . '_' . $screenshot['name'];
+        $targetPath = '../uploads/' . $fileName;
+
+        // Create uploads directory if it doesn't exist
+        if (!file_exists('../uploads')) {
+            mkdir('../uploads', 0777, true);
         }
 
-        if (!is_numeric($amount) || $amount <= 0) {
-            throw new Exception("Invalid amount");
-        }
+        // Move uploaded file
+        if (move_uploaded_file($screenshot['tmp_name'], $targetPath)) {
+            // Insert transaction record
+            $stmt = $pdo->prepare("INSERT INTO transactions (user_id, name, phone, amount, screenshot, status) VALUES (?, ?, ?, ?, ?, 'pending')");
+            $stmt->execute([$user_id, $name, $phone, $amount, $fileName]);
 
-        // Validate phone number format
-        if (!preg_match('/^(\+959|09)\d{9,11}$/', $phone)) {
-            throw new Exception("Invalid phone number format");
-        }
+            // Update user's premium status
+            $stmt = $pdo->prepare("UPDATE users SET is_premium = 1 WHERE user_id = ?");
+            $stmt->execute([$user_id]);
 
-        // Check if screenshot was uploaded
-        if ($screenshot['error'] !== 0) {
-            throw new Exception("Screenshot upload failed: " . getFileUploadError($screenshot['error']));
+            header('Location: payment.php?status=success');
+            exit();
+        } else {
+            throw new Exception("Error uploading file");
         }
-
-        // Validate file type
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!in_array($screenshot['type'], $allowed_types)) {
-            throw new Exception("Invalid file type. Only JPG, PNG and GIF are allowed");
-        }
-
-        $stmt = $pdo->prepare("
-            INSERT INTO transactions (user_id, name, phone, amount, payment_method, status, screenshot_path, created_at)
-            VALUES (?, ?, ?, ?, 'KBZ Pay', 'pending', ?, NOW())
-        ");
-        
-        $stmt->execute([$user_id, $name, $phone, $amount, $screenshot_path]);
-        
-        // Redirect with success message
-        header('Location: index.php?status=success');
-        exit();
-        
     } catch (Exception $e) {
-        // Encode the error message to safely pass in URL
-        $error_message = urlencode($e->getMessage());
-        header("Location: index.php?status=error&message={$error_message}");
+        error_log($e->getMessage());
+        header('Location: payment.php?status=error');
         exit();
     }
 }

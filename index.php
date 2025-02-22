@@ -1,6 +1,5 @@
 /*Adding commend by Htet Mon Myint👑👑*/
-/*Adding commend by Htet Mon Myint*/
-/*Adding commend by Htet Mon Myint again!*/
+
 <?php
 session_start();
 require_once 'config/database.php';
@@ -363,7 +362,7 @@ require_once 'includes/header.php';
                             <i class="fas fa-book-open"></i>
                         </div>
                         <div class="lesson-content">
-                            <h4>Course</h4>
+                            <h4>OfficialCourse</h4>
                             <p>Learn the proper way to position your fingers on the home row keys.</p>
                             <button class="btn btn-outline-primary btn-sm" id="startCourseBtn">Start Course</button>
                         </div>
@@ -375,34 +374,23 @@ require_once 'includes/header.php';
                             <i class="fas fa-crown"></i>
                         </div>
                         <div class="lesson-content">
-                            <!-- Update the premium lessons link in the navbar -->
-                            <a class="nav-link" href="<?php 
-                                if (!isset($_SESSION['user_id'])) {
-                                    echo 'login.php';
-                                } else {
+                            <h4>Premium</h4>
+                            <p>Practice typing the most frequently used words in English.</p>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <?php
                                     $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
                                     $stmt->execute([$_SESSION['user_id']]);
                                     $user = $stmt->fetch();
-                                    echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
-                                }
-                            ?>">
-                            </a>
-                            
-                            <!-- Update the premium card link in the lessons section -->
-                            <div class="lesson-content">
-                                <h4>Premium</h4>
-                                <p>Practice typing the most frequently used words in English.</p>
-                                <a href="<?php 
-                                    if (!isset($_SESSION['user_id'])) {
-                                        echo 'login.php';
-                                    } else {
-                                        $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
-                                        $stmt->execute([$_SESSION['user_id']]);
-                                        $user = $stmt->fetch();
-                                        echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
-                                    }
-                                ?>" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
-                            </div>
+                                    
+                                    if ($user && $user['is_premium'] == 1):
+                                ?>
+                                    <a href="premium_custom_practice.php" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
+                                <?php else: ?>
+                                    <a href="premium.php" class="btn btn-outline-primary btn-sm">Get Premium</a>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <a href="login.php" class="btn btn-outline-primary btn-sm">Login for Premium</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
