@@ -17,6 +17,18 @@ if (!$user || $user['is_premium'] != 1) {
     header('Location: premium.php');
     exit();
 }
+
+// Add at the top of the file
+$lang = $_GET['lang'] ?? 'en';
+
+// Add language-specific titles
+$languageTitles = [
+    'en' => 'English Premium Courses',
+    'my' => 'Myanmar Premium Courses',
+    'jp' => 'Japanese Premium Courses'
+];
+
+$title = $languageTitles[$lang] ?? $languageTitles['en'];
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +36,7 @@ if (!$user || $user['is_premium'] != 1) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Courses - Boku no Typing</title>
+    <title><?php echo $title; ?> - Boku no Typing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -100,62 +112,135 @@ if (!$user || $user['is_premium'] != 1) {
     <?php include 'includes/navbar.php'; ?>
 
     <div class="course-container">
-        <h1 class="text-center mb-5">Premium Typing Courses</h1>
+        <h1 class="text-center mb-5">
+            <?php if ($lang === 'my'): ?>
+                မြန်မာဘာသာ Premium သင်ခန်းစာများ
+            <?php elseif ($lang === 'jp'): ?>
+                プレミアムコース
+            <?php else: ?>
+                Premium Courses
+            <?php endif; ?>
+        </h1>
         
         <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-keyboard"></i>
-                    </div>
-                    <h2 class="course-title">Custom Practice</h2>
-                    <p class="course-description">Create your own custom typing exercises with any text you want.</p>
-                    <a href="premium_custom_practice.php" class="course-button">Start Practice</a>
-                    <div class="course-stats">
-                        <i class="fas fa-clock me-2"></i>Flexible Duration
+            <?php if ($lang === 'my'): ?>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <h2 class="course-title">အခြေခံ သင်ခန်းစာများ</h2>
+                        <p class="course-description">မြန်မာစာ စာရိုက်ခြင်း အခြေခံများကို လေ့လာပါ</p>
+                        <a href="premium_lesson.php?lang=my&level=basic" class="course-button">စတင်လေ့လာမည်</a>
+                        <div class="course-stats">
+                            <i class="fas fa-clock me-2"></i>အခြေခံအဆင့်
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h2 class="course-title">အဆင့်မြင့် သင်ခန်းစာများ</h2>
+                        <p class="course-description">မြန်မာစာ စာရိုက်ခြင်း အဆင့်မြင့်နည်းများ</p>
+                        <a href="premium_lesson.php?lang=my&level=advanced" class="course-button">စတင်မည်</a>
+                        <div class="course-stats">
+                            <i class="fas fa-star me-2"></i>အဆင့်မြင့်
+                        </div>
+                    </div>
+                </div>
 
+            <?php elseif ($lang === 'jp'): ?>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <h2 class="course-title">基本レッスン</h2>
+                        <p class="course-description">日本語タイピングの基本を学びましょう</p>
+                        <a href="premium_lesson.php?lang=jp&level=basic" class="course-button">始める</a>
+                        <div class="course-stats">
+                            <i class="fas fa-clock me-2"></i>基本レベル
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h2 class="course-title">上級レッスン</h2>
+                        <p class="course-description">日本語タイピングの高度なテクニック</p>
+                        <a href="premium_lesson.php?lang=jp&level=advanced" class="course-button">始める</a>
+                        <div class="course-stats">
+                            <i class="fas fa-star me-2"></i>上級レベル
+                        </div>
+                    </div>
+                </div>
+
+            <?php else: ?>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <h2 class="course-title">Basic Lessons</h2>
+                        <p class="course-description">Learn the fundamentals of English typing</p>
+                        <a href="premium_lesson.php?lang=en&level=basic" class="course-button">Start Learning</a>
+                        <div class="course-stats">
+                            <i class="fas fa-clock me-2"></i>Basic Level
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h2 class="course-title">Advanced Lessons</h2>
+                        <p class="course-description">Master advanced English typing techniques</p>
+                        <a href="premium_lesson.php?lang=en&level=advanced" class="course-button">Start Now</a>
+                        <div class="course-stats">
+                            <i class="fas fa-star me-2"></i>Advanced Level
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Common features for all languages -->
             <div class="col-md-6 mb-4">
                 <div class="course-card">
                     <div class="course-icon">
                         <i class="fas fa-certificate"></i>
                     </div>
-                    <h2 class="course-title">Certification Course</h2>
-                    <p class="course-description">Complete exercises to earn your official typing certification.</p>
-                    <a href="certification_course.php" class="course-button">Start Course</a>
-                    <div class="course-stats">
-                        <i class="fas fa-star me-2"></i>Earn Certificate
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h2 class="course-title">Advanced Techniques</h2>
-                    <p class="course-description">Learn advanced typing techniques and shortcuts.</p>
-                    <a href="advanced_course.php" class="course-button">Start Learning</a>
-                    <div class="course-stats">
-                        <i class="fas fa-bolt me-2"></i>Advanced Level
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h2 class="course-title">Programming Practice</h2>
-                    <p class="course-description">Practice typing code in various programming languages.</p>
-                    <a href="programming_practice.php" class="course-button">Start Coding</a>
-                    <div class="course-stats">
-                        <i class="fas fa-code-branch me-2"></i>Multiple Languages
-                    </div>
+                    <h2 class="course-title">
+                        <?php if ($lang === 'my'): ?>
+                            အသိအမှတ်ပြုလက်မှတ်
+                        <?php elseif ($lang === 'jp'): ?>
+                            認定証
+                        <?php else: ?>
+                            Certification
+                        <?php endif; ?>
+                    </h2>
+                    <p class="course-description">
+                        <?php if ($lang === 'my'): ?>
+                            တရားဝင် အသိအမှတ်ပြုလက်မှတ် ရယူပါ
+                        <?php elseif ($lang === 'jp'): ?>
+                            公式認定証を取得しましょう
+                        <?php else: ?>
+                            Earn your official typing certificate
+                        <?php endif; ?>
+                    </p>
+                    <a href="certification.php?lang=<?php echo $lang; ?>" class="course-button">
+                        <?php if ($lang === 'my'): ?>
+                            စတင်မည်
+                        <?php elseif ($lang === 'jp'): ?>
+                            始める
+                        <?php else: ?>
+                            Start Now
+                        <?php endif; ?>
+                    </a>
                 </div>
             </div>
         </div>

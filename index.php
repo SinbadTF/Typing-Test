@@ -362,9 +362,11 @@ require_once 'includes/header.php';
                             <i class="fas fa-book-open"></i>
                         </div>
                         <div class="lesson-content">
-                            <h4>OfficialCourse</h4>
+                            <h4>Official Course</h4>
                             <p>Learn the proper way to position your fingers on the home row keys.</p>
-                            <button class="btn btn-outline-primary btn-sm" id="startCourseBtn">Start Course</button>
+                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#languageModal">
+                                <i class="fas fa-play me-2"></i>Start Course
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -384,7 +386,9 @@ require_once 'includes/header.php';
                                     
                                     if ($user && $user['is_premium'] == 1):
                                 ?>
-                                    <a href="premium_custom_practice.php" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#premiumLanguageModal">
+                                        <i class="fas fa-play me-2"></i>Premium Lessons
+                                    </a>
                                 <?php else: ?>
                                     <a href="premium.php" class="btn btn-outline-primary btn-sm">Get Premium</a>
                                 <?php endif; ?>
@@ -424,7 +428,7 @@ require_once 'includes/header.php';
         </div>
     </div>
 
-    <!-- Add this modal after the features-section div -->
+    <!-- Language selection modal -->
     <div class="modal fade" id="languageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark text-light">
@@ -434,26 +438,46 @@ require_once 'includes/header.php';
                 </div>
                 <div class="modal-body">
                     <div class="d-grid gap-3">
-                        <a href="course.php" class="btn btn-outline-light btn-lg">
+                        <a href="course.php?lang=en" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-language me-2"></i>English
                         </a>
-                        <a href="japanese__course.php" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-language me-2"></i>日本語
+                        <a href="course.php?lang=my" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>မြန်မာ
                         </a>
-                        <a href="#" class="btn btn-outline-light btn-lg disabled">
-                            <i class="fas fa-language me-2"></i>မြန်မာ (Coming Soon)
+                        <a href="course.php?lang=jp" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>日本語
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Add premium language modal -->
+    <div class="modal fade" id="premiumLanguageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Choose Your Language</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <a href="premium_course.php?lang=en" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>English
+                        </a>
+                        <a href="premium_course.php?lang=my" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>မြန်မာ
+                        </a>
+                        <a href="premium_course.php?lang=jp" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>日本語
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Add this before the closing body tag -->
-        <script>
-            document.getElementById('startCourseBtn').addEventListener('click', function() {
-                new bootstrap.Modal(document.getElementById('languageModal')).show();
-            });
-        </script>
-    </body>
-    </html>
+</body>
+</html>

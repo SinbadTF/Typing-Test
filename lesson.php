@@ -11,9 +11,10 @@ require_once 'config/database.php';
 $level = $_GET['level'] ?? '';
 $lessonNumber = $_GET['lesson'] ?? '';
 $lessonId = $_GET['id'] ?? '';
+$lang = $_GET['lang'] ?? 'en';
 
-$stmt = $pdo->prepare("SELECT * FROM lessons WHERE id = ?");
-$stmt->execute([$lessonId]);
+$stmt = $pdo->prepare("SELECT * FROM lessons WHERE language = ? AND level = ? AND lesson_number = ?");
+$stmt->execute([$lang, $level, $lessonNumber]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$lesson) {
@@ -51,13 +52,22 @@ $lessons = [
     ],
     // Add more lessons as needed
 ];
+
+// Add language-specific titles
+$languageTitles = [
+    'en' => 'English Typing Lesson',
+    'my' => 'မြန်မာစာ စာရိုက်လေ့ကျင့်ခန်း',
+    'jp' => '日本語タイピング練習'
+];
+
+$pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($lesson['title']); ?> - Typing Lesson</title>
+    <title><?php echo $pageTitle; ?> - Boku no Typing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">

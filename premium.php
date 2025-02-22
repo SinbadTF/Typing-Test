@@ -347,6 +347,39 @@ require_once 'config/database.php';
                 <p class="feature-description">Personalize your experience with custom keyboard themes and background images</p>
             </div>
         </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6 mb-4">
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="course-title">Premium Lessons</h2>
+                    <p class="course-description">Access advanced typing courses in multiple languages</p>
+                    <a href="#" class="course-button" data-bs-toggle="modal" data-bs-target="#premiumLanguageModal">
+                        <i class="fas fa-globe me-2"></i>Choose Language
+                    </a>
+                    <div class="course-stats">
+                        <i class="fas fa-language me-2"></i>Multiple Languages Available
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h2 class="course-title">Custom Practice</h2>
+                    <p class="course-description">Create your own custom typing exercises</p>
+                    <a href="premium_custom_practice.php" class="course-button">
+                        <i class="fas fa-edit me-2"></i>Start Practice
+                    </a>
+                    <div class="course-stats">
+                        <i class="fas fa-clock me-2"></i>Practice at Your Own Pace
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Add this modal HTML before the closing body tag -->
@@ -361,6 +394,31 @@ require_once 'config/database.php';
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </a>
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal HTML before the closing body tag -->
+    <div class="modal fade" id="premiumLanguageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Choose Your Language</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <a href="premium_course.php?lang=en" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>English
+                        </a>
+                        <a href="premium_course.php?lang=my" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>မြန်မာ
+                        </a>
+                        <a href="premium_course.php?lang=jp" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>日本語
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
