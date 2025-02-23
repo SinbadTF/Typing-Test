@@ -12,22 +12,23 @@ $level = $_GET['level'] ?? '';
 $lessonNumber = $_GET['lesson'] ?? '';
 $lessonId = $_GET['id'] ?? '';
 
-$stmt = $pdo->prepare("SELECT * FROM japanese_lessons WHERE id = ?");
+// Modified query to get Myanmar lessons
+$stmt = $pdo->prepare("SELECT * FROM myanmar_lessons WHERE id = ?");
 $stmt->execute([$lessonId]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$lesson) {
-    header('Location: course.php');
+    header('Location: myanmar_course.php');
     exit();
 }
 
 // Get next lesson
-$stmt = $pdo->prepare("SELECT id, lesson_number FROM japanese_lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
+$stmt = $pdo->prepare("SELECT id, lesson_number FROM myanmar_lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
 $stmt->execute([$level, $lessonNumber]);
 $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
+    body {
             background-color: #323437;
             color: #d1d0c5;
             font-family: 'Roboto Mono', monospace;
@@ -67,6 +68,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .typing-area {
+         
             position: relative;
             font-size: 1.5rem;
             line-height: 1.5;
@@ -194,7 +196,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .key {
-            width: 55px;
+            width: 40px;
             height: 40px;
             background: #2c2c2c;
             border: none;
@@ -344,7 +346,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     padding: 10px 15px;
     background: none;
     border: none;
-    color: #d1d0c5;
+    color: #FFF5EE;
     cursor: pointer;
     text-align: left;
     border-radius: 4px;
@@ -465,188 +467,27 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             align-items: center;
             gap: 8px;
         }
-        .key .japanese {
+        .key .myanmar {
       padding-left: 2px;
       margin-top: -18px;
       margin-right: -3px;
       font-size: 15px;
       color: #888;
     }
-    .results-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(32, 34, 37, 0.95);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .results-content {
-        background: #323437;
-        border-radius: 10px;
-        padding: 2rem;
-        max-width: 600px;
-        width: 90%;
-        animation: slideIn 0.3s ease;
-        border: 1px solid rgba(209, 208, 197, 0.1);
-    }
-
-    .results-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .results-header h2 {
-        color: #d1d0c5;
-        font-size: 1.8rem;
-        font-weight: 500;
-    }
-
-    .results-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
-        background: rgba(38, 40, 43, 0.5);
-        padding: 1.5rem;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .stat-icon {
-        color: #646669;
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #d1d0c5;
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-        color: #646669;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-    }
-
-    .feedback-message {
-        text-align: center;
-        padding: 1rem;
-        margin: 1.5rem 0;
-        border-radius: 8px;
-        background: rgba(38, 40, 43, 0.5);
-    }
-
-    .feedback-message.warning {
-        color: #ca4754;
-    }
-
-    .feedback-message.success {
-        color: #4a9eff;
-    }
-
-    .results-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-
-    .btn-retry, .btn-course, .btn-next {
-        padding: 0.8rem 1.5rem;
-        border: 1px solid #646669;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 1rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: none;
-        color: #646669;
-    }
-
-    .btn-retry:hover, .btn-course:hover {
-        color: #d1d0c5;
-        border-color: #d1d0c5;
-        background: rgba(209, 208, 197, 0.1);
-    }
-
-    .btn-next {
-        background: #4a9eff;
-        color: #ffffff;
-        border-color: #4a9eff;
-    }
-
-    .btn-next:hover {
-        opacity: 0.9;
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Add these styles for better mobile responsiveness */
-    @media (max-width: 768px) {
-        .results-content {
-            width: 95%;
-            padding: 1.5rem;
-        }
-
-        .results-stats {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .results-actions {
-            flex-direction: column;
-        }
-
-        .btn-retry, .btn-course, .btn-next {
-            width: 100%;
-            justify-content: center;
-        }
-    }
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
-    
-
-    <!-- Add sound effects -->
-    <audio id="keySound" preload="auto">
-        <source src="assets/sounds/key-press.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="errorSound" preload="auto">
-        <source src="assets/sounds/error.mp3" type="audio/mpeg">
-    </audio>
 
     <div class="typing-container">
-        <div class="header-section">
-            <!-- Add this after the typing-container div -->
-<div class="caps-warning" id="capsWarning">
+    <div class="header-section">
+    
+        <div class="caps-warning" id="capsWarning">
     <i class="fas fa-exclamation-triangle"></i>
     Caps Lock is ON
 </div>
-            <div class="stats-container">
+
+<div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">0:00</span></div>
@@ -669,187 +510,186 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="words" id="words"></div>
             <input type="text" class="input-field" id="input-field" autofocus>
         </div>
-
-
-<div class="keyboard">
-            <div class="keyboard-row">
-                
-                <div class="key" data-key="`">｀</div>
-                <div class="key" data-key="ぬ">ぬ
-                    <span class="japanese">1</span>
+        <div class="keyboard">
+        <div class="keyboard-row">
+        <div class="key" data-key="ၐ">ၐ
+                    <span class="myanmar">ဎ</span>
                 </div>
-                <div class="key" data-key="ふ">ふ
-                    <span class="japanese">2</span>
+                <div class="key" data-key="၁">၁
+                    <span class="myanmar">ဍ</span>
                 </div>
-                <div class="key" data-key="あ">あ
-                    <span class="japanese">3</span>
+                <div class="key" data-key="၂">၂
+                    <span class="myanmar">ၒ</span>
                 </div>
-                <div class="key" data-key="う">う
-                    <span class="japanese">4</span>
+                <div class="key" data-key="၃">၃
+                    <span class="myanmar">ဋ</span>
                 </div>
-                <div class="key" data-key="え">え
-                    <span class="japanese">5</span>
+                <div class="key" data-key="၄">၄
+                    <span class="myanmar">ၓ</span>
                 </div>
-                <div class="key" data-key="お">お
-                    <span class="japanese">6</span>
+                <div class="key" data-key="၅">၅
+                    <span class="myanmar">ၔ</span>
                 </div>
-                <div class="key" data-key="や">や
-                    <span class="japanese">7</span>
+                <div class="key" data-key="၆">၆
+                    <span class="myanmar">ၕ</span>
                 </div>
-                <div class="key" data-key="ゆ">ゆ
-                    <span class="japanese">8</span>
+                <div class="key" data-key="၇">၇
+                    <span class="myanmar">ရ</span>
                 </div>
-                <div class="key" data-key="よ">よ
-                    <span class="japanese">9</span>
+                <div class="key" data-key="၈">၈
+                    <span class="myanmar">*</span>
                 </div>
-                <div class="key" data-key="わ">わ
-                    <span class="japanese">0</span>
+                <div class="key" data-key="၉">၉
+                    <span class="myanmar">(</span>
                 </div>
-                <div class="key " data-key="ほ">ほ
-                    <span class="japanese">-</span>
+                <div class="key" data-key="၀">၀
+                    <span class="myanmar">)</span>
                 </div>
-                <div class="key " data-key="゜">゜
-                    <span class="japanese">=</span>
+                <div class="key " data-key="-">-
+                    <span class="myanmar">_</span>
+                </div>
+                <div class="key " data-key="=">=
+                    <span class="myanmar">+</span>
                 </div>
                 <div class="key delete special" data-key="Backspace">delete</div>
             </div>
 
         <div class="keyboard-row">
         <div class="key tab " data-key="tab">  tab</div>
-        <div class="key" data-key="q">た
-        <span class="japanese">Q</span>
+        <div class="key" data-key="ဆ">ဆ
+        <span class="myanmar">ဈ</span>
         </div>
-        <div class="key" data-key="w">て
-        <span class="japanese">W</span>
+        <div class="key" data-key="တ">တ
+        <span class="myanmar">ဝ</span>
         </div>
-        <div class="key" data-key="e">い
-        <span class="japanese">E</span>
+        <div class="key" data-key="န">န
+        <span class="myanmar">ဣ</span>
         </div>
-        <div class="key" data-key="r">す
-        <span class="japanese">R</span>
+        <div class="key" data-key="မ">မ
+        <span class="myanmar">၎င်း</span>
         </div>
-        <div class="key" data-key="t">か
-        <span class="japanese">T</span>
+        <div class="key" data-key="အ">အ
+        <span class="myanmar">ဤ</span>
         </div>
-        <div class="key" data-key="y">ん
-        <span class="japanese">Y</span>
+        <div class="key" data-key="ပ">ပ
+        <span class="myanmar">၌</span>
         </div>
-        <div class="key" data-key="u">な
-        <span class="japanese">U</span>
+        <div class="key" data-key="က">က
+        <span class="myanmar">ဥ</span>
         </div>
-        <div class="key" data-key="i">に
-        <span class="japanese">I</span>
+        <div class="key" data-key="င">င
+        <span class="myanmar">၍</span>
         </div>
-        <div class="key" data-key="o">ら
-        <span class="japanese">O</span>
+        <div class="key" data-key="သ">သ
+        <span class="myanmar">ဿ</span>
         </div>
-        <div class="key" data-key="p">せ
-        <span class="japanese">P</span>
+        <div class="key" data-key="စ">စ
+        <span class="myanmar">ဏ</span>
         </div>
-        <div class="key" data-key="[">゛
-        <span class="japanese">[</span>
+        <div class="key" data-key="ဟ">ဟ
+        <span class="myanmar">ဧ</span>
         </div>
-        <div class="key" data-key="]">む
-        <span class="japanese">]</span>
+        <div class="key" data-key="ဩ">ဩ
+        <span class="myanmar">ဪ</span>
         </div>
-        <div class="key" data-key="\">へ
-        <span class="japanese">\</span>
+        <div class="key" data-key="၏">၏
+        <span class="myanmar">၏</span>
         </div>
      </div>
 
 <div class="keyboard-row">
         <div class="key caps special" data-key="CapsLock">caps</div>
-        <div class="key" data-key="a">ち
-            <span class="japanese">A</span>
+        <div class="key" data-key="‌ေ">‌ေ
+            <span class="myanmar">ဗ</span>
         </div>
-        <div class="key" data-key="s">と
-            <span class="japanese">S</span>
+        <div class="key" data-key="ျ">ျ
+            <span class="myanmar">ှ</span>
         </div>
-        <div class="key" data-key="d">し
-            <span class="japanese">D</span>
+        <div class="key" data-key="ိိ">ိ
+            <span class="myanmar">ီ</span>
         </div>
-        <div class="key" data-key="f">は
-            <span class="japanese">F</span>
+        <div class="key" data-key="်">်
+            <span class="myanmar">္</span>
         </div>
-        <div class="key" data-key="g">き
-            <span class="japanese">G</span>
+        <div class="key" data-key="ါ">ါ
+            <span class="myanmar">ွ</span>
         </div>
-        <div class="key" data-key="h">く
-            <span class="japanese">H</span>
+        <div class="key" data-key="့">့
+            <span class="myanmar">ံ</span>
         </div>
-        <div class="key" data-key="j">ま
-            <span class="japanese">J</span>
+        <div class="key" data-key="ြ">ြ
+            <span class="myanmar">ဲ</span>
         </div>
-        <div class="key" data-key="k">の
-            <span class="japanese">K</span>
+        <div class="key" data-key="ု">ု
+            <span class="myanmar">ဒ</span>
         </div>
-        <div class="key" data-key="l">り
-            <span class="japanese">L</span>
+        <div class="key" data-key="ူ">ူ
+            <span class="myanmar">ဓ</span>
         </div>
-        <div class="key" data-key=";">れ
-            <span class="japanese">;</span>
+        <div class="key" data-key="း">း
+            <span class="myanmar">ဂ</span>
         </div>
-        <div class="key " data-key="'">け
-            <span class="japanese">'</span>
+        <div class="key " data-key="'">"
+            <span class="myanmar">'</span>
         </div>
         <div class="key enter special" data-key="Enter">enter</div>
      </div>
+
      <div class="keyboard-row">
         <div class="key shift" data-key="Shift">Shift</div>
-        <div class="key" data-key="z">つ
-            <span class="japanese">Z</span>
+        <div class="key" data-key="ဖ">ဖ
+            <span class="myanmar">ဇ</span>
         </div>
-        <div class="key" data-key="x">さ
-            <span class="japanese">X</span>
+        <div class="key" data-key="ထ">ထ
+            <span class="myanmar">ဌ</span>
         </div>
-        <div class="key" data-key="c">そ
-            <span class="japanese">C</span>
+        <div class="key" data-key="ခ">ခ
+            <span class="myanmar">ဃ</span>
         </div>
-        <div class="key" data-key="v">ひ
-            <span class="japanese">V</span>
+        <div class="key" data-key="လ">လ
+            <span class="myanmar">ဠ</span>
         </div>
-        <div class="key" data-key="b">こ
-            <span class="japanese">B</span>
+        <div class="key" data-key="ဘ">ဘ
+            <span class="myanmar">ယ</span>
         </div>
-        <div class="key" data-key="n">み
-            <span class="japanese">N</span>
+        <div class="key" data-key="ည">ည
+            <span class="myanmar">ဉ</span>
         </div>
-        <div class="key" data-key="m">も
-            <span class="japanese">M</span>
+        <div class="key" data-key="ာ">ာ
+            <span class="myanmar">ဦ</span>
         </div>
-        <div class="key" data-key=",">ね
-            <span class="japanese">,</span>
+        <div class="key" data-key=",">,
+            <span class="myanmar">၊</span>
         </div>
-        <div class="key" data-key=".">る
-            <span class="japanese">.</span>
+        <div class="key" data-key=".">.
+            <span class="myanmar">။</span>
         </div>
-        <div class="key" data-key="/">め
-            <span class="japanese">/</span>
+        <div class="key" data-key="/">/
+            <span class="myanmar">?</span>
         </div>
         <div class="key shift" data-key="Shift">Shift</div>
     </div>
     
-    <div class="keyboard-row">
+  
         <div class="keyboard-row">
-            <div class="key space" data-key=" ">スペース</div>
+            <div class="key space" data-key=" "></div>
         </div>
                 
             </div>
-        </div>
+    
 
         <div class="text-center">
             <button class="restart-button" id="restart-button">
                 <i class="fas fa-redo me-2"></i>restart lesson
             </button>
             <?php if ($nextLesson): ?>
-            <a href="japanese_course.php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
+            <a href="lesson.php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
                id="next-btn" class="restart-button ms-3" style="display: none;">
                 next lesson <i class="fas fa-arrow-right ms-2"></i>
             </a>
             <?php endif; ?>
         </div>
     </div>
-
     <script>
         document.addEventListener('keydown', function(event) {
         if (event.getModifierState('CapsLock')) {
@@ -862,30 +702,9 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             document.getElementById('capsWarning').classList.remove('show');
         }
     });
-    document.addEventListener('keydown', function(event) {
-        const key = event.key;
-        const keys = document.querySelectorAll('.key');
-        
-        keys.forEach(keyElement => {
-            const dataKey = keyElement.getAttribute('data-key').toLowerCase();
-            if (dataKey === key || 
-                (event.code === 'ShiftLeft' && dataKey === 'shift') ||
-                (event.code === 'ShiftRight' && dataKey === 'shift') ||
-                (event.code === 'Enter' && dataKey === 'enter') ||
-                (event.key === ' ' && dataKey === ' ')) {       // Additional space check
-                keyElement.classList.add('active');
-            }
-        });
-    });
-
-    document.addEventListener('keyup', function(event) {
-        const keys = document.querySelectorAll('.key');
-        keys.forEach(key => key.classList.remove('active'));
-    });
         const lessonText = <?php echo json_encode($lesson['content']); ?>;
         const lessonId = <?php echo $lesson['id']; ?>;
         const userId = <?php echo $_SESSION['user_id']; ?>;
-
     </script>
     <script src="assets/js/lesson.js"></script>
 </body>
