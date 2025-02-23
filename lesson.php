@@ -8,16 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'config/database.php';
 
+// Get parameters from URL
 $level = $_GET['level'] ?? '';
 $lessonNumber = $_GET['lesson'] ?? '';
 $lessonId = $_GET['id'] ?? '';
 $lang = $_GET['lang'] ?? 'en';
 
-$stmt = $pdo->prepare("SELECT * FROM lessons WHERE language = ? AND level = ? AND lesson_number = ?");
-$stmt->execute([$lang, $level, $lessonNumber]);
+// Fetch the lesson from lessons table (not premium_lessons)
+$stmt = $pdo->prepare("SELECT * FROM lessons WHERE id = ? AND level = ? AND lesson_number = ?");
+$stmt->execute([$lessonId, $level, $lessonNumber]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$lesson) {
+    // Redirect back to course.php instead of premium_course.php
     header('Location: course.php');
     exit();
 }
@@ -538,12 +541,11 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
 <body>
     <?php include 'includes/navbar.php'; ?>
     <div class="typing-container">
+        <h2 class="lesson-title"><?php echo htmlspecialchars($lesson['title']); ?></h2>
+        <div class="typing-text">
+            <p id="text-to-type"><?php echo htmlspecialchars($lesson['content']); ?></p>
+        </div>
         <div class="header-section">
-            <!-- Add this after the typing-container div -->
-<div class="caps-warning" id="capsWarning">
-    <i class="fas fa-exclamation-triangle"></i>
-    Caps Lock is ON
-</div>
             <div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>

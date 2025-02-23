@@ -306,41 +306,21 @@ require_once 'includes/header.php';
                 <i class="fas fa-keyboard me-2"></i>Boku no Typing
             </a>
             <div class="navbar-nav ms-auto">
-                
-                 
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a class="nav-link d-flex align-items-center" href="profile.php">
-                        <?php if (isset($_SESSION['profile_image']) && $_SESSION['profile_image']): ?>
-                            <img src="uploads/profile_images/<?php echo htmlspecialchars($_SESSION['profile_image']); ?>" 
-                                 class="rounded-circle me-2" 
-                                 width="30" 
-                                 height="30" 
-                                 alt="Profile">
-                        <?php else: ?>
-                            <i class="fas fa-user-circle me-2"></i>
-                        <?php endif; ?>
-                        <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    <a class="nav-link" href="profile.php">
+                        <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($_SESSION['username']); ?>
                     </a>
                     <a class="nav-link" href="logout.php">
                         <i class="fas fa-sign-out-alt me-2"></i>Logout
-                    </a>
-                    <?php
-                        $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
-                        $stmt->execute([$_SESSION['user_id']]);
-                        $user = $stmt->fetch();
-                    ?>
-                    <a class="nav-link" href="<?php echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php'; ?>">
-                        <i class="fas fa-crown me-2"></i>Premium
                     </a>
                 <?php else: ?>
                     <a class="nav-link" href="login.php">
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </a>
-                    <a class="nav-link" href="premium.php">
-                        <i class="fas fa-crown me-2"></i>Premium
-                    </a>
                 <?php endif; ?>
-                
+                <a class="nav-link" href="premium.php">
+                    <i class="fas fa-crown me-2"></i>Premium
+                </a>
             </div>
         </div>
     </nav>
@@ -392,7 +372,7 @@ require_once 'includes/header.php';
                                     <a href="premium.php" class="btn btn-outline-primary btn-sm">Get Premium</a>
                                 <?php endif; ?>
                             <?php else: ?>
-                                <a href="login.php" class="btn btn-outline-primary btn-sm">Login for Premium</a>
+                                <a href="login.php" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -472,6 +452,27 @@ require_once 'includes/header.php';
                             <i class="fas fa-language me-2"></i>日本語
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal for login prompt -->
+    <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Login Required</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-lock text-warning mb-3" style="font-size: 3rem;"></i>
+                    <h4 class="mb-3">Please Log In</h4>
+                    <p class="text-muted mb-4">You need to log in to access premium lessons</p>
+                    <a href="login.php" class="btn btn-primary me-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
