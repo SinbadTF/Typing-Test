@@ -17,9 +17,8 @@ CREATE TABLE exam_texts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 INSERT INTO exam_texts (section, content) VALUES
-('programming_logic', 'function calculateFactorial(n) {\n    if (n === 0 || n === 1) return 1;\n    return n * calculateFactorial(n - 1);\n}'),
-('special_characters', '@#$%^&*()_+ symbols are commonly used!\nRegular expressions: /^[a-zA-Z0-9]+$/\nSQL Query: SELECT * FROM users WHERE id = 1;'),
-('mixed_content', 'The quick brown fox jumps over 13 lazy dogs!\nPython: def main(): print("Hello, World!")\nCSS: .container { margin: 0 auto; }');
+
+('mixed_content', 'The quick brown fox jumps over 13 lazy dogs');
 CREATE TABLE IF NOT EXISTS certificate_exams (
     exam_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
