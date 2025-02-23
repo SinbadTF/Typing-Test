@@ -217,7 +217,7 @@ session_start();
                 <li>Exclusive keyboard themes</li>
                 <li>Custom background images</li>
             </ul>
-            <a href="/transaction/index.php" class="premium-button">Get Premium Access</a>
+            <a href="./transaction/index.php" class="premium-button">Get Premium Access</a>
         </div>
     </div>
 

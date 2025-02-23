@@ -1,5 +1,3 @@
-/*Adding commend by Htet Mon Myint*/
-/*Adding commend by Htet Mon Myint again!*/
 <?php
 session_start();
 require_once 'config/database.php';
@@ -387,8 +385,9 @@ require_once 'includes/header.php';
                             <i class="fas fa-crown"></i>
                         </div>
                         <div class="lesson-content">
-                            <!-- Update the premium lessons link in the navbar -->
-                            <a class="nav-link" href="<?php 
+                            <h4>Premium</h4>
+                            <p>Practice typing the most frequently used words in English.</p>
+                            <a href="<?php 
                                 if (!isset($_SESSION['user_id'])) {
                                     echo 'login.php';
                                 } else {
@@ -397,24 +396,56 @@ require_once 'includes/header.php';
                                     $user = $stmt->fetch();
                                     echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
                                 }
-                            ?>">
-                            </a>
-                            
-                            <!-- Update the premium card link in the lessons section -->
-                            <div class="lesson-content">
-                                <h4>Premium</h4>
-                                <p>Practice typing the most frequently used words in English.</p>
-                                <a href="<?php 
-                                    if (!isset($_SESSION['user_id'])) {
-                                        echo 'login.php';
-                                    } else {
-                                        $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
-                                        $stmt->execute([$_SESSION['user_id']]);
-                                        $user = $stmt->fetch();
-                                        echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
-                                    }
-                                ?>" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
-                            </div>
+                            ?>" class="btn btn-outline-primary btn-sm">Premium Lessons</a>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="section-title">What's New!!!</h2>
+                <div class="col-md-6 mb-4">
+                    <div class="lesson-card">
+                        <div class="lesson-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="lesson-content">
+                            <h4>Typing Games</h4>
+                            <p>Improve your skills while having fun with interactive typing games.</p>
+                            <button class="btn btn-outline-primary btn-sm">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="lesson-card">
+                        <div class="lesson-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="lesson-content">
+                            <h4>Proverb Typing</h4>
+                            <p>Makes typing practice more engaging and educational.</p>
+                            <a href="proverb_typing.php" class="btn btn-outline-primary btn-sm">Start Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="lesson-card">
+                        <div class="lesson-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <div class="lesson-content">
+                            <h4>Story Mode</h4>
+                            <p>Keep typing practice interesting, enhances reading comprehension.</p>
+                            <a href="story_mode.php" class="btn btn-outline-primary btn-sm">Start Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="lesson-card">
+                        <div class="lesson-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="lesson-content">
+                            <h4>Challenges</h4>
+                            <p>Daily and weekly typing challenges to test your skills.</p>
+                            <button class="btn btn-outline-primary btn-sm">Challenges</button>
                         </div>
                     </div>
                 </div>

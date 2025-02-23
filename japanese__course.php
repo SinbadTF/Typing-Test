@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -53,13 +54,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
             min-height: 100vh;
             padding-bottom: 50px;
         }
-        .navbar {
-            background: rgba(25, 25, 25, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
+   
         .course-section {
             padding: 80px 0;
             max-width: 1000px;

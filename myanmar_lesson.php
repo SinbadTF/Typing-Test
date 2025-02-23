@@ -12,22 +12,23 @@ $level = $_GET['level'] ?? '';
 $lessonNumber = $_GET['lesson'] ?? '';
 $lessonId = $_GET['id'] ?? '';
 
-$stmt = $pdo->prepare("SELECT * FROM lessons WHERE id = ?");
+// Modified query to get Myanmar lessons
+$stmt = $pdo->prepare("SELECT * FROM myanmar_lessons WHERE id = ?");
 $stmt->execute([$lessonId]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$lesson) {
-    header('Location: course.php');
+    header('Location: myanmar_course.php');
     exit();
 }
 
 // Get next lesson
-$stmt = $pdo->prepare("SELECT id, lesson_number FROM lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
+$stmt = $pdo->prepare("SELECT id, lesson_number FROM myanmar_lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
 $stmt->execute([$level, $lessonNumber]);
 $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
+    body {
             background-color: #323437;
             color: #d1d0c5;
             font-family: 'Roboto Mono', monospace;
@@ -67,6 +68,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .typing-area {
+         
             position: relative;
             font-size: 1.5rem;
             line-height: 1.5;
@@ -80,20 +82,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         .words {
             user-select: none;
-            font-size: 1.5rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            min-height: 120px;
-            max-height: 150px !important;
-            overflow-y: auto !important;
-            position: relative;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(38, 40, 43, 0.5);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            word-break: break-all;
-            overflow-wrap: break-word;
         }
 
         .letter {
@@ -358,7 +346,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     padding: 10px 15px;
     background: none;
     border: none;
-    color: #d1d0c5;
+    color: #FFF5EE;
     cursor: pointer;
     text-align: left;
     border-radius: 4px;
@@ -479,38 +467,27 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             align-items: center;
             gap: 8px;
         }
-
-        /* Add scrollbar styling */
-        .words::-webkit-scrollbar {
-            width: 8px !important;
-            display: block !important;
-        }
-
-        .words::-webkit-scrollbar-track {
-            background: rgba(38, 40, 43, 0.95);
-            border-radius: 4px;
-        }
-
-        .words::-webkit-scrollbar-thumb {
-            background: #646669;
-            border-radius: 4px;
-        }
-
-        .words::-webkit-scrollbar-thumb:hover {
-            background: #4a4a4a;
-        }
+        .key .myanmar {
+      padding-left: 2px;
+      margin-top: -18px;
+      margin-right: -3px;
+      font-size: 15px;
+      color: #888;
+    }
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
+
     <div class="typing-container">
-        <div class="header-section">
-            <!-- Add this after the typing-container div -->
-<div class="caps-warning" id="capsWarning">
+    <div class="header-section">
+    
+        <div class="caps-warning" id="capsWarning">
     <i class="fas fa-exclamation-triangle"></i>
     Caps Lock is ON
 </div>
-            <div class="stats-container">
+
+<div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">0:00</span></div>
@@ -531,78 +508,175 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         <div class="typing-area">
             <div class="words" id="words"></div>
-            <input type="text" class="input-field" id="input-field">
+            <input type="text" class="input-field" id="input-field" autofocus>
         </div>
-
         <div class="keyboard">
-            <div class="keyboard-row">
-                
-                <div class="key " data-key="`">`</div>
-                <div class="key" data-key="1">1</div>
-                <div class="key" data-key="2">2</div>
-                <div class="key" data-key="3">3</div>
-                <div class="key" data-key="4">4</div>
-                <div class="key" data-key="5">5</div>
-                <div class="key" data-key="6">6</div>
-                <div class="key" data-key="7">7</div>
-                <div class="key" data-key="8">8</div>
-                <div class="key" data-key="9">9</div>
-                <div class="key" data-key="0">0</div>
-                <div class="key " data-key="-">-</div>
-                <div class="key " data-key="=">=</div>
+        <div class="keyboard-row">
+        <div class="key" data-key="ၐ">ၐ
+                    <span class="myanmar">ဎ</span>
+                </div>
+                <div class="key" data-key="၁">၁
+                    <span class="myanmar">ဍ</span>
+                </div>
+                <div class="key" data-key="၂">၂
+                    <span class="myanmar">ၒ</span>
+                </div>
+                <div class="key" data-key="၃">၃
+                    <span class="myanmar">ဋ</span>
+                </div>
+                <div class="key" data-key="၄">၄
+                    <span class="myanmar">ၓ</span>
+                </div>
+                <div class="key" data-key="၅">၅
+                    <span class="myanmar">ၔ</span>
+                </div>
+                <div class="key" data-key="၆">၆
+                    <span class="myanmar">ၕ</span>
+                </div>
+                <div class="key" data-key="၇">၇
+                    <span class="myanmar">ရ</span>
+                </div>
+                <div class="key" data-key="၈">၈
+                    <span class="myanmar">*</span>
+                </div>
+                <div class="key" data-key="၉">၉
+                    <span class="myanmar">(</span>
+                </div>
+                <div class="key" data-key="၀">၀
+                    <span class="myanmar">)</span>
+                </div>
+                <div class="key " data-key="-">-
+                    <span class="myanmar">_</span>
+                </div>
+                <div class="key " data-key="=">=
+                    <span class="myanmar">+</span>
+                </div>
                 <div class="key delete special" data-key="Backspace">delete</div>
             </div>
-            <div class="keyboard-row">
-                <div class="key tab " data-key="tab">  tab</div>
-                <div class="key" data-key="q">q</div>
-                <div class="key" data-key="w">w</div>
-                <div class="key" data-key="e">e</div>
-                <div class="key" data-key="r">r</div>
-                <div class="key" data-key="t">t</div>
-                <div class="key" data-key="y">y</div>
-                <div class="key" data-key="u">u</div>
-                <div class="key" data-key="i">i</div>
-                <div class="key" data-key="o">o</div>
-                <div class="key" data-key="p">p</div>
-                <div class="key" data-key="[">[</div>
-                <div class="key" data-key="]">]</div>
-                <div class="key" data-key="\">]\</div>
-            </div>
-            <div class="keyboard-row">
-                <div class="key caps special" data-key="CapsLock">caps</div>
-                <div class="key" data-key="a">a</div>
-                <div class="key" data-key="s">s</div>
-                <div class="key" data-key="d">d</div>
-                <div class="key" data-key="f">f</div>
-                <div class="key" data-key="g">g</div>
-                <div class="key" data-key="h">h</div>
-                <div class="key" data-key="j">j</div>
-                <div class="key" data-key="k">k</div>
-                <div class="key" data-key="l">l</div>
-                <div class="key " data-key=";">;</div>
-                <div class="key " data-key="'">'</div>
-                <div class="key enter special" data-key="Enter">enter</div>
-            </div>
-            <div class="keyboard-row">
-                <div class="key shift" data-key="Shift">Shift</div>
-                <div class="key" data-key="z">z</div>
-                <div class="key" data-key="x">x</div>
-                <div class="key" data-key="c">c</div>
-                <div class="key" data-key="v">v</div>
-                <div class="key" data-key="b">b</div>
-                <div class="key" data-key="n">n</div>
-                <div class="key" data-key="m">m</div>
-                <div class="key" data-key=",">,</div>
-                <div class="key" data-key=".">.</div>
-                <div class="key" data-key="/">/</div>
-                <div class="key shift" data-key="Shift">Shift</div>
-            </div>
-            <div class="keyboard-row">
-                
-                <div class="key space" data-key=" ">space</div>
-                
-            </div>
+
+        <div class="keyboard-row">
+        <div class="key tab " data-key="tab">  tab</div>
+        <div class="key" data-key="ဆ">ဆ
+        <span class="myanmar">ဈ</span>
         </div>
+        <div class="key" data-key="တ">တ
+        <span class="myanmar">ဝ</span>
+        </div>
+        <div class="key" data-key="န">န
+        <span class="myanmar">ဣ</span>
+        </div>
+        <div class="key" data-key="မ">မ
+        <span class="myanmar">၎င်း</span>
+        </div>
+        <div class="key" data-key="အ">အ
+        <span class="myanmar">ဤ</span>
+        </div>
+        <div class="key" data-key="ပ">ပ
+        <span class="myanmar">၌</span>
+        </div>
+        <div class="key" data-key="က">က
+        <span class="myanmar">ဥ</span>
+        </div>
+        <div class="key" data-key="င">င
+        <span class="myanmar">၍</span>
+        </div>
+        <div class="key" data-key="သ">သ
+        <span class="myanmar">ဿ</span>
+        </div>
+        <div class="key" data-key="စ">စ
+        <span class="myanmar">ဏ</span>
+        </div>
+        <div class="key" data-key="ဟ">ဟ
+        <span class="myanmar">ဧ</span>
+        </div>
+        <div class="key" data-key="ဩ">ဩ
+        <span class="myanmar">ဪ</span>
+        </div>
+        <div class="key" data-key="၏">၏
+        <span class="myanmar">၏</span>
+        </div>
+     </div>
+
+<div class="keyboard-row">
+        <div class="key caps special" data-key="CapsLock">caps</div>
+        <div class="key" data-key="‌ေ">‌ေ
+            <span class="myanmar">ဗ</span>
+        </div>
+        <div class="key" data-key="ျ">ျ
+            <span class="myanmar">ှ</span>
+        </div>
+        <div class="key" data-key="ိိ">ိ
+            <span class="myanmar">ီ</span>
+        </div>
+        <div class="key" data-key="်">်
+            <span class="myanmar">္</span>
+        </div>
+        <div class="key" data-key="ါ">ါ
+            <span class="myanmar">ွ</span>
+        </div>
+        <div class="key" data-key="့">့
+            <span class="myanmar">ံ</span>
+        </div>
+        <div class="key" data-key="ြ">ြ
+            <span class="myanmar">ဲ</span>
+        </div>
+        <div class="key" data-key="ု">ု
+            <span class="myanmar">ဒ</span>
+        </div>
+        <div class="key" data-key="ူ">ူ
+            <span class="myanmar">ဓ</span>
+        </div>
+        <div class="key" data-key="း">း
+            <span class="myanmar">ဂ</span>
+        </div>
+        <div class="key " data-key="'">"
+            <span class="myanmar">'</span>
+        </div>
+        <div class="key enter special" data-key="Enter">enter</div>
+     </div>
+
+     <div class="keyboard-row">
+        <div class="key shift" data-key="Shift">Shift</div>
+        <div class="key" data-key="ဖ">ဖ
+            <span class="myanmar">ဇ</span>
+        </div>
+        <div class="key" data-key="ထ">ထ
+            <span class="myanmar">ဌ</span>
+        </div>
+        <div class="key" data-key="ခ">ခ
+            <span class="myanmar">ဃ</span>
+        </div>
+        <div class="key" data-key="လ">လ
+            <span class="myanmar">ဠ</span>
+        </div>
+        <div class="key" data-key="ဘ">ဘ
+            <span class="myanmar">ယ</span>
+        </div>
+        <div class="key" data-key="ည">ည
+            <span class="myanmar">ဉ</span>
+        </div>
+        <div class="key" data-key="ာ">ာ
+            <span class="myanmar">ဦ</span>
+        </div>
+        <div class="key" data-key=",">,
+            <span class="myanmar">၊</span>
+        </div>
+        <div class="key" data-key=".">.
+            <span class="myanmar">။</span>
+        </div>
+        <div class="key" data-key="/">/
+            <span class="myanmar">?</span>
+        </div>
+        <div class="key shift" data-key="Shift">Shift</div>
+    </div>
+    
+  
+        <div class="keyboard-row">
+            <div class="key space" data-key=" "></div>
+        </div>
+                
+            </div>
+    
 
         <div class="text-center">
             <button class="restart-button" id="restart-button">
@@ -616,7 +690,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </div>
     </div>
-
     <script>
         document.addEventListener('keydown', function(event) {
         if (event.getModifierState('CapsLock')) {
@@ -629,151 +702,10 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             document.getElementById('capsWarning').classList.remove('show');
         }
     });
-        // Get the lesson text from the database as a plain string
         const lessonText = <?php echo json_encode($lesson['content']); ?>;
-        
-        // Initialize variables
-        let isTyping = false;
-        let currentIndex = 0;
-        let startTime;
-        let timer;
-        let totalChars = 0;
-        let mistakes = 0;
-        let lastScrollPosition = 0;
-        let typedCharCount = 0; // New counter for typed characters
-        const CHARS_BEFORE_SCROLL = 40; // Scroll every 20 characters typed
-
-        // Initialize the words container with the lesson text
-        document.addEventListener('DOMContentLoaded', () => {
-            const wordsContainer = document.getElementById('words');
-            const inputField = document.getElementById('input-field');
-            
-            // Initialize text content
-            const text = lessonText.split('').map(char => {
-                const span = document.createElement('span');
-                span.textContent = char;
-                span.className = 'letter';
-                return span;
-            });
-            
-            wordsContainer.innerHTML = '';
-            text.forEach(span => wordsContainer.appendChild(span));
-            
-            // Set initial current letter
-            if (text.length > 0) {
-                text[0].classList.add('current');
-            }
-            
-            // Handle backspace key
-            inputField.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && currentIndex > 0) {
-                    e.preventDefault();
-                    currentIndex--;
-                    
-                    const letters = document.querySelectorAll('.letter');
-                    const current = letters[currentIndex];
-                    const next = letters[currentIndex + 1];
-                    
-                    // Remove classes from current letter
-                    current.classList.remove('correct', 'incorrect');
-                    current.classList.add('current');
-                    
-                    // Remove current class from next letter
-                    if (next) {
-                        next.classList.remove('current');
-                    }
-                    
-                    // Update stats
-                    if (current.classList.contains('incorrect')) {
-                        mistakes--;
-                    }
-                    totalChars--;
-                    updateStats();
-                }
-            });
-            
-            wordsContainer.style.overflowY = 'auto';
-            wordsContainer.style.maxHeight = '150px';
-            
-            setTimeout(() => {
-                inputField.focus();
-            }, 100);
-        });
-
-        // Add updateTimer function
-        function updateTimer() {
-            const timeElapsed = Math.round((new Date() - startTime) / 1000);
-            const minutes = Math.floor(timeElapsed / 60);
-            const seconds = timeElapsed % 60;
-            document.getElementById('time').textContent = 
-                `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // Add updateStats function
-        function updateStats() {
-            const timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
-            const wpm = Math.round((currentIndex / 5) / timeElapsed);
-            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
-            
-            document.getElementById('wpm').textContent = wpm || 0;
-            document.getElementById('accuracy').textContent = `${accuracy || 100}%`;
-        }
-
-        document.getElementById('input-field').addEventListener('input', (e) => {
-            if (!isTyping) {
-                startTime = new Date();
-                isTyping = true;
-                timer = setInterval(updateTimer, 1000);
-            }
-
-            const letters = document.querySelectorAll('.letter');
-            const typed = e.target.value;
-
-            if (typed && currentIndex < letters.length) {
-                totalChars++;
-                typedCharCount++; // Increment typed character count
-                const current = letters[currentIndex];
-                
-                if (typed === current.textContent) {
-                    current.classList.add('correct');
-                } else {
-                    mistakes++;
-                    current.classList.add('incorrect');
-                }
-
-
-
-                current.classList.remove('current');
-                
-                if (letters[currentIndex + 1]) {
-                    letters[currentIndex + 1].classList.add('current');
-                    
-                    // Scroll based on number of characters typed
-                    if (typedCharCount % CHARS_BEFORE_SCROLL === 0) {
-                        const wordsContainer = document.getElementById('words');
-                        wordsContainer.scrollBy({
-                            top: 25, // Small scroll amount
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-
-                currentIndex++;
-                updateStats();
-                e.target.value = '';
-
-                if (currentIndex >= letters.length) {
-                    clearInterval(timer);
-                    const nextBtn = document.getElementById('next-btn');
-                    if (nextBtn) nextBtn.style.display = 'inline-block';
-                }
-            }
-        });
-
-        // Handle focus when clicking anywhere on the typing area
-        document.querySelector('.typing-area').addEventListener('click', () => {
-            document.getElementById('input-field').focus();
-        });
+        const lessonId = <?php echo $lesson['id']; ?>;
+        const userId = <?php echo $_SESSION['user_id']; ?>;
     </script>
     <script src="assets/js/lesson.js"></script>
 </body>
+</html>
