@@ -222,20 +222,34 @@ $examTexts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <source src="assets/sounds/error.mp3" type="audio/mpeg">
     </audio>
 
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="certification-header mb-4">
+                    <h1 class="display-4 text-primary mb-3">Typing Certification</h1>
+                    <p class="lead text-muted">Earn your official typing certificate by passing our standardized test</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="typing-container">
         <?php if ($existingPass): ?>
             <div class="exam-instructions">
                 <h4>Certification Status</h4>
                 <p>You have already passed the certification exam!</p>
-                <a href="certificate/generate_certificate.php" class="restart-button">View Certificate</a>
+                <a href="certificate/generate_certificate.php" class="restart-button">
+                    <i class="fas fa-certificate me-2"></i>View Certificate
+                </a>
             </div>
         <?php else: ?>
             <div class="exam-instructions">
                 <h4>Exam Requirements:</h4>
                 <ul>
-                    <li>Minimum WPM: 40</li>
-                    <li>Overall Accuracy: 95%</li>
-                    
+                    <li><i class="fas fa-tachometer-alt me-2"></i>Minimum WPM: 40</li>
+                    <li><i class="fas fa-check-circle me-2"></i>Overall Accuracy: 95%</li>
+                    <li><i class="fas fa-clock me-2"></i>Test Duration: 5 minutes</li>
                 </ul>
             </div>
 
