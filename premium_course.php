@@ -640,7 +640,7 @@ if ($category === 'books') {
                         <h2 class="category-title"><i class="fas fa-book me-2"></i>Classic Literature</h2>
                         <div class="lessons-grid">
                             <?php for ($i = 1; $i <= 9; $i++): ?>
-                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                <div class="lesson-box">
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">
                                         <?php 
@@ -656,12 +656,8 @@ if ($category === 'books') {
                                         echo $title;
                                         ?>
                                     </h3>
-                                    <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=<?php echo $i; ?>" 
-                                           class="start-btn">Start</a>
-                                    <?php else: ?>
-                                        <div class="locked-text">Locked</div>
-                                    <?php endif; ?>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=<?php echo $i; ?>" 
+                                       class="start-btn">Start</a>
                                 </div>
                             <?php endfor; ?>
                         </div>
@@ -687,7 +683,7 @@ if ($category === 'books') {
 
                             for ($i = 1; $i <= 9; $i++): 
                             ?>
-                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                <div class="lesson-box">
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">
                                         <?php echo htmlspecialchars($songLessons[$i]['title']); ?>
@@ -695,12 +691,8 @@ if ($category === 'books') {
                                     <div class="lesson-difficulty">
                                         <?php echo $songLessons[$i]['difficulty']; ?>
                                     </div>
-                                    <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=<?php echo $i; ?>" 
-                                           class="start-btn">Start</a>
-                                    <?php else: ?>
-                                        <div class="locked-text">Locked</div>
-                                    <?php endif; ?>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=<?php echo $i; ?>" 
+                                       class="start-btn">Start</a>
                                 </div>
                             <?php endfor; ?>
                         </div>
@@ -711,14 +703,11 @@ if ($category === 'books') {
                         <h2 class="category-title"><i class="fas fa-code me-2"></i>Programming Practice</h2>
                         <div class="lessons-grid">
                             <?php for ($i = 1; $i <= 9; $i++): ?>
-                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                <div class="lesson-box">
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">Code <?php echo $i; ?></h3>
-                                    <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=coding&lesson=1" class="start-btn">Start</a>
-                                    <?php else: ?>
-                                        <div class="locked-text">Locked</div>
-                                    <?php endif; ?>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=coding&lesson=<?php echo $i; ?>" 
+                                       class="start-btn">Start</a>
                                 </div>
                             <?php endfor; ?>
                         </div>
@@ -729,14 +718,11 @@ if ($category === 'books') {
                         <h2 class="category-title"><i class="fas fa-brain me-2"></i>Educational Content</h2>
                         <div class="lessons-grid">
                             <?php for ($i = 1; $i <= 9; $i++): ?>
-                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                <div class="lesson-box">
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">Topic <?php echo $i; ?></h3>
-                                    <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=knowledge&lesson=1" class="start-btn">Start</a>
-                                    <?php else: ?>
-                                        <div class="locked-text">Locked</div>
-                                    <?php endif; ?>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=knowledge&lesson=<?php echo $i; ?>" 
+                                       class="start-btn">Start</a>
                                 </div>
                             <?php endfor; ?>
                         </div>
