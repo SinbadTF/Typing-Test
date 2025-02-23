@@ -472,11 +472,165 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
       font-size: 15px;
       color: #888;
     }
+    .results-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(32, 34, 37, 0.95);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .results-content {
+        background: #323437;
+        border-radius: 10px;
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        animation: slideIn 0.3s ease;
+        border: 1px solid rgba(209, 208, 197, 0.1);
+    }
+
+    .results-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .results-header h2 {
+        color: #d1d0c5;
+        font-size: 1.8rem;
+        font-weight: 500;
+    }
+
+    .results-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: rgba(38, 40, 43, 0.5);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .stat-icon {
+        color: #646669;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #d1d0c5;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #646669;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .feedback-message {
+        text-align: center;
+        padding: 1rem;
+        margin: 1.5rem 0;
+        border-radius: 8px;
+        background: rgba(38, 40, 43, 0.5);
+    }
+
+    .feedback-message.warning {
+        color: #ca4754;
+    }
+
+    .feedback-message.success {
+        color: #4a9eff;
+    }
+
+    .results-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn-retry, .btn-course, .btn-next {
+        padding: 0.8rem 1.5rem;
+        border: 1px solid #646669;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: none;
+        color: #646669;
+    }
+
+    .btn-retry:hover, .btn-course:hover {
+        color: #d1d0c5;
+        border-color: #d1d0c5;
+        background: rgba(209, 208, 197, 0.1);
+    }
+
+    .btn-next {
+        background: #4a9eff;
+        color: #ffffff;
+        border-color: #4a9eff;
+    }
+
+    .btn-next:hover {
+        opacity: 0.9;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Add these styles for better mobile responsiveness */
+    @media (max-width: 768px) {
+        .results-content {
+            width: 95%;
+            padding: 1.5rem;
+        }
+
+        .results-stats {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .results-actions {
+            flex-direction: column;
+        }
+
+        .btn-retry, .btn-course, .btn-next {
+            width: 100%;
+            justify-content: center;
+        }
+    }
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
     
+
     <!-- Add sound effects -->
     <audio id="keySound" preload="auto">
         <source src="assets/sounds/key-press.mp3" type="audio/mpeg">

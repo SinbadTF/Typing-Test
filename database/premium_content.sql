@@ -1,3 +1,8 @@
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS premium_books;
+DROP TABLE IF EXISTS premium_lessons;
+
+-- Create premium_books table
 CREATE TABLE premium_books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -8,6 +13,23 @@ CREATE TABLE premium_books (
     lesson_number INT NOT NULL,
     difficulty_level ENUM('easy', 'medium', 'hard') NOT NULL,
     description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_lesson (category, language, lesson_number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Create premium_lessons table
+CREATE TABLE premium_lessons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    category ENUM('books', 'lyrics', 'coding', 'knowledge') NOT NULL,
+    language ENUM('en', 'my', 'jp') NOT NULL,
+    lesson_number INT NOT NULL,
+    level_name VARCHAR(255) NOT NULL DEFAULT 'Basic Level',
+    difficulty_level ENUM('easy', 'medium', 'hard') NOT NULL,
+    description TEXT,
+    is_locked BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY unique_lesson (category, language, lesson_number)
@@ -33,23 +55,6 @@ INSERT INTO premium_books (title, author, content, category, language, lesson_nu
 
 ('Little Women', 'Louisa May Alcott', 'Christmas won\'t be Christmas without any presents, grumbled Jo, lying on the rug.', 'books', 'en', 9, 'medium', 'Practice typing with this beloved classic');
 
--- Create table for all premium lessons
-CREATE TABLE premium_lessons (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    category ENUM('books', 'lyrics', 'coding', 'knowledge') NOT NULL,
-    language ENUM('en', 'my', 'jp') NOT NULL,
-    lesson_number INT NOT NULL,
-    level_name VARCHAR(255) NOT NULL DEFAULT 'Basic Level',
-    difficulty_level ENUM('easy', 'medium', 'hard') NOT NULL,
-    description TEXT,
-    is_locked BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_lesson (category, language, lesson_number)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 -- Insert sample data for Basic Level typing lessons
 INSERT INTO premium_lessons (title, content, category, language, lesson_number, level_name, difficulty_level, description, is_locked) VALUES
 ('Home Row Keys', 'asdf jkl;', 'lyrics', 'en', 1, 'Basic Level', 'easy', 'Learn the home row keys', FALSE),
@@ -60,4 +65,4 @@ INSERT INTO premium_lessons (title, content, category, language, lesson_number, 
 ('R and U Keys', 'asdfr ;lkju', 'lyrics', 'en', 6, 'Basic Level', 'medium', 'Learn R and U keys', TRUE),
 ('Common Words', 'they have been', 'lyrics', 'en', 7, 'Basic Level', 'hard', 'Practice common words', TRUE),
 ('Speed Practice', 'quick typing test', 'lyrics', 'en', 8, 'Basic Level', 'hard', 'Speed typing practice', TRUE),
-('Full Review', 'complete review', 'lyrics', 'en', 9, 'Basic Level', 'hard', 'Review all lessons', TRUE); 
+('Full Review', 'complete review', 'lyrics', 'en', 9, 'Basic Level', 'hard', 'Review all lessons', TRUE);

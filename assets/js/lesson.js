@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let startTime;
     let timer;
     let totalChars = 0;
+    let typedCharCount = 0;
 
     function initLesson() {
         words.innerHTML = lessonText.split('').map((char, i) => 
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mistakes = 0;
         isTyping = false;
         totalChars = 0;
+        typedCharCount = 0;
         
         clearInterval(timer);
         timeDisplay.textContent = '0:00';
@@ -69,29 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         wpmDisplay.textContent = previousWPM;
         accuracyDisplay.textContent = previousAccuracy + '%';
-    }
-
-    // Update initLesson function
-    function initLesson() {
-        words.innerHTML = lessonText.split('').map((char, i) => 
-            `<span class="letter ${i === 0 ? 'current' : ''}">${char}</span>`
-        ).join('');
-        
-        currentIndex = 0;
-        mistakes = 0;
-        isTyping = false;
-        totalChars = 0;
-        
-        clearInterval(timer);
-        timeDisplay.textContent = '0:00';
-        
-        // Load previous stats instead of resetting
-        loadPreviousStats();
-        
-        input.value = '';
-        input.focus();
-
-        if (nextBtn) nextBtn.style.display = 'none';
     }
 
     function saveLessonProgress() {
@@ -150,45 +129,78 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the input event listener
         input.addEventListener('input', (e) => {
             if (!isTyping) {
-                startTime = Date.now();
+                startTime = new Date();
                 isTyping = true;
-                startTimer();
+                timer = setInterval(updateTimer, 1000);
             }
-    
-            if (e.inputType === 'deleteContentBackward') return;
-            if (!e.data) return;
     
             const letters = words.querySelectorAll('.letter');
-            const current = letters[currentIndex];
-            const typedChar = e.data;
-            const correctChar = letters[currentIndex].textContent;
+            const typed = e.target.value;
     
-            highlightKey(typedChar);
-            totalChars++;
+            if (typed && currentIndex < letters.length) {
+                totalChars++;
+                typedCharCount++;
+                const current = letters[currentIndex];
+                
+                if (typed === current.textContent) {
+                    current.classList.add('correct');
+                    correctSound.currentTime = 0;
+                    correctSound.play();
+                } else {
+                    current.classList.add('incorrect');
+                    mistakes++;
+                    wrongSound.currentTime = 0;
+                    wrongSound.play();
+                }
     
-            if (typedChar === correctChar) {
-                current.classList.add('correct');
-                correctSound.currentTime = 0;
-                correctSound.play();
-            } else {
-                current.classList.add('incorrect');
-                mistakes++;
-                wrongSound.currentTime = 0;
-                wrongSound.play();
-            }
+                current.classList.remove('current');
+                
+                if (letters[currentIndex + 1]) {
+                    letters[currentIndex + 1].classList.add('current');
+                    
+                    if (typedCharCount % CHARS_BEFORE_SCROLL === 0) {
+                        const wordsContainer = document.getElementById('words');
+                        wordsContainer.scrollBy({
+                            top: 25,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
     
-            current.classList.remove('current');
-            if (letters[currentIndex + 1]) {
-                letters[currentIndex + 1].classList.add('current');
-            }
+                currentIndex++;
+                updateStats();
+                e.target.value = '';
     
-            currentIndex++;
-            input.value = '';
-            updateStats();
-    
-            if (currentIndex >= lessonText.length) {
-                clearInterval(timer);
-                saveLessonProgress();
+                // Check if typing is completed
+                if (currentIndex >= letters.length) {
+                    clearInterval(timer);
+                    
+                    // Update final stats in modal
+                    document.getElementById('final-wpm').textContent = document.getElementById('wpm').textContent;
+                    document.getElementById('final-accuracy').textContent = document.getElementById('accuracy').textContent;
+                    document.getElementById('final-time').textContent = document.getElementById('time').textContent;
+                    
+                    // Show appropriate feedback message
+                    const accuracy = parseInt(document.getElementById('accuracy').textContent);
+                    const feedbackEl = document.getElementById('feedbackMessage');
+                    
+                    if (accuracy < 80) {
+                        feedbackEl.className = 'feedback-message warning';
+                        feedbackEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Practice more to improve your accuracy. Try this lesson again!';
+                        if (document.getElementById('next-lesson-btn')) {
+                            document.getElementById('next-lesson-btn').style.display = 'none';
+                        }
+                    } else {
+                        feedbackEl.className = 'feedback-message success';
+                        feedbackEl.innerHTML = '<i class="fas fa-check-circle"></i> Great job! You\'re ready for the next lesson.';
+                        if (document.getElementById('next-lesson-btn')) {
+                            document.getElementById('next-lesson-btn').style.display = 'inline-flex';
+                        }
+                    }
+                    
+                    // Show the modal
+                    document.getElementById('resultsModal').style.display = 'flex';
+                }
             }
         });
 
@@ -323,3 +335,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     themeToggle.style.backgroundColor = savedColor;
+
+// Add click event to close modal when clicking outside
+document.getElementById('resultsModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        this.style.display = 'none';
+    }
+});

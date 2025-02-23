@@ -8,19 +8,15 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'config/database.php';
 
-// Get parameters from URL
 $level = $_GET['level'] ?? '';
 $lessonNumber = $_GET['lesson'] ?? '';
 $lessonId = $_GET['id'] ?? '';
-$lang = $_GET['lang'] ?? 'en';
 
-// Fetch the lesson from lessons table (not premium_lessons)
-$stmt = $pdo->prepare("SELECT * FROM lessons WHERE id = ? AND level = ? AND lesson_number = ?");
-$stmt->execute([$lessonId, $level, $lessonNumber]);
+$stmt = $pdo->prepare("SELECT * FROM lessons WHERE id = ?");
+$stmt->execute([$lessonId]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$lesson) {
-    // Redirect back to course.php instead of premium_course.php
     header('Location: course.php');
     exit();
 }
@@ -29,48 +25,13 @@ if (!$lesson) {
 $stmt = $pdo->prepare("SELECT id, lesson_number FROM lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
 $stmt->execute([$level, $lessonNumber]);
 $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Get user's completed lessons
-$stmt = $pdo->prepare("SELECT completed_lessons FROM users WHERE user_id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch();
-$completedLessons = isset($user['completed_lessons']) ? explode(',', $user['completed_lessons']) : [];
-
-// Define lessons
-$lessons = [
-    1 => [
-        'title' => 'Home Row Keys',
-        'description' => 'Learn the basic home row keys position',
-        'link' => 'lesson1.php'
-    ],
-    2 => [
-        'title' => 'Upper Row Keys',
-        'description' => 'Practice typing with upper row keys',
-        'link' => 'lesson2.php'
-    ],
-    3 => [
-        'title' => 'Lower Row Keys',
-        'description' => 'Master the lower row keys',
-        'link' => 'lesson3.php'
-    ],
-    // Add more lessons as needed
-];
-
-// Add language-specific titles
-$languageTitles = [
-    'en' => 'English Typing Lesson',
-    'my' => 'မြန်မာစာ စာရိုက်လေ့ကျင့်ခန်း',
-    'jp' => '日本語タイピング練習'
-];
-
-$pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $pageTitle; ?> - Boku no Typing</title>
+    <title><?php echo htmlspecialchars($lesson['title']); ?> - Typing Lesson</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -128,9 +89,11 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             position: relative;
             padding: 10px;
             border-radius: 8px;
-            background: rgba(38, 40, 43, 0.5);
+            background: transparent;
             white-space: pre-wrap;
             word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
         }
 
         .letter {
@@ -141,7 +104,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         .letter.correct {
             color: #d1d0c5;
         }
-
+ 
         .letter.incorrect {
             color: #ca4754;
             background: rgba(202, 71, 84, 0.2);
@@ -536,16 +499,211 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         .words::-webkit-scrollbar-thumb:hover {
             background: #4a4a4a;
         }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .results-content {
+            background: #2c2c2c;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(209, 208, 197, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #d1d0c5;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(25, 25, 25, 0.95);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            color: #4a9eff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #d1d0c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #646669;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .feedback-message {
+            text-align: center;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .feedback-message.warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .feedback-message.success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-retry, .btn-course, .btn-next {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-retry {
+            background: #646669;
+            color: #d1d0c5;
+        }
+
+        .btn-course {
+            background: #2c2c2c;
+            color: #d1d0c5;
+            border: 1px solid #646669;
+        }
+
+        .btn-next {
+            background: #4a9eff;
+            color: #ffffff;
+        }
+
+        .btn-retry:hover, .btn-course:hover, .btn-next:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+            color: #ffffff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+       
+        .modal-content {
+            background-color: #323437;
+            color: #d1d0c5;
+            padding: 30px;
+            margin: 10% auto;
+            width: 400px;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid rgba(209, 208, 197, 0.1);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #d1d0c5;
+        }
+
+        .modal-content p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .modal-content strong {
+            color: #4a9eff;
+        }
+
+        .modal-content button,
+        .modal-content a {
+            background: #323437;
+            color: #d1d0c5;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content button:hover,
+        .modal-content a:hover {
+            background: #4a4a4a;
+            transform: translateY(-2px);
+        }
+
+        /* Add these new styles */
+        .modal.show {
+            display: block !important;
+        }
+
+   
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
     <div class="typing-container">
-        <h2 class="lesson-title"><?php echo htmlspecialchars($lesson['title']); ?></h2>
-        <div class="typing-text">
-            <p id="text-to-type"><?php echo htmlspecialchars($lesson['content']); ?></p>
-        </div>
         <div class="header-section">
+            <!-- Add this after the typing-container div -->
+<div class="caps-warning" id="capsWarning">
+    <i class="fas fa-exclamation-triangle"></i>
+    Caps Lock is ON
+</div>
             <div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
@@ -653,6 +811,68 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         </div>
     </div>
 
+    <div class="results-modal" id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <h2>Test Results</h2>
+            </div>
+            <div class="results-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="stat-value" id="final-wpm">0</div>
+                    <div class="stat-label">WPM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-value" id="final-accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-value" id="final-time">0:00</div>
+                    <div class="stat-label">Time</div>
+                </div>
+            </div>
+            <div class="feedback-message" id="feedbackMessage"></div>
+            <div class="results-actions">
+                <button class="btn-retry" onclick="location.reload()">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+                <a href="myanmar_course.php" class="btn-course">
+                    <i class="fas fa-book"></i> Back to Course
+                </a>
+                <?php if ($nextLesson): ?>
+                <a href="myanmar_lesson.php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
+                   id="next-lesson-btn" class="btn-next">
+                    Next Lesson <i class="fas fa-arrow-right"></i>
+                </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <h2>Typing Test Results</h2>
+            <p><strong>Accuracy:</strong> <span id="accuracy-result">0%</span></p>
+            <p><strong>Speed:</strong> <span id="speed-result">0 WPM</span></p>
+            <p><strong>Errors:</strong> <span id="errors-result">0</span></p>
+            <p><strong>Time:</strong> <span id="time-result">0 s</span></p>
+            <button onclick="location.reload()" class="btn-retry">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+            <a href="course.php" class="btn-course">
+                <i class="fas fa-book"></i> Back to Course
+            </a>
+            <?php if ($nextLesson): ?>
+            <a href="lesson.php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
+               id="next-btn" class="btn-next">
+                Next Lesson <i class="fas fa-arrow-right"></i>
+            </a>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('keydown', function(event) {
         if (event.getModifierState('CapsLock')) {
@@ -755,6 +975,37 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             document.getElementById('accuracy').textContent = `${accuracy || 100}%`;
         }
 
+        // Replace your existing showResults function with this updated version
+        function showResults() {
+            const timeElapsed = (new Date() - startTime) / 1000; // in seconds
+            const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
+            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+
+            // Update results in modal
+            document.getElementById('accuracy-result').textContent = accuracy + '%';
+            document.getElementById('speed-result').textContent = wpm + ' WPM';
+            document.getElementById('errors-result').textContent = mistakes;
+            document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
+
+            // Show/hide next lesson button based on accuracy
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) {
+                nextBtn.style.display = accuracy >= 80 ? 'inline-block' : 'none';
+            }
+
+            // Show the modal
+            const modal = document.getElementById('resultModal');
+            modal.style.display = 'block';
+
+            // Remove the click outside to close functionality
+            window.onclick = null; // Remove any existing click handler
+
+            // Prevent closing modal when clicking outside
+            modal.onclick = function(event) {
+                event.stopPropagation();
+            };
+        }
+
         document.getElementById('input-field').addEventListener('input', (e) => {
             if (!isTyping) {
                 startTime = new Date();
@@ -777,8 +1028,6 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                     current.classList.add('incorrect');
                 }
 
-
-
                 current.classList.remove('current');
                 
                 if (letters[currentIndex + 1]) {
@@ -800,8 +1049,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
 
                 if (currentIndex >= letters.length) {
                     clearInterval(timer);
-                    const nextBtn = document.getElementById('next-btn');
-                    if (nextBtn) nextBtn.style.display = 'inline-block';
+                    showResults();
                 }
             }
         });
@@ -810,7 +1058,19 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         document.querySelector('.typing-area').addEventListener('click', () => {
             document.getElementById('input-field').focus();
         });
+
+        // Add event listener for the restart button
+        document.getElementById('restart-button').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Add event listener to close modal when clicking outside
+        document.getElementById('resultsModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('resultsModal')) {
+                document.getElementById('resultsModal').style.display = 'none';
+            }
+        });
     </script>
     <script src="assets/js/lesson.js"></script>
 </body>
-</html>
+

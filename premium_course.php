@@ -628,6 +628,12 @@ if ($category === 'books') {
                                         <i class="fas fa-brain me-2"></i>Knowledge
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                        <a class="nav-link <?php echo $category === 'certification' ? 'active' : ''; ?>" 
+                           href="?lang=<?php echo $lang; ?>&category=certification">
+                            <i class="fas fa-certificate me-2"></i>Certification
+                        </a>
+                    </li>
                             </ul>
                         </div>
                     </div>
@@ -725,6 +731,29 @@ if ($category === 'books') {
                                        class="start-btn">Start</a>
                                 </div>
                             <?php endfor; ?>
+                        </div>
+                    </div>
+                    
+
+                    <!-- Add this section before the closing div.col-md-9 -->
+                    <div id="certification-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-certificate me-2"></i>Typing Certification</h2>
+                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto;">
+                            <div class="lesson-number">
+                                <i class="fas fa-award" style="color: #f0b232; font-size: 2.5rem;"></i>
+                            </div>
+                            <h3 class="lesson-title">Official Typing Certificate</h3>
+                            <div class="lesson-difficulty">
+                                Requirements:
+                                <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                                    <li><i class="fas fa-tachometer-alt me-2"></i>40 WPM</li>
+                                    <li><i class="fas fa-check-circle me-2"></i>95% Accuracy</li>
+                                    <li><i class="fas fa-clock me-2"></i>5 Minutes Test</li>
+                                </ul>
+                            </div>
+                            <a href="certificate_exam.php" class="start-btn">
+                                Take Certification Exam
+                            </a>
                         </div>
                     </div>
                 </div>
