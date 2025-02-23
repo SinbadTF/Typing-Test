@@ -2,12 +2,13 @@
 require_once '../config/database.php';
 
 try {
-    // Create transactions table if it doesn't exist
-    $sql = "CREATE TABLE IF NOT EXISTS transactions (
+    // Drop existing transactions table if it exists
+    $pdo->exec("DROP TABLE IF EXISTS transactions");
+    
+    // Create transactions table with all required columns
+    $sql = "CREATE TABLE transactions (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
-        name VARCHAR(255) NOT NULL,
-        phone VARCHAR(20) NOT NULL,
         amount DECIMAL(10,2) NOT NULL,
         screenshot VARCHAR(255) NOT NULL,
         status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
@@ -16,7 +17,7 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     $pdo->exec($sql);
-    echo "Transactions table created successfully";
+    echo "Transactions table recreated successfully";
 
     // Create uploads directory if it doesn't exist
     $uploadDir = '../uploads/';

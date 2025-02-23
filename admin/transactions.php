@@ -46,12 +46,23 @@ if (isset($_POST['action']) && isset($_POST['transaction_id'])) {
 
 // Get all transactions with user information
 $stmt = $pdo->query("
-    SELECT t.*, u.username, u.email 
+    SELECT 
+        t.id,
+        t.user_id,
+        t.amount,
+        t.status,
+        t.created_at,
+        t.screenshot,
+        u.username,
+        u.email
     FROM transactions t 
     JOIN users u ON t.user_id = u.user_id 
     ORDER BY t.created_at DESC
 ");
-$transactions = $stmt->fetchAll();
+$transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Add debug output
+error_log("Transactions query result: " . print_r($transactions, true));
 ?>
 
 <!DOCTYPE html>
@@ -175,9 +186,14 @@ $transactions = $stmt->fetchAll();
                         <div class="row">
                             <div class="col-md-4">
                                 <h5 class="section-title"><i class="fas fa-user me-2"></i>User Information</h5>
-                                <p><span class="info-label">Username:</span> <span class="info-value"><?php echo htmlspecialchars($transaction['username']); ?></span></p>
-                                <p><span class="info-label">Email:</span> <span class="info-value"><?php echo htmlspecialchars($transaction['email']); ?></span></p>
-                                <p><span class="info-label">Phone:</span> <span class="info-value"><?php echo htmlspecialchars($transaction['phone']); ?></span></p>
+                                <p>
+                                    <span class="info-label">Username:</span> 
+                                    <span class="info-value"><?php echo htmlspecialchars($transaction['username']); ?></span>
+                                </p>
+                                <p>
+                                    <span class="info-label">Email:</span> 
+                                    <span class="info-value"><?php echo htmlspecialchars($transaction['email']); ?></span>
+                                </p>
                             </div>
                             <div class="col-md-4">
                                 <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Transaction Details</h5>
@@ -191,11 +207,19 @@ $transactions = $stmt->fetchAll();
                             </div>
                             <div class="col-md-4">
                                 <h5 class="section-title"><i class="fas fa-image me-2"></i>Payment Screenshot</h5>
-                                <img src="../uploads/<?php echo htmlspecialchars($transaction['screenshot']); ?>" 
-                                     class="screenshot-preview img-fluid mb-3" 
-                                     data-bs-toggle="modal" 
-                                     data-bs-target="#screenshotModal"
-                                     data-screenshot="../uploads/<?php echo htmlspecialchars($transaction['screenshot']); ?>">
+                                <?php if (isset($transaction['screenshot']) && !empty($transaction['screenshot'])): ?>
+                                    <img src="../uploads/<?php echo htmlspecialchars($transaction['screenshot']); ?>" 
+                                         class="screenshot-preview img-fluid mb-3" 
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#screenshotModal"
+                                         data-screenshot="../uploads/<?php echo htmlspecialchars($transaction['screenshot']); ?>"
+                                         alt="Payment Screenshot">
+                                <?php else: ?>
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        No screenshot uploaded
+                                    </div>
+                                <?php endif; ?>
                                 
                                 <?php if ($transaction['status'] === 'pending'): ?>
                                     <div class="d-flex gap-2">

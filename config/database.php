@@ -1,7 +1,7 @@
 <?php
 try {
     $host = '127.0.0.1'; // Changed from localhost to IP address
-    $dbname = 'typing_test';
+    $dbname = 'typing_test3';
     $username = 'root';
     $password = '';
     
