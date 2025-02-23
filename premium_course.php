@@ -232,7 +232,7 @@ $title = $languageTitles[$lang] ?? $languageTitles['en'];
                             Earn your official typing certificate
                         <?php endif; ?>
                     </p>
-                    <a href="certification.php?lang=<?php echo $lang; ?>" class="course-button">
+                    <a href="certificate_exam.php?lang=<?php echo $lang; ?>" class="course-button">
                         <?php if ($lang === 'my'): ?>
                             စတင်မည်
                         <?php elseif ($lang === 'jp'): ?>
