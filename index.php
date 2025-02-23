@@ -400,7 +400,7 @@ require_once 'includes/header.php';
                         </div>
                     </div>
                 </div>
-                <h2 class="section-title">What's New!!!</h2>
+                <h2 class="section-title"> [ Free Practice ] What's New!!!</h2>
                 <div class="col-md-6 mb-4">
                     <div class="lesson-card">
                         <div class="lesson-icon">
@@ -409,7 +409,7 @@ require_once 'includes/header.php';
                         <div class="lesson-content">
                             <h4>Typing Games</h4>
                             <p>Improve your skills while having fun with interactive typing games.</p>
-                            <button class="btn btn-outline-primary btn-sm">Play Now</button>
+                            <a href="typing_games.php" class="btn btn-outline-primary btn-sm">Play Now</a>
                         </div>
                     </div>
                 </div>
@@ -421,7 +421,7 @@ require_once 'includes/header.php';
                         <div class="lesson-content">
                             <h4>Proverb Typing</h4>
                             <p>Makes typing practice more engaging and educational.</p>
-                            <a href="proverb_typing.php" class="btn btn-outline-primary btn-sm">Start Now</a>
+                            <a href="proverb_course.php" class="btn btn-outline-primary btn-sm">Start Now</a>
                         </div>
                     </div>
                 </div>
@@ -445,7 +445,7 @@ require_once 'includes/header.php';
                         <div class="lesson-content">
                             <h4>Challenges</h4>
                             <p>Daily and weekly typing challenges to test your skills.</p>
-                            <button class="btn btn-outline-primary btn-sm">Challenges</button>
+                            <a href="typing_test.php" class="btn btn-outline-primary btn-sm">Challenges</a>
                         </div>
                     </div>
                 </div>
@@ -492,11 +492,11 @@ require_once 'includes/header.php';
                         <a href="course.php" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-language me-2"></i>English
                         </a>
-                        <a href="japanese__course.php" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-language me-2"></i>日本語
+                        <a href="japanese_course.php" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>Japanese [日本語]
                         </a>
-                        <a href="#" class="btn btn-outline-light btn-lg disabled">
-                            <i class="fas fa-language me-2"></i>မြန်မာ (Coming Soon)
+                        <a href="myanmar_course.php" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-language me-2"></i>Myanmar [မြန်မာ]
                         </a>
                     </div>
                 </div>

@@ -58,7 +58,19 @@ $advancedLessons = getLessons($pdo, 'advanced');
         min-height: 100vh;
         padding-bottom: 50px;
     }
-   
+    .navbar {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+        background: rgba(25, 25, 25, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
     /* Adjust main content spacing */
 
     .course-section {
@@ -68,13 +80,13 @@ $advancedLessons = getLessons($pdo, 'advanced');
     }
     .section-title {
         margin-top: 100px;
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 3rem;
-        background: linear-gradient(45deg, #007bff, #00ff88);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
     }
   
     .level-card {
