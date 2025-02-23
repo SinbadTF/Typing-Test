@@ -18,8 +18,9 @@ if (!$user || $user['is_premium'] != 1) {
     exit();
 }
 
-// Add at the top of the file
+// Get language and category
 $lang = $_GET['lang'] ?? 'en';
+$category = $_GET['category'] ?? '';
 
 // Add language-specific titles
 $languageTitles = [
@@ -29,6 +30,27 @@ $languageTitles = [
 ];
 
 $title = $languageTitles[$lang] ?? $languageTitles['en'];
+
+// Initialize arrays
+$books = [];
+$lessons = [];
+
+// Fetch all books regardless of category selection
+$stmt = $pdo->prepare("SELECT * FROM premium_books WHERE language = ? ORDER BY lesson_number");
+$stmt->execute([$lang]);
+$books = $stmt->fetchAll();
+
+// Fetch all lessons regardless of category selection
+$stmt = $pdo->prepare("SELECT * FROM premium_lessons WHERE language = ? ORDER BY lesson_number");
+$stmt->execute([$lang]);
+$lessons = $stmt->fetchAll();
+
+// When displaying books, fetch from database
+if ($category === 'books') {
+    $stmt = $pdo->prepare("SELECT * FROM premium_books WHERE category = ? AND language = ? ORDER BY lesson_number");
+    $stmt->execute(['books', $lang]);
+    $books = $stmt->fetchAll();
+}
 ?>
 
 <!DOCTYPE html>
@@ -106,6 +128,441 @@ $title = $languageTitles[$lang] ?? $languageTitles['en'];
             margin-bottom: 15px;
             color: #f0b232;
         }
+
+        .container-fluid {
+            display: flex;
+        }
+
+        .row {
+            flex: 1;
+        }
+
+        .sidebar {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-sticky {
+            position: sticky;
+            top: 0;
+        }
+
+        .sidebar-heading {
+            color: #f0b232;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(240, 178, 50, 0.2);
+        }
+
+        .nav-link {
+            color: #d1d0c5;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.4s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #f0b232, #f7c157);
+            transition: width 0.4s ease;
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .nav-link:hover:before,
+        .nav-link.active:before {
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #f0b232;
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sub-menu {
+            padding-left: 30px;
+        }
+
+        .sub-menu a {
+            display: block;
+            color: #adb5bd;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .sub-menu a:hover {
+            color: #f0b232;
+            background: rgba(240, 178, 50, 0.05);
+        }
+
+        .lesson-box {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .lesson-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #f0b232, #f7c157);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .lesson-box:hover:not(.locked) {
+            transform: translateY(-10px);
+            border-color: rgba(240, 178, 50, 0.3);
+        }
+
+        .lesson-box:hover:not(.locked):before {
+            opacity: 0.1;
+        }
+
+        .lesson-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f0b232;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(240, 178, 50, 0.3);
+        }
+
+        .lesson-title {
+            color: #ffffff;
+            font-size: 1rem;
+            margin: 10px 0;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #f0b232, #f7c157);
+            color: #0f172a;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+            font-size: 0.9rem;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 178, 50, 0.3);
+            color: #0f172a;
+        }
+
+        .lesson-box.locked {
+            opacity: 0.5;
+        }
+
+        .locked-text {
+            color: #d1d0c5;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .locked-text:before {
+            content: '\f023';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+
+        .col-md-4 {
+            padding: 15px;
+        }
+
+        .row {
+            margin: 0 -15px;
+        }
+
+        .level-container {
+            padding: 20px;
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .level-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #00e1d4;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .level-title {
+            font-size: 24px;
+            color: #e2b714;
+            margin: 0;
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .category-header {
+            margin-bottom: 30px;
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #2c2e31;
+            border-radius: 10px;
+        }
+
+        .level-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #00e1d4;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .level-title {
+            font-size: 24px;
+            color: #e2b714;
+            margin: 0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .category-card {
+            background: #2c2e31;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 40px;
+            color: #00e1d4;
+            margin-bottom: 20px;
+        }
+
+        .category-card h2 {
+            color: #e2b714;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .category-card p {
+            color: #adb5bd;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .category-btn {
+            background: #00e1d4;
+            color: #2c2e31;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .category-btn:hover {
+            background: #00bfb3;
+            color: #2c2e31;
+            text-decoration: none;
+        }
+
+        .col-md-9 {
+            padding: 20px;
+        }
+
+        .category-sidebar {
+            background: #2c2e31;
+            padding: 20px;
+            border-radius: 10px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .category-card {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .category-card.active {
+            background: #00e1d4;
+        }
+
+        .category-card.active .lesson-number,
+        .category-card.active .lesson-title {
+            color: #2c2e31;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 50px;
+            color: #adb5bd;
+        }
+
+        .welcome-message h2 {
+            color: #e2b714;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            color: #f0b232;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-title:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: linear-gradient(to bottom, #f0b232, #f7c157);
+        }
+
+        .category-title i {
+            font-size: 2rem;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #f0b232, #f7c157);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lessons-container {
+            padding: 15px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+            padding-top: 15px;
+        }
+
+        .category-section.active {
+            scroll-margin-top: 20px;
+        }
+
+        .category-title {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #1e1e1e;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 1200px) {
+            .lessons-grid {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 1199px) {
+            .lesson-box {
+                padding: 15px;
+            }
+            .lesson-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lessons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -122,130 +579,173 @@ $title = $languageTitles[$lang] ?? $languageTitles['en'];
             <?php endif; ?>
         </h1>
         
-        <div class="row">
-            <?php if ($lang === 'my'): ?>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-keyboard"></i>
-                        </div>
-                        <h2 class="course-title">အခြေခံ သင်ခန်းစာများ</h2>
-                        <p class="course-description">မြန်မာစာ စာရိုက်ခြင်း အခြေခံများကို လေ့လာပါ</p>
-                        <a href="premium_lesson.php?lang=my&level=basic" class="course-button">စတင်လေ့လာမည်</a>
-                        <div class="course-stats">
-                            <i class="fas fa-clock me-2"></i>အခြေခံအဆင့်
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h2 class="course-title">အဆင့်မြင့် သင်ခန်းစာများ</h2>
-                        <p class="course-description">မြန်မာစာ စာရိုက်ခြင်း အဆင့်မြင့်နည်းများ</p>
-                        <a href="premium_lesson.php?lang=my&level=advanced" class="course-button">စတင်မည်</a>
-                        <div class="course-stats">
-                            <i class="fas fa-star me-2"></i>အဆင့်မြင့်
-                        </div>
-                    </div>
-                </div>
-
-            <?php elseif ($lang === 'jp'): ?>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-keyboard"></i>
-                        </div>
-                        <h2 class="course-title">基本レッスン</h2>
-                        <p class="course-description">日本語タイピングの基本を学びましょう</p>
-                        <a href="premium_lesson.php?lang=jp&level=basic" class="course-button">始める</a>
-                        <div class="course-stats">
-                            <i class="fas fa-clock me-2"></i>基本レベル
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h2 class="course-title">上級レッスン</h2>
-                        <p class="course-description">日本語タイピングの高度なテクニック</p>
-                        <a href="premium_lesson.php?lang=jp&level=advanced" class="course-button">始める</a>
-                        <div class="course-stats">
-                            <i class="fas fa-star me-2"></i>上級レベル
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Left side: Categories -->
+                <div class="col-md-3">
+                    <div class="sidebar">
+                        <div class="sidebar-sticky">
+                            <h5 class="sidebar-heading">Categories</h5>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link <?php echo $category === 'books' ? 'active' : ''; ?>" 
+                                       href="?lang=<?php echo $lang; ?>&category=books">
+                                        <i class="fas fa-book me-2"></i>Books
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php echo $category === 'lyrics' ? 'active' : ''; ?>" 
+                                       href="?lang=<?php echo $lang; ?>&category=lyrics">
+                                        <i class="fas fa-music me-2"></i>Song Lyrics
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php echo $category === 'coding' ? 'active' : ''; ?>" 
+                                       href="?lang=<?php echo $lang; ?>&category=coding">
+                                        <i class="fas fa-code me-2"></i>Coding
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php echo $category === 'knowledge' ? 'active' : ''; ?>" 
+                                       href="?lang=<?php echo $lang; ?>&category=knowledge">
+                                        <i class="fas fa-brain me-2"></i>Knowledge
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-            <?php else: ?>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-keyboard"></i>
-                        </div>
-                        <h2 class="course-title">Basic Lessons</h2>
-                        <p class="course-description">Learn the fundamentals of English typing</p>
-                        <a href="premium_lesson.php?lang=en&level=basic" class="course-button">Start Learning</a>
-                        <div class="course-stats">
-                            <i class="fas fa-clock me-2"></i>Basic Level
+                <!-- Right side: Lessons -->
+                <div class="col-md-9">
+                    <!-- Books Section -->
+                    <div id="books-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-book me-2"></i>Classic Literature</h2>
+                        <div class="lessons-grid">
+                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                    <div class="lesson-number"><?php echo $i; ?></div>
+                                    <h3 class="lesson-title">
+                                        <?php 
+                                        $title = "Book " . $i;  // Default title
+                                        if (!empty($books)) {
+                                            foreach ($books as $book) {
+                                                if ((int)$book['lesson_number'] === $i) {
+                                                    $title = htmlspecialchars($book['title']);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        echo $title;
+                                        ?>
+                                    </h3>
+                                    <?php if ($i === 1): ?>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=1" class="start-btn">Start</a>
+                                    <?php else: ?>
+                                        <div class="locked-text">Locked</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endfor; ?>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="course-card">
-                        <div class="course-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h2 class="course-title">Advanced Lessons</h2>
-                        <p class="course-description">Master advanced English typing techniques</p>
-                        <a href="premium_lesson.php?lang=en&level=advanced" class="course-button">Start Now</a>
-                        <div class="course-stats">
-                            <i class="fas fa-star me-2"></i>Advanced Level
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
 
-            <!-- Common features for all languages -->
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-certificate"></i>
+                    <!-- Lyrics Section -->
+                    <div id="lyrics-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-music me-2"></i>Basic Level</h2>
+                        <div class="lessons-grid">
+                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                    <div class="lesson-number"><?php echo $i; ?></div>
+                                    <h3 class="lesson-title">
+                                        <?php 
+                                        $title = "Lesson " . $i;  // Default title
+                                        if (!empty($lessons)) {
+                                            foreach ($lessons as $lesson) {
+                                                if ((int)$lesson['lesson_number'] === $i) {
+                                                    $title = htmlspecialchars($lesson['title']);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        echo $title;
+                                        ?>
+                                    </h3>
+                                    <?php if ($i === 1): ?>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=1" class="start-btn">Start</a>
+                                    <?php else: ?>
+                                        <div class="locked-text">Locked</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endfor; ?>
+                        </div>
                     </div>
-                    <h2 class="course-title">
-                        <?php if ($lang === 'my'): ?>
-                            အသိအမှတ်ပြုလက်မှတ်
-                        <?php elseif ($lang === 'jp'): ?>
-                            認定証
-                        <?php else: ?>
-                            Certification
-                        <?php endif; ?>
-                    </h2>
-                    <p class="course-description">
-                        <?php if ($lang === 'my'): ?>
-                            တရားဝင် အသိအမှတ်ပြုလက်မှတ် ရယူပါ
-                        <?php elseif ($lang === 'jp'): ?>
-                            公式認定証を取得しましょう
-                        <?php else: ?>
-                            Earn your official typing certificate
-                        <?php endif; ?>
-                    </p>
-                    <a href="certification.php?lang=<?php echo $lang; ?>" class="course-button">
-                        <?php if ($lang === 'my'): ?>
-                            စတင်မည်
-                        <?php elseif ($lang === 'jp'): ?>
-                            始める
-                        <?php else: ?>
-                            Start Now
-                        <?php endif; ?>
-                    </a>
+
+                    <!-- Coding Section -->
+                    <div id="coding-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-code me-2"></i>Programming Practice</h2>
+                        <div class="lessons-grid">
+                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                    <div class="lesson-number"><?php echo $i; ?></div>
+                                    <h3 class="lesson-title">Code <?php echo $i; ?></h3>
+                                    <?php if ($i === 1): ?>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=coding&lesson=1" class="start-btn">Start</a>
+                                    <?php else: ?>
+                                        <div class="locked-text">Locked</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Section -->
+                    <div id="knowledge-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-brain me-2"></i>Educational Content</h2>
+                        <div class="lessons-grid">
+                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                                <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
+                                    <div class="lesson-number"><?php echo $i; ?></div>
+                                    <h3 class="lesson-title">Topic <?php echo $i; ?></h3>
+                                    <?php if ($i === 1): ?>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=knowledge&lesson=1" class="start-btn">Start</a>
+                                    <?php else: ?>
+                                        <div class="locked-text">Locked</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the category from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        
+        if (category) {
+            // Scroll to the selected category section
+            const section = document.getElementById(category + '-section');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Add click handlers for category links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const category = this.href.split('category=')[1];
+                const section = document.getElementById(category + '-section');
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

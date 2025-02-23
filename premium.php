@@ -284,7 +284,30 @@ require_once 'config/database.php';
     </style>
 </head>
 <body>
-    <?php include 'includes/navbar.php'; ?>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-keyboard me-2"></i>Boku no Typing
+            </a>
+            <div class="navbar-nav ms-auto">
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a class="nav-link" href="profile.php">
+                        <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($_SESSION['username']); ?>
+                    </a>
+                    <a class="nav-link" href="logout.php">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                <?php else: ?>
+                    <a class="nav-link" href="login.php">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                <?php endif; ?>
+                <a class="nav-link" href="premium.php">
+                    <i class="fas fa-crown me-2"></i>Premium
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
         <div class="premium-hero">
@@ -347,39 +370,6 @@ require_once 'config/database.php';
                 <p class="feature-description">Personalize your experience with custom keyboard themes and background images</p>
             </div>
         </div>
-
-        <div class="row mt-5">
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h2 class="course-title">Premium Lessons</h2>
-                    <p class="course-description">Access advanced typing courses in multiple languages</p>
-                    <a href="#" class="course-button" data-bs-toggle="modal" data-bs-target="#premiumLanguageModal">
-                        <i class="fas fa-globe me-2"></i>Choose Language
-                    </a>
-                    <div class="course-stats">
-                        <i class="fas fa-language me-2"></i>Multiple Languages Available
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="course-card">
-                    <div class="course-icon">
-                        <i class="fas fa-keyboard"></i>
-                    </div>
-                    <h2 class="course-title">Custom Practice</h2>
-                    <p class="course-description">Create your own custom typing exercises</p>
-                    <a href="premium_custom_practice.php" class="course-button">
-                        <i class="fas fa-edit me-2"></i>Start Practice
-                    </a>
-                    <div class="course-stats">
-                        <i class="fas fa-clock me-2"></i>Practice at Your Own Pace
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Add this modal HTML before the closing body tag -->
@@ -399,59 +389,6 @@ require_once 'config/database.php';
         </div>
     </div>
 
-    <!-- Add this modal HTML before the closing body tag -->
-    <div class="modal fade" id="premiumLanguageModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Choose Your Language</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-3">
-                        <a href="premium_course.php?lang=en" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-language me-2"></i>English
-                        </a>
-                        <a href="premium_course.php?lang=my" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-language me-2"></i>မြန်မာ
-                        </a>
-                        <a href="premium_course.php?lang=jp" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-language me-2"></i>日本語
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function showLoginPrompt(event) {
-            event.preventDefault();
-            new bootstrap.Modal(document.getElementById('loginPromptModal')).show();
-        }
-
-        let lastScroll = 0;
-        const navbar = document.querySelector('.navbar');
-        
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll <= 0) {
-                navbar.classList.remove('navbar-hidden');
-                return;
-            }
-            
-            if (currentScroll > lastScroll && !navbar.classList.contains('navbar-hidden')) {
-                // Scrolling down
-                navbar.classList.add('navbar-hidden');
-            } else if (currentScroll < lastScroll && navbar.classList.contains('navbar-hidden')) {
-                // Scrolling up
-                navbar.classList.remove('navbar-hidden');
-            }
-            
-            lastScroll = currentScroll;
-        });
-    </script>
 </body>
 </html>
