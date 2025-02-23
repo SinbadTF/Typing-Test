@@ -563,6 +563,23 @@ if ($category === 'books') {
                 grid-template-columns: 1fr;
             }
         }
+
+        .lesson-difficulty {
+            font-size: 0.8rem;
+            color: #adb5bd;
+            margin: 5px 0;
+        }
+        
+        .lesson-title {
+            font-size: 0.9rem;
+            line-height: 1.3;
+            margin: 8px 0;
+            height: 2.6em;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
     </style>
 </head>
 <body>
@@ -627,7 +644,7 @@ if ($category === 'books') {
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">
                                         <?php 
-                                        $title = "Book " . $i;  // Default title
+                                        $title = "Book " . $i;
                                         if (!empty($books)) {
                                             foreach ($books as $book) {
                                                 if ((int)$book['lesson_number'] === $i) {
@@ -640,7 +657,8 @@ if ($category === 'books') {
                                         ?>
                                     </h3>
                                     <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=1" class="start-btn">Start</a>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=<?php echo $i; ?>" 
+                                           class="start-btn">Start</a>
                                     <?php else: ?>
                                         <div class="locked-text">Locked</div>
                                     <?php endif; ?>
@@ -651,27 +669,35 @@ if ($category === 'books') {
 
                     <!-- Lyrics Section -->
                     <div id="lyrics-section" class="category-section">
-                        <h2 class="category-title"><i class="fas fa-music me-2"></i>Basic Level</h2>
+                        <h2 class="category-title"><i class="fas fa-music me-2"></i>Song Lyrics</h2>
                         <div class="lessons-grid">
-                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                            <?php 
+                            // Define song lessons
+                            $songLessons = [
+                                1 => ['title' => 'Perfect - Ed Sheeran', 'difficulty' => 'Easy'],
+                                2 => ['title' => 'Someone Like You - Adele', 'difficulty' => 'Medium'],
+                                3 => ['title' => 'Shape of You - Ed Sheeran', 'difficulty' => 'Medium'],
+                                4 => ['title' => 'All of Me - John Legend', 'difficulty' => 'Medium'],
+                                5 => ['title' => 'Hello - Adele', 'difficulty' => 'Hard'],
+                                6 => ['title' => 'Stay With Me - Sam Smith', 'difficulty' => 'Medium'],
+                                7 => ['title' => 'Thinking Out Loud - Ed Sheeran', 'difficulty' => 'Hard'],
+                                8 => ['title' => 'Rolling in the Deep - Adele', 'difficulty' => 'Hard'],
+                                9 => ['title' => 'Just the Way You Are - Bruno Mars', 'difficulty' => 'Medium']
+                            ];
+
+                            for ($i = 1; $i <= 9; $i++): 
+                            ?>
                                 <div class="lesson-box <?php echo $i > 1 ? 'locked' : ''; ?>">
                                     <div class="lesson-number"><?php echo $i; ?></div>
                                     <h3 class="lesson-title">
-                                        <?php 
-                                        $title = "Lesson " . $i;  // Default title
-                                        if (!empty($lessons)) {
-                                            foreach ($lessons as $lesson) {
-                                                if ((int)$lesson['lesson_number'] === $i) {
-                                                    $title = htmlspecialchars($lesson['title']);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        echo $title;
-                                        ?>
+                                        <?php echo htmlspecialchars($songLessons[$i]['title']); ?>
                                     </h3>
+                                    <div class="lesson-difficulty">
+                                        <?php echo $songLessons[$i]['difficulty']; ?>
+                                    </div>
                                     <?php if ($i === 1): ?>
-                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=1" class="start-btn">Start</a>
+                                        <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=<?php echo $i; ?>" 
+                                           class="start-btn">Start</a>
                                     <?php else: ?>
                                         <div class="locked-text">Locked</div>
                                     <?php endif; ?>
