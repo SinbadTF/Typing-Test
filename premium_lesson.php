@@ -625,7 +625,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            color: #4a4a4a;
+            color: #333333;
         }
         
         body.theme-kid {
@@ -640,181 +640,113 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             padding-bottom: 50px;
         }
 
-        /* Kid theme keyboard */
+        /* Kid theme keyboard - Baby blue colors */
         .keyboard.theme-kid {
-            background: linear-gradient(135deg, rgba(255, 192, 203, 0.9), rgba(255, 218, 233, 0.9));
+            background: linear-gradient(135deg, rgba(176, 226, 255, 0.9), rgba(135, 206, 250, 0.9));
             backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 166, 193, 0.3);
-            box-shadow: 0 4px 20px rgba(255, 166, 193, 0.3);
-            margin: 20px auto;
-            max-width: 100%;
-            padding: 15px;
-        }
-
-        @media screen and (max-width: 768px) {
-            body.theme-kid {
-                background-size: auto 100%;
-                background-position: top center;
-            }
-            
-            .keyboard.theme-kid {
-                padding: 10px;
-            }
-            
-            .keyboard.theme-kid .key {
-                margin: 2px;
-                height: 40px;
-            }
-        }
-
-        /* Customize overlay for kid theme */
-        body.theme-kid::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                rgba(255, 255, 255, 0.9),
-                rgba(255, 218, 233, 0.9)
-            ); /* Adjusted overlay opacity */
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Add overlay for better readability */
-        body[class*="theme-"]::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Subtle dark overlay */
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Ensure content stays above overlay */
-        .typing-container, .navbar, .keyboard {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Space theme */
-        .navbar.theme-space {
-            background-color: rgba(10, 10, 42, 0.85) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(100, 149, 237, 0.2);
-        }
-
-        .keyboard.theme-space {
-            background: rgba(10, 10, 42, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(100, 149, 237, 0.2);
-        }
-
-        .keyboard.theme-space .key {
-            background: rgba(30, 30, 70, 0.9);
-            color: #64ffda;
-            border: 1px solid rgba(100, 149, 237, 0.2);
-        }
-
-        /* Galaxy Light theme keyboard - Updated design */
-        .keyboard.theme-galaxylight {
-            background: linear-gradient(135deg, rgba(74, 214, 174, 0.9), rgba(83, 196, 216, 0.9));
-            backdrop-filter: blur(10px);
             border: 2px solid rgba(135, 206, 250, 0.4);
-            box-shadow: 0 4px 25px rgba(100, 149, 237, 0.3);
+            box-shadow: 0 4px 20px rgba(100, 181, 246, 0.3);
             border-radius: 15px;
-            padding: 20px;
         }
 
-        .keyboard.theme-galaxylight .key {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.95));
-            color: #4682b4; /* Steel blue */
+        .keyboard.theme-kid .key {
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.95), rgba(230, 240, 255, 0.95));
+            color: #4a90e2; /* Sky blue */
             border: 1px solid rgba(135, 206, 250, 0.4);
             box-shadow: 0 3px 0 rgba(135, 206, 250, 0.3);
             border-radius: 8px;
             transition: all 0.2s ease;
         }
 
-        .keyboard.theme-galaxylight .key.special {
+        .keyboard.theme-kid .key.special {
             background: linear-gradient(135deg, rgba(230, 240, 255, 0.95), rgba(220, 235, 255, 0.95));
-            color: #1e90ff; /* Dodger blue */
+            color: #1e88e5; /* Slightly darker blue */
             font-weight: 500;
         }
 
-        .keyboard.theme-galaxylight .key:hover {
+        .keyboard.theme-kid .key:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 0 rgba(135, 206, 250, 0.3);
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 248, 255, 0.98));
         }
 
-        .keyboard.theme-galaxylight .key:active,
-        .keyboard.theme-galaxylight .key.active {
+        .keyboard.theme-kid .key:active,
+        .keyboard.theme-kid .key.active {
             transform: translateY(2px);
-            background: linear-gradient(135deg, #1e90ff, #4682b4);
-            color: #ffffff;
+            background: linear-gradient(135deg, #64b5f6, #90caf9); /* Light blue gradient */
+            color: white;
             box-shadow: none;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            border-color: #4682b4;
         }
 
-        /* Special keys for galaxy light theme */
-        .keyboard.theme-galaxylight .key.space {
+        /* Special keys for kid theme */
+        .keyboard.theme-kid .key.space {
             background: linear-gradient(135deg, rgba(240, 248, 255, 0.95), rgba(230, 240, 255, 0.95));
             border-radius: 12px;
         }
 
-        .keyboard.theme-galaxylight .key.enter,
-        .keyboard.theme-galaxylight .key.shift,
-        .keyboard.theme-galaxylight .key.caps,
-        .keyboard.theme-galaxylight .key.tab {
+        .keyboard.theme-kid .key.enter,
+        .keyboard.theme-kid .key.shift,
+        .keyboard.theme-kid .key.caps,
+        .keyboard.theme-kid .key.tab {
             background: linear-gradient(135deg, rgba(230, 240, 255, 0.95), rgba(220, 235, 255, 0.95));
-            color: #4169e1; /* Royal blue */
+            color: #2196f3; /* Bright blue */
             font-weight: 500;
         }
 
-        /* Larvender theme */
-        .navbar.theme-larvender {
-            background-color: rgba(230, 230, 250, 0.85) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(147, 112, 219, 0.3);
-        }
-
+        /* Lavender theme keyboard - Updated design */
         .keyboard.theme-larvender {
-            background: rgba(230, 230, 250, 0.85);
+            background: linear-gradient(135deg, rgba(230, 230, 255, 0.9), rgba(220, 220, 255, 0.9));
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(147, 112, 219, 0.3);
+            border: 2px solid rgba(147, 112, 219, 0.4);
+            box-shadow: 0 4px 25px rgba(147, 112, 219, 0.3);
+            border-radius: 15px;
+            padding: 20px;
         }
 
         .keyboard.theme-larvender .key {
-            background: rgba(255, 240, 255, 0.9);
-            color: #663399;
-            border: 1px solid rgba(147, 112, 219, 0.3);
-        }
-
-        /* Kid theme */
-        .navbar.theme-kid {
-            background: linear-gradient(135deg, rgba(255, 192, 203, 0.9), rgba(255, 218, 233, 0.9)) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(255, 166, 193, 0.3);
-            box-shadow: 0 2px 15px rgba(255, 166, 193, 0.3);
-        }
-
-        .keyboard.theme-kid .key {
-            background: rgba(255, 245, 248, 0.95);
-            color:rgb(105, 255, 223);
-            border: 1px solid rgba(255, 166, 193, 0.4);
-            box-shadow: 0 2px 4px rgba(255, 166, 193, 0.2);
+            background: linear-gradient(135deg, rgba(250, 250, 255, 0.95), rgba(240, 240, 255, 0.95));
+            color: #8e44ad; /* Rich purple */
+            border: 1px solid rgba(147, 112, 219, 0.4);
+            box-shadow: 0 3px 0 rgba(147, 112, 219, 0.3);
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
-        .keyboard.theme-kid .key:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 6px rgba(255, 166, 193, 0.3);
+        .keyboard.theme-larvender .key.special {
+            background: linear-gradient(135deg, rgba(240, 240, 255, 0.95), rgba(230, 230, 255, 0.95));
+            color: #9b59b6; /* Softer purple */
+            font-weight: 500;
+        }
+
+        .keyboard.theme-larvender .key:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 rgba(147, 112, 219, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 255, 0.98));
+        }
+
+        .keyboard.theme-larvender .key:active,
+        .keyboard.theme-larvender .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #a569bd, #9b59b6);
+            color: white;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Special keys for lavender theme */
+        .keyboard.theme-larvender .key.space {
+            background: linear-gradient(135deg, rgba(245, 245, 255, 0.95), rgba(235, 235, 255, 0.95));
+            border-radius: 12px;
+        }
+
+        .keyboard.theme-larvender .key.enter,
+        .keyboard.theme-larvender .key.shift,
+        .keyboard.theme-larvender .key.caps,
+        .keyboard.theme-larvender .key.tab {
+            background: linear-gradient(135deg, rgba(235, 235, 255, 0.95), rgba(225, 225, 255, 0.95));
+            color: #8e44ad;
+            font-weight: 500;
         }
 
         /* Active key states for all themes */
@@ -856,88 +788,277 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             text-shadow: 0 0 10px rgba(255, 166, 193, 0.4);
         }
 
-        /* Sakura theme keyboard */
+        /* Sakura theme text visibility fixes */
+        body.theme-sweety {
+            color: #333333;
+        }
+
+        body.theme-sweety .typing-text {
+            background: linear-gradient(135deg, rgba(255, 219, 230, 0.7), rgba(255, 209, 220, 0.7));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            box-shadow: 
+                0 4px 20px rgba(255, 182, 193, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        body.theme-sweety .lesson-title {
+            color: #ff4d82;
+            text-shadow: 2px 2px 4px rgba(255, 166, 193, 0.4);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        body.theme-sweety .stats-container {
+            background: linear-gradient(135deg, rgba(255, 219, 230, 0.7), rgba(255, 209, 220, 0.7));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(255, 182, 193, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        body.theme-sweety #input-field {
+            background: linear-gradient(135deg, rgba(255, 219, 230, 0.7), rgba(255, 209, 220, 0.7));
+            color: #333333;
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(255, 182, 193, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+        }
+
+        body.theme-sweety #input-field:focus {
+            box-shadow: 
+                0 0 0 2px #ff4d82,
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-color: #ff4d82;
+        }
+
+        /* Text highlighting colors */
+        body.theme-sweety .correct {
+            color: #2ecc71;
+        }
+
+        body.theme-sweety .incorrect {
+            color: #e74c3c;
+        }
+
+        body.theme-sweety .current {
+            background-color: #ff4d82;
+            color: #ffffff;
+        }
+
+        /* Sakura theme keyboard - Baby pink colors */
         .keyboard.theme-sweety {
-            background: rgba(255, 235, 238, 0.85);
+            background: linear-gradient(135deg, rgba(255, 219, 230, 0.9), rgba(255, 209, 220, 0.9));
             backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 182, 193, 0.4);
-            box-shadow: 0 4px 20px rgba(255, 192, 203, 0.3);
+            border: 2px solid rgba(255, 192, 203, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            border-radius: 15px;
         }
 
         .keyboard.theme-sweety .key {
-            background: rgba(255, 245, 245, 0.9);
-            color: #ff758c;
-            border: 1px solid rgba(255, 182, 193, 0.4);
-            box-shadow: 0 2px 4px rgba(255, 192, 203, 0.2);
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.95), rgba(255, 228, 235, 0.95));
+            color: #ff8da1; /* Soft pink */
+            border: 1px solid rgba(255, 192, 203, 0.4);
+            box-shadow: 0 3px 0 rgba(255, 182, 193, 0.3);
             transition: all 0.2s ease;
         }
 
         .keyboard.theme-sweety .key.special {
-            background: rgba(255, 228, 225, 0.9);
-            color: #ff4d6d;
+            background: linear-gradient(135deg, rgba(255, 228, 235, 0.95), rgba(255, 218, 225, 0.95));
+            color: #ff7a8c; /* Slightly darker pink */
         }
 
-        /* Galaxy Light theme keyboard */
-        .keyboard.theme-galaxylight {
-            background: rgba(230, 230, 250, 0.85);
-            backdrop-filter: blur(8px);
-            border: 2px solid rgba(147, 112, 219, 0.3);
-            box-shadow: 0 4px 20px rgba(147, 112, 219, 0.2);
-        }
-
-        .keyboard.theme-galaxylight .key {
-            background: rgba(240, 240, 255, 0.9);
-            color: #8a2be2;
-            border: 1px solid rgba(147, 112, 219, 0.3);
-            box-shadow: 0 2px 4px rgba(147, 112, 219, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .keyboard.theme-galaxylight .key.special {
-            background: rgba(230, 230, 250, 0.9);
-            color: #9370db;
-        }
-
-        /* Kid theme keyboard */
-        .keyboard.theme-kid {
-            background: linear-gradient(135deg, rgba(255, 182, 193, 0.9), rgba(255, 218, 233, 0.9));
-            backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2);
-        }
-
-        .keyboard.theme-kid .key {
-            background: rgba(255, 240, 245, 0.95);
-            color: #ff69b4;
-            border: 1px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 2px 4px rgba(255, 105, 180, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .keyboard.theme-kid .key.special {
-            background: rgba(255, 228, 225, 0.95);
-            color: #ff1493;
-        }
-
-        /* Active and hover states for all three themes */
-        .keyboard.theme-sweety .key:hover,
-        .keyboard.theme-galaxylight .key:hover,
-        .keyboard.theme-kid .key:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
+        .keyboard.theme-sweety .key:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 rgba(255, 182, 193, 0.3);
         }
 
         .keyboard.theme-sweety .key:active,
-        .keyboard.theme-sweety .key.active,
-        .keyboard.theme-galaxylight .key:active,
-        .keyboard.theme-galaxylight .key.active,
-        .keyboard.theme-kid .key:active,
-        .keyboard.theme-kid .key.active {
+        .keyboard.theme-sweety .key.active {
             transform: translateY(2px);
-            background: linear-gradient(135deg, #ff69b4, #ff8da1);
-            color: #ffffff;
+            background: linear-gradient(135deg, #ffb6c1, #ffc0cb); /* Light pink to pink */
+            color: white;
             box-shadow: none;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Happy Kid theme text visibility fixes */
+        body.theme-kid {
+            color: #333333;
+        }
+
+        body.theme-kid .typing-text {
+            background: linear-gradient(135deg, rgba(176, 226, 255, 0.7), rgba(135, 206, 250, 0.7));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(135, 206, 250, 0.3);
+            box-shadow: 
+                0 4px 20px rgba(100, 181, 246, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        body.theme-kid .lesson-title {
+            color: #1e88e5;
+            text-shadow: 2px 2px 4px rgba(135, 206, 250, 0.4);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        body.theme-kid .stats-container {
+            background: linear-gradient(135deg, rgba(176, 226, 255, 0.7), rgba(135, 206, 250, 0.7));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(135, 206, 250, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(100, 181, 246, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        body.theme-kid .stat-item {
+            color: #333333;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        body.theme-kid .stat-value {
+            color: #1e88e5;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(135, 206, 250, 0.3);
+        }
+
+        body.theme-kid #input-field {
+            background: linear-gradient(135deg, rgba(176, 226, 255, 0.7), rgba(135, 206, 250, 0.7));
+            color: #333333;
+            border: 2px solid rgba(135, 206, 250, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(100, 181, 246, 0.15),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+        }
+
+        body.theme-kid #input-field:focus {
+            box-shadow: 
+                0 0 0 2px #4a90e2,
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+            border-color: #4a90e2;
+        }
+
+        /* Text highlighting colors */
+        body.theme-kid .correct {
+            color: #2ecc71;
+            text-shadow: 0 0 1px rgba(46, 204, 113, 0.3);
+        }
+
+        body.theme-kid .incorrect {
+            color: #e74c3c;
+            text-shadow: 0 0 1px rgba(231, 76, 60, 0.3);
+        }
+
+        body.theme-kid .current {
+            background-color: #4a90e2;
+            color: #ffffff;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+
+        /* Sakura theme navbar text styling */
+        .navbar.theme-sweety .nav-link,
+        .navbar.theme-sweety .navbar-brand {
+            color: #4a90e2 !important; /* Baby blue color */
+            text-shadow: 0 0 10px rgba(135, 206, 250, 0.4);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.theme-sweety .nav-link:hover {
+            color: #1e88e5 !important; /* Slightly darker blue on hover */
+            transform: translateY(-1px);
+        }
+
+        /* Remove any background containers */
+        .navbar.theme-sweety .navbar-collapse,
+        .navbar.theme-sweety .container-fluid {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar.theme-sweety .navbar-toggler {
+            border: none;
+            padding: 8px 12px;
+        }
+
+        /* Galaxy Night theme keyboard - Updated design */
+        .keyboard.theme-space {
+            background: linear-gradient(135deg, rgba(13, 15, 30, 0.9), rgba(20, 20, 40, 0.9));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(100, 149, 237, 0.3);
+            box-shadow: 
+                0 4px 25px rgba(100, 149, 237, 0.2),
+                inset 0 0 30px rgba(100, 149, 237, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .keyboard.theme-space .key {
+            background: linear-gradient(135deg, rgba(30, 35, 60, 0.95), rgba(25, 30, 50, 0.95));
+            color: #64ffda;
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            box-shadow: 0 3px 0 rgba(100, 149, 237, 0.2);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+        }
+
+        .keyboard.theme-space .key.special {
+            background: linear-gradient(135deg, rgba(25, 30, 50, 0.95), rgba(20, 25, 45, 0.95));
+            color: #7f7fd5;
+            font-weight: 500;
+        }
+
+        .keyboard.theme-space .key:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 0 rgba(100, 149, 237, 0.2),
+                0 0 10px rgba(100, 255, 218, 0.3);
+            background: linear-gradient(135deg, rgba(35, 40, 65, 0.98), rgba(30, 35, 55, 0.98));
+        }
+
+        .keyboard.theme-space .key:active,
+        .keyboard.theme-space .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #64ffda, #91fff1);
+            color: #1a1b26;
+            box-shadow: none;
+            text-shadow: none;
+        }
+
+        /* Special keys for space theme */
+        .keyboard.theme-space .key.space {
+            background: linear-gradient(135deg, rgba(35, 40, 65, 0.95), rgba(30, 35, 55, 0.95));
+            border-radius: 12px;
+        }
+
+        .keyboard.theme-space .key.enter,
+        .keyboard.theme-space .key.shift,
+        .keyboard.theme-space .key.caps,
+        .keyboard.theme-space .key.tab {
+            background: linear-gradient(135deg, rgba(30, 35, 55, 0.95), rgba(25, 30, 50, 0.95));
+            color: #91fff1;
+            font-weight: 500;
         }
     </style>
 </head>
