@@ -71,6 +71,10 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             color: #d1d0c5;
             font-family: 'Roboto Mono', monospace;
             min-height: 100vh;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            transition: background 0.3s ease;
         }
 
         .typing-container {
@@ -374,6 +378,567 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         body.theme-light .stat-value {
             color: #2c2c2c;
         }
+
+        /* Add these new theme styles after the existing theme styles */
+
+        /* Neon Theme */
+        body.theme-neon {
+            background-color: #0f0f1a;
+            color: #00ff95;
+        }
+
+        .keyboard.theme-neon {
+            background: rgba(15, 15, 26, 0.95);
+            box-shadow: 0 0 20px rgba(0, 255, 149, 0.2);
+            border: 1px solid rgba(0, 255, 149, 0.1);
+        }
+
+        .keyboard.theme-neon .key {
+            background: rgba(0, 255, 149, 0.1);
+            color: #00ff95;
+            border: 1px solid rgba(0, 255, 149, 0.3);
+            box-shadow: 0 2px 0 rgba(0, 255, 149, 0.2);
+        }
+
+        .keyboard.theme-neon .key:active,
+        .keyboard.theme-neon .key.active {
+            background: #00ff95;
+            color: #0f0f1a;
+            box-shadow: 0 0 15px rgba(0, 255, 149, 0.5);
+        }
+
+        /* Ocean Theme */
+        body.theme-ocean {
+            background-color: #0a192f;
+            color: #64ffda;
+        }
+
+        .keyboard.theme-ocean {
+            background: rgba(10, 25, 47, 0.95);
+            box-shadow: 0 4px 20px rgba(100, 255, 218, 0.1);
+        }
+
+        .keyboard.theme-ocean .key {
+            background: #112240;
+            color: #64ffda;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            box-shadow: 0 2px 0 #0a192f;
+        }
+
+        .keyboard.theme-ocean .key:active,
+        .keyboard.theme-ocean .key.active {
+            background: #64ffda;
+            color: #0a192f;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+
+        /* Retro Theme */
+        body.theme-retro {
+            background-color: #2d2b55;
+            color: #ff7edb;
+        }
+
+        .keyboard.theme-retro {
+            background: rgba(45, 43, 85, 0.95);
+            box-shadow: 0 4px 20px rgba(255, 126, 219, 0.2);
+        }
+
+        .keyboard.theme-retro .key {
+            background: #1f1f41;
+            color: #ff7edb;
+            border: 1px solid rgba(255, 126, 219, 0.2);
+            box-shadow: 0 2px 0 #1a1a38;
+        }
+
+        .keyboard.theme-retro .key:active,
+        .keyboard.theme-retro .key.active {
+            background: #ff7edb;
+            color: #1f1f41;
+            box-shadow: 0 0 10px rgba(255, 126, 219, 0.4);
+        }
+
+        /* Matrix Theme */
+        body.theme-matrix {
+            background-color: #000000;
+            color: #00ff00;
+        }
+
+        .keyboard.theme-matrix {
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+        }
+
+        .keyboard.theme-matrix .key {
+            background: #001100;
+            color: #00ff00;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            box-shadow: 0 2px 0 #000800;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .keyboard.theme-matrix .key:active,
+        .keyboard.theme-matrix .key.active {
+            background: #00ff00;
+            color: #000000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        /* Add these navbar theme styles after the existing theme styles */
+
+        /* Light Theme Navbar */
+        .navbar.theme-light {
+            background-color: #f0f0f0 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar.theme-light .nav-link,
+        .navbar.theme-light .navbar-brand {
+            color: #2c2c2c !important;
+        }
+        .navbar.theme-light .nav-link:hover {
+            color: #4a9eff !important;
+        }
+
+        /* Neon Theme Navbar */
+        .navbar.theme-neon {
+            background-color: rgba(15, 15, 26, 0.95) !important;
+            box-shadow: 0 0 20px rgba(0, 255, 149, 0.2);
+            border-bottom: 1px solid rgba(0, 255, 149, 0.1);
+        }
+        .navbar.theme-neon .nav-link,
+        .navbar.theme-neon .navbar-brand {
+            color: #00ff95 !important;
+            text-shadow: 0 0 10px rgba(0, 255, 149, 0.5);
+        }
+        .navbar.theme-neon .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 15px rgba(0, 255, 149, 0.8);
+        }
+
+        /* Ocean Theme Navbar */
+        .navbar.theme-ocean {
+            background-color: rgba(10, 25, 47, 0.95) !important;
+            box-shadow: 0 2px 20px rgba(100, 255, 218, 0.1);
+        }
+        .navbar.theme-ocean .nav-link,
+        .navbar.theme-ocean .navbar-brand {
+            color: #64ffda !important;
+        }
+        .navbar.theme-ocean .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        /* Retro Theme Navbar */
+        .navbar.theme-retro {
+            background-color: rgba(45, 43, 85, 0.95) !important;
+            box-shadow: 0 2px 20px rgba(255, 126, 219, 0.2);
+        }
+        .navbar.theme-retro .nav-link,
+        .navbar.theme-retro .navbar-brand {
+            color: #ff7edb !important;
+        }
+        .navbar.theme-retro .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px rgba(255, 126, 219, 0.5);
+        }
+
+        /* Matrix Theme Navbar */
+        .navbar.theme-matrix {
+            background-color: rgba(0, 0, 0, 0.95) !important;
+            box-shadow: 0 2px 20px rgba(0, 255, 0, 0.2);
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        }
+        .navbar.theme-matrix .nav-link,
+        .navbar.theme-matrix .navbar-brand {
+            color: #00ff00 !important;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        .navbar.theme-matrix .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        /* Update existing theme navbars */
+        .navbar.theme-midnight {
+            background-color: rgba(26, 27, 38, 0.95) !important;
+        }
+        .navbar.theme-midnight .nav-link,
+        .navbar.theme-midnight .navbar-brand {
+            color: #7aa2f7 !important;
+        }
+        .navbar.theme-midnight .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .navbar.theme-forest {
+            background-color: rgba(43, 47, 43, 0.95) !important;
+        }
+        .navbar.theme-forest .nav-link,
+        .navbar.theme-forest .navbar-brand {
+            color: #95c085 !important;
+        }
+        .navbar.theme-forest .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .navbar.theme-sunset {
+            background-color: rgba(45, 27, 45, 0.95) !important;
+        }
+        .navbar.theme-sunset .nav-link,
+        .navbar.theme-sunset .navbar-brand {
+            color: #f67e7d !important;
+        }
+        .navbar.theme-sunset .nav-link:hover {
+            color: #fff !important;
+        }
+
+        /* Add a new space theme */
+        body.theme-space {
+            background: url('assets/images/themes/space.jpg');
+            background-color: #000000; /* Fallback */
+            color: #ffffff;
+        }
+        body.theme-galaxylight {
+            background: url('assets/images/themes/galaxy1.jpg');
+            background-color: #000000; /* Fallback */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #ffffff;
+        }
+        
+        body.theme-larvender {
+            background: url('assets/images/themes/lar2.jpg');
+            background-color: #000000; /* Fallback */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #ffffff;
+        }
+        body.theme-sweety {
+            background: url('assets/images/themes/Sakura.jpg');
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #4a4a4a;
+        }
+        
+        body.theme-kid {
+            background: url('assets/images/themes/kid.jpg');
+            background-color: #FFE5F1; /* Light pink fallback color */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333333;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* Kid theme keyboard */
+        .keyboard.theme-kid {
+            background: linear-gradient(135deg, rgba(255, 192, 203, 0.9), rgba(255, 218, 233, 0.9));
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 166, 193, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 166, 193, 0.3);
+            margin: 20px auto;
+            max-width: 100%;
+            padding: 15px;
+        }
+
+        @media screen and (max-width: 768px) {
+            body.theme-kid {
+                background-size: auto 100%;
+                background-position: top center;
+            }
+            
+            .keyboard.theme-kid {
+                padding: 10px;
+            }
+            
+            .keyboard.theme-kid .key {
+                margin: 2px;
+                height: 40px;
+            }
+        }
+
+        /* Customize overlay for kid theme */
+        body.theme-kid::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.9),
+                rgba(255, 218, 233, 0.9)
+            ); /* Adjusted overlay opacity */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Add overlay for better readability */
+        body[class*="theme-"]::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Subtle dark overlay */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Ensure content stays above overlay */
+        .typing-container, .navbar, .keyboard {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Space theme */
+        .navbar.theme-space {
+            background-color: rgba(10, 10, 42, 0.85) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 149, 237, 0.2);
+        }
+
+        .keyboard.theme-space {
+            background: rgba(10, 10, 42, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 149, 237, 0.2);
+        }
+
+        .keyboard.theme-space .key {
+            background: rgba(30, 30, 70, 0.9);
+            color: #64ffda;
+            border: 1px solid rgba(100, 149, 237, 0.2);
+        }
+
+        /* Galaxy Light theme keyboard - Updated design */
+        .keyboard.theme-galaxylight {
+            background: linear-gradient(135deg, rgba(74, 214, 174, 0.9), rgba(83, 196, 216, 0.9));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(135, 206, 250, 0.4);
+            box-shadow: 0 4px 25px rgba(100, 149, 237, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .keyboard.theme-galaxylight .key {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.95));
+            color: #4682b4; /* Steel blue */
+            border: 1px solid rgba(135, 206, 250, 0.4);
+            box-shadow: 0 3px 0 rgba(135, 206, 250, 0.3);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .keyboard.theme-galaxylight .key.special {
+            background: linear-gradient(135deg, rgba(230, 240, 255, 0.95), rgba(220, 235, 255, 0.95));
+            color: #1e90ff; /* Dodger blue */
+            font-weight: 500;
+        }
+
+        .keyboard.theme-galaxylight .key:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 rgba(135, 206, 250, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 248, 255, 0.98));
+        }
+
+        .keyboard.theme-galaxylight .key:active,
+        .keyboard.theme-galaxylight .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #1e90ff, #4682b4);
+            color: #ffffff;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            border-color: #4682b4;
+        }
+
+        /* Special keys for galaxy light theme */
+        .keyboard.theme-galaxylight .key.space {
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.95), rgba(230, 240, 255, 0.95));
+            border-radius: 12px;
+        }
+
+        .keyboard.theme-galaxylight .key.enter,
+        .keyboard.theme-galaxylight .key.shift,
+        .keyboard.theme-galaxylight .key.caps,
+        .keyboard.theme-galaxylight .key.tab {
+            background: linear-gradient(135deg, rgba(230, 240, 255, 0.95), rgba(220, 235, 255, 0.95));
+            color: #4169e1; /* Royal blue */
+            font-weight: 500;
+        }
+
+        /* Larvender theme */
+        .navbar.theme-larvender {
+            background-color: rgba(230, 230, 250, 0.85) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(147, 112, 219, 0.3);
+        }
+
+        .keyboard.theme-larvender {
+            background: rgba(230, 230, 250, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147, 112, 219, 0.3);
+        }
+
+        .keyboard.theme-larvender .key {
+            background: rgba(255, 240, 255, 0.9);
+            color: #663399;
+            border: 1px solid rgba(147, 112, 219, 0.3);
+        }
+
+        /* Kid theme */
+        .navbar.theme-kid {
+            background: linear-gradient(135deg, rgba(255, 192, 203, 0.9), rgba(255, 218, 233, 0.9)) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 166, 193, 0.3);
+            box-shadow: 0 2px 15px rgba(255, 166, 193, 0.3);
+        }
+
+        .keyboard.theme-kid .key {
+            background: rgba(255, 245, 248, 0.95);
+            color:rgb(105, 255, 223);
+            border: 1px solid rgba(255, 166, 193, 0.4);
+            box-shadow: 0 2px 4px rgba(255, 166, 193, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .keyboard.theme-kid .key:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(255, 166, 193, 0.3);
+        }
+
+        /* Active key states for all themes */
+        .keyboard.theme-space .key:active,
+        .keyboard.theme-space .key.active,
+        .keyboard.theme-galaxylight .key:active,
+        .keyboard.theme-galaxylight .key.active,
+        .keyboard.theme-larvender .key:active,
+        .keyboard.theme-larvender .key.active,
+        .keyboard.theme-kid .key:active,
+        .keyboard.theme-kid .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #ff69b4, #ff8da1);
+            color: #ffffff;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Navbar text colors for each theme */
+        .navbar.theme-space .nav-link,
+        .navbar.theme-space .navbar-brand {
+            color: #64ffda !important;
+        }
+
+        .navbar.theme-galaxylight .nav-link,
+        .navbar.theme-galaxylight .navbar-brand {
+            color: #ff4d82 !important;
+            text-shadow: 0 0 10px rgba(255, 166, 193, 0.3);
+        }
+
+        .navbar.theme-larvender .nav-link,
+        .navbar.theme-larvender .navbar-brand {
+            color: #663399 !important;
+        }
+
+        .navbar.theme-kid .nav-link,
+        .navbar.theme-kid .navbar-brand {
+            color: #ff1493 !important;
+            text-shadow: 0 0 10px rgba(255, 166, 193, 0.4);
+        }
+
+        /* Sakura theme keyboard */
+        .keyboard.theme-sweety {
+            background: rgba(255, 235, 238, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 192, 203, 0.3);
+        }
+
+        .keyboard.theme-sweety .key {
+            background: rgba(255, 245, 245, 0.9);
+            color: #ff758c;
+            border: 1px solid rgba(255, 182, 193, 0.4);
+            box-shadow: 0 2px 4px rgba(255, 192, 203, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .keyboard.theme-sweety .key.special {
+            background: rgba(255, 228, 225, 0.9);
+            color: #ff4d6d;
+        }
+
+        /* Galaxy Light theme keyboard */
+        .keyboard.theme-galaxylight {
+            background: rgba(230, 230, 250, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(147, 112, 219, 0.3);
+            box-shadow: 0 4px 20px rgba(147, 112, 219, 0.2);
+        }
+
+        .keyboard.theme-galaxylight .key {
+            background: rgba(240, 240, 255, 0.9);
+            color: #8a2be2;
+            border: 1px solid rgba(147, 112, 219, 0.3);
+            box-shadow: 0 2px 4px rgba(147, 112, 219, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .keyboard.theme-galaxylight .key.special {
+            background: rgba(230, 230, 250, 0.9);
+            color: #9370db;
+        }
+
+        /* Kid theme keyboard */
+        .keyboard.theme-kid {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.9), rgba(255, 218, 233, 0.9));
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2);
+        }
+
+        .keyboard.theme-kid .key {
+            background: rgba(255, 240, 245, 0.95);
+            color: #ff69b4;
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            box-shadow: 0 2px 4px rgba(255, 105, 180, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .keyboard.theme-kid .key.special {
+            background: rgba(255, 228, 225, 0.95);
+            color: #ff1493;
+        }
+
+        /* Active and hover states for all three themes */
+        .keyboard.theme-sweety .key:hover,
+        .keyboard.theme-galaxylight .key:hover,
+        .keyboard.theme-kid .key:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(255, 105, 180, 0.3);
+        }
+
+        .keyboard.theme-sweety .key:active,
+        .keyboard.theme-sweety .key.active,
+        .keyboard.theme-galaxylight .key:active,
+        .keyboard.theme-galaxylight .key.active,
+        .keyboard.theme-kid .key:active,
+        .keyboard.theme-kid .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #ff69b4, #ff8da1);
+            color: #ffffff;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -386,10 +951,13 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         </button>
         <div class="theme-options" id="theme-options">
             <button class="theme-option" data-theme="dark">Dark</button>
-            <button class="theme-option" data-theme="light">Light</button>
-            <button class="theme-option" data-theme="midnight">Midnight</button>
-            <button class="theme-option" data-theme="forest">Forest</button>
-            <button class="theme-option" data-theme="sunset">Sunset</button>
+            <button class="theme-option" data-theme="retro">Retro</button>
+            <button class="theme-option" data-theme="matrix">Matrix</button>
+            <button class="theme-option" data-theme="space">Galaxy Night</button>
+            <button class="theme-option" data-theme="galaxylight">Galaxy Light</button>
+            <button class="theme-option" data-theme="larvender">Larvender</button>
+            <button class="theme-option" data-theme="sweety">Sakura</button>
+            <button class="theme-option" data-theme="kid">Happy kid</button>
         </div>
     </div>
 

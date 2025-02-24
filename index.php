@@ -309,6 +309,28 @@ require_once 'includes/header.php';
         .feature-icon {
             animation: float 3s ease-in-out infinite;
         }
+
+        .theme-option {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-option:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .theme-option.active {
+            border: 2px solid #007bff;
+        }
+
+        .theme-option img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -503,5 +525,30 @@ require_once 'includes/header.php';
                 new bootstrap.Modal(document.getElementById('languageModal')).show();
             });
         </script>
+    <script>
+    document.querySelectorAll('.theme-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const theme = this.getAttribute('data-theme');
+            // Remove active class from all themes
+            document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+            // Add active class to selected theme
+            this.classList.add('active');
+            // Apply the theme
+            document.body.setAttribute('data-theme', theme);
+            // Store the preference
+            localStorage.setItem('preferred-theme', theme);
+        });
+    });
+
+    // Apply saved theme on page load
+    const savedTheme = localStorage.getItem('preferred-theme');
+    if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        const activeTheme = document.querySelector(`[data-theme="${savedTheme}"]`);
+        if (activeTheme) {
+            activeTheme.classList.add('active');
+        }
+    }
+    </script>
     </body>
     </html>

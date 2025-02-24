@@ -62,6 +62,7 @@ if ($category === 'books') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Base Styles */
         body {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
@@ -69,74 +70,26 @@ if ($category === 'books') {
             font-family: 'Inter', sans-serif;
         }
 
+        /* Layout */
         .course-container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
         }
 
-        .course-card {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .course-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #f0b232;
-        }
-
-        .course-description {
-            color: #adb5bd;
-            margin-bottom: 20px;
-        }
-
-        .course-button {
-            background: linear-gradient(45deg, #f0b232, #f7c157);
-            color: #0f172a;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .course-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(240, 178, 50, 0.3);
-            color: #0f172a;
-        }
-
-        .course-stats {
-            color: #adb5bd;
-            font-size: 0.9rem;
-            margin-top: 15px;
-        }
-
-        .course-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #f0b232;
-        }
-
         .container-fluid {
             display: flex;
+            overflow: visible;
+            min-height: 100vh;
         }
 
         .row {
             flex: 1;
+            position: relative;
+            margin: 0 -15px;
         }
 
+        /* Sidebar Styles */
         .sidebar {
             background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(10px);
@@ -145,11 +98,10 @@ if ($category === 'books') {
             margin: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar-sticky {
             position: sticky;
-            top: 0;
+            top: 20px;
+            height: calc(100vh - 40px);
+            overflow-y: auto;
         }
 
         .sidebar-heading {
@@ -161,6 +113,7 @@ if ($category === 'books') {
             border-bottom: 2px solid rgba(240, 178, 50, 0.2);
         }
 
+        /* Navigation Links */
         .nav-link {
             color: #d1d0c5;
             padding: 15px 20px;
@@ -202,282 +155,10 @@ if ($category === 'books') {
             z-index: 1;
         }
 
-        .sub-menu {
-            padding-left: 30px;
-        }
-
-        .sub-menu a {
-            display: block;
-            color: #adb5bd;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .sub-menu a:hover {
-            color: #f0b232;
-            background: rgba(240, 178, 50, 0.05);
-        }
-
-        .lesson-box {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .lesson-box:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #f0b232, #f7c157);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .lesson-box:hover:not(.locked) {
-            transform: translateY(-10px);
-            border-color: rgba(240, 178, 50, 0.3);
-        }
-
-        .lesson-box:hover:not(.locked):before {
-            opacity: 0.1;
-        }
-
-        .lesson-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #f0b232;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 10px rgba(240, 178, 50, 0.3);
-        }
-
-        .lesson-title {
-            color: #ffffff;
-            font-size: 1rem;
-            margin: 10px 0;
-            font-weight: 500;
-            position: relative;
-            z-index: 1;
-            line-height: 1.4;
-        }
-
-        .start-btn {
-            background: linear-gradient(45deg, #f0b232, #f7c157);
-            color: #0f172a;
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            position: relative;
-            z-index: 1;
-            transition: all 0.4s ease;
-            font-size: 0.9rem;
-        }
-
-        .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(240, 178, 50, 0.3);
-            color: #0f172a;
-        }
-
-        .lesson-box.locked {
-            opacity: 0.5;
-        }
-
-        .locked-text {
-            color: #d1d0c5;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .locked-text:before {
-            content: '\f023';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-        }
-
-        .col-md-4 {
-            padding: 15px;
-        }
-
-        .row {
-            margin: 0 -15px;
-        }
-
-        .level-container {
-            padding: 20px;
-        }
-
-        .level-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .level-icon {
-            width: 60px;
-            height: 60px;
-            background-color: #00e1d4;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .level-title {
-            font-size: 24px;
-            color: #e2b714;
-            margin: 0;
-        }
-
-        .lessons-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            padding: 10px;
-        }
-
-        .category-header {
-            margin-bottom: 30px;
-        }
-
-        .level-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: #2c2e31;
-            border-radius: 10px;
-        }
-
-        .level-icon {
-            width: 60px;
-            height: 60px;
-            background-color: #00e1d4;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .level-title {
-            font-size: 24px;
-            color: #e2b714;
-            margin: 0;
-        }
-
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .category-card {
-            background: #2c2e31;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .category-icon {
-            font-size: 40px;
-            color: #00e1d4;
-            margin-bottom: 20px;
-        }
-
-        .category-card h2 {
-            color: #e2b714;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .category-card p {
-            color: #adb5bd;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .category-btn {
-            background: #00e1d4;
-            color: #2c2e31;
-            padding: 10px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .category-btn:hover {
-            background: #00bfb3;
-            color: #2c2e31;
-            text-decoration: none;
-        }
-
-        .col-md-9 {
-            padding: 20px;
-        }
-
-        .category-sidebar {
-            background: #2c2e31;
-            padding: 20px;
-            border-radius: 10px;
-            position: sticky;
-            top: 20px;
-        }
-
-        .category-card {
-            background: #1e1e1e;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .category-card.active {
-            background: #00e1d4;
-        }
-
-        .category-card.active .lesson-number,
-        .category-card.active .lesson-title {
-            color: #2c2e31;
-        }
-
-        .welcome-message {
-            text-align: center;
-            padding: 50px;
-            color: #adb5bd;
-        }
-
-        .welcome-message h2 {
-            color: #e2b714;
-            margin-bottom: 20px;
+        /* Category Section */
+        .category-section {
+            margin-bottom: 40px;
+            padding-top: 15px;
         }
 
         .category-title {
@@ -492,8 +173,9 @@ if ($category === 'books') {
             font-size: 1.5rem;
             display: flex;
             align-items: center;
-            position: relative;
-            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .category-title:before {
@@ -514,71 +196,64 @@ if ($category === 'books') {
             -webkit-text-fill-color: transparent;
         }
 
-        .lessons-container {
-            padding: 15px;
-            height: 100vh;
-            overflow-y: auto;
+        /* Lesson Grid */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 10px;
         }
 
-        .category-section {
-            margin-bottom: 40px;
-            padding-top: 15px;
+        .lesson-box {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
         }
 
-        .category-section.active {
-            scroll-margin-top: 20px;
+        .lesson-box:hover:not(.locked) {
+            transform: translateY(-10px);
+            border-color: rgba(240, 178, 50, 0.3);
         }
 
-        .category-title {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: #1e1e1e;
-            margin-bottom: 20px;
+        /* Buttons and Interactive Elements */
+        .start-btn {
+            background: linear-gradient(45deg, #f0b232, #f7c157);
+            color: #0f172a;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.4s ease;
         }
 
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 178, 50, 0.3);
+            color: #0f172a;
+        }
+
+        /* Responsive Design */
         @media (min-width: 1200px) {
-            .lessons-grid {
-                gap: 20px;
-            }
+            .lessons-grid { gap: 20px; }
         }
 
         @media (max-width: 1199px) {
-            .lesson-box {
-                padding: 15px;
-            }
-            .lesson-number {
-                font-size: 2rem;
-            }
+            .lesson-box { padding: 15px; }
         }
 
         @media (max-width: 768px) {
-            .lessons-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .lessons-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 576px) {
-            .lessons-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .lesson-difficulty {
-            font-size: 0.8rem;
-            color: #adb5bd;
-            margin: 5px 0;
-        }
-        
-        .lesson-title {
-            font-size: 0.9rem;
-            line-height: 1.3;
-            margin: 8px 0;
-            height: 2.6em;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            .lessons-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -797,28 +472,86 @@ if ($category === 'books') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get the category from URL
+        // Get all sections and nav links
+        const sections = document.querySelectorAll('.category-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        // Add scroll event listener
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                // Get section position
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                // Check if we've scrolled to this section
+                if (window.pageYOffset >= sectionTop - 200) { // 200px offset for better UX
+                    current = section.getAttribute('id').replace('-section', '');
+                }
+            });
+            
+            // Update active state of nav links
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.href.includes(`category=${current}`)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Existing click handlers
         const urlParams = new URLSearchParams(window.location.search);
         const category = urlParams.get('category');
         
         if (category) {
-            // Scroll to the selected category section
             const section = document.getElementById(category + '-section');
             if (section) {
                 section.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // Add click handlers for category links
+        // Smooth scroll for category links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
-                const category = this.href.split('category=')[1];
+                e.preventDefault(); // Prevent default navigation
+                const category = new URLSearchParams(this.href.split('?')[1]).get('category');
                 const section = document.getElementById(category + '-section');
+                
                 if (section) {
+                    // Update URL without reloading
+                    const newUrl = `${window.location.pathname}?category=${category}`;
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                    
+                    // Smooth scroll to section
                     section.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
+
+        // Add intersection observer for better performance
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const current = entry.target.getAttribute('id').replace('-section', '');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.href.includes(`category=${current}`)) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        sections.forEach(section => observer.observe(section));
     });
     </script>
 </body>
