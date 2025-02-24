@@ -26,6 +26,7 @@ $lang = $_GET['lang'] ?? 'en';
 
 // Fetch lesson content based on category
 if ($category === 'books') {
+    
     $stmt = $pdo->prepare("SELECT * FROM premium_books WHERE language = ? AND lesson_number = ?");
     $stmt->execute([$lang, $lessonNumber]);
     $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -145,56 +146,252 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         }
 
         .keyboard {
-            margin-top: 30px;
-            user-select: none;
+            margin: 30px auto;
+            max-width: 850px;
+            background: rgba(25, 25, 25, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .keyboard-row {
             display: flex;
             justify-content: center;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
+            gap: 5px;
         }
 
         .key {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 44px;
+            height: 44px;
+            background: #3c3c3c;
+            border: none;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.1s ease;
+            position: relative;
+            box-shadow: 0 2px 0 #262626;
+        }
+
+        .key:active, .key.active {
+            transform: translateY(2px);
+            box-shadow: 0 0 0 #262626;
+            background: #4a9eff;
+            color: #ffffff;
+        }
+
+        .key.tab { width: 75px; }
+        .key.caps { width: 85px; }
+        .key.enter { width: 90px; }
+        .key.shift { width: 105px; }
+        .key.ctrl, .key.win, .key.alt { width: 60px; }
+        .key.menu { width: 60px; }
+        .key.space { width: 320px; }
+        .key.delete { width: 85px; }
+
+        .key.special {
+            color: #a0a0a0;
+            font-size: 0.75rem;
+        }
+
+        .key.tab, .key.caps, .key.shift, .key.ctrl, 
+        .key.win, .key.alt, .key.menu, .key.enter,
+        .key.delete {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            background: #333333;
+            color: #a0a0a0;
+        }
+
+        .theme-selector-practice {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-button {
+            margin-top: 50px;
+            background: #2c2e31;
             color: #d1d0c5;
+            border: 2px solid #4a4a4a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-button:hover {
+            background: #3c3c3c;
+            border-color: #5c5c5c;
+            transform: translateY(-1px);
+        }
+
+        .theme-button i {
+            font-size: 1rem;
+            color: #e2b714;
+        }
+
+        .theme-options {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: #2c2e31;
+            border: 2px solid #4a4a4a;
+            border-radius: 8px;
             padding: 8px;
-            margin: 0 4px;
-            min-width: 30px;
-            text-align: center;
-            cursor: default;
-            font-size: 14px;
+            display: none;
+            min-width: 150px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-options.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            color: #d1d0c5;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 6px;
             transition: all 0.2s ease;
         }
 
-        .key.special {
-            min-width: 60px;
-            font-size: 12px;
-            text-transform: uppercase;
+        .theme-option:hover {
+            background: #3c3c3c;
         }
 
-        .key[data-key=" "] {
-            width: 400px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .key.active {
-            background: #e2b714;
-            color: #323437;
-            border-color: #e2b714;
-            transform: translateY(2px);
+        /* Theme styles */
+        body.theme-light {
+            background-color: #e0e0e0;
+        }
+        body.theme-midnight {
+            background-color: #1a1b26;
+        }
+        body.theme-forest {
+            background-color: #2b2f2b;
+        }
+        body.theme-sunset {
+            background-color: #2d1b2d;
         }
 
-        .key.wrong {
-            background: #e06c75;
-            color: #fff;
-            border-color: #e06c75;
+        /* Keyboard theme styles */
+        .keyboard.theme-light {
+            background: #f0f0f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .keyboard.theme-light .key {
+            background: #ffffff;
+            color: #2c2c2c;
+            box-shadow: 0 2px 0 #d0d0d0;
+            border: 1px solid #e0e0e0;
+        }
+        .keyboard.theme-light .key:active, 
+        .keyboard.theme-light .key.active {
+            background: #4a9eff;
+            color: #ffffff;
+            box-shadow: 0 0 0 #c0c0c0;
+            border-color: #4a9eff;
+        }
+        .keyboard.theme-light .key.special,
+        .keyboard.theme-light .key.tab, 
+        .keyboard.theme-light .key.caps, 
+        .keyboard.theme-light .key.shift, 
+        .keyboard.theme-light .key.ctrl, 
+        .keyboard.theme-light .key.win, 
+        .keyboard.theme-light .key.alt, 
+        .keyboard.theme-light .key.menu, 
+        .keyboard.theme-light .key.enter,
+        .keyboard.theme-light .key.delete {
+            background: #e8e8e8;
+            color: #404040;
+            border: 1px solid #d8d8d8;
+        }
+
+        .keyboard.theme-midnight {
+            background: #1a1b26;
+        }
+        .keyboard.theme-midnight .key {
+            background: #24283b;
+            color: #7aa2f7;
+            box-shadow: 0 2px 0 #16161e;
+        }
+
+        .keyboard.theme-forest {
+            background: #2b2f2b;
+        }
+        .keyboard.theme-forest .key {
+            background: #1e231f;
+            color: #95c085;
+            box-shadow: 0 2px 0 #161916;
+        }
+
+        .keyboard.theme-sunset {
+            background: #2d1b2d;
+        }
+        .keyboard.theme-sunset .key {
+            background: #1f1520;
+            color: #f67e7d;
+            box-shadow: 0 2px 0 #170d17;
+        }
+
+        /* Also update the light theme text colors */
+        body.theme-light {
+            background-color: #e0e0e0;
+            color: #2c2c2c;
+        }
+
+        body.theme-light .typing-text {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c2c2c;
+        }
+
+        body.theme-light .stat-item {
+            color: #404040;
+        }
+
+        body.theme-light .stat-value {
+            color: #2c2c2c;
         }
     </style>
 </head>
 <body>
     <?php include 'includes/navbar.php'; ?>
+
+    <div class="theme-selector-practice">
+        <button class="theme-button" id="theme-toggle">
+            <i class="fas fa-palette"></i>
+            Theme
+        </button>
+        <div class="theme-options" id="theme-options">
+            <button class="theme-option" data-theme="dark">Dark</button>
+            <button class="theme-option" data-theme="light">Light</button>
+            <button class="theme-option" data-theme="midnight">Midnight</button>
+            <button class="theme-option" data-theme="forest">Forest</button>
+            <button class="theme-option" data-theme="sunset">Sunset</button>
+        </div>
+    </div>
 
     <div class="typing-container">
         <h2 class="lesson-title"><?php echo htmlspecialchars($title); ?></h2>
@@ -213,7 +410,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
 
         <div class="keyboard">
             <div class="keyboard-row">
-                <div class="key" data-key="`">`</div>
+                <div class="key special" data-key="`">`</div>
                 <div class="key" data-key="1">1</div>
                 <div class="key" data-key="2">2</div>
                 <div class="key" data-key="3">3</div>
@@ -224,12 +421,12 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                 <div class="key" data-key="8">8</div>
                 <div class="key" data-key="9">9</div>
                 <div class="key" data-key="0">0</div>
-                <div class="key" data-key="-">-</div>
-                <div class="key" data-key="=">=</div>
-                <div class="key special" data-key="Backspace">delete</div>
+                <div class="key special" data-key="-">-</div>
+                <div class="key special" data-key="=">=</div>
+                <div class="key delete special" data-key="Backspace">delete</div>
             </div>
             <div class="keyboard-row">
-                <div class="key special" data-key="Tab">tab</div>
+                <div class="key tab special" data-key="Tab">tab</div>
                 <div class="key" data-key="q">q</div>
                 <div class="key" data-key="w">w</div>
                 <div class="key" data-key="e">e</div>
@@ -245,7 +442,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                 <div class="key" data-key="\">\</div>
             </div>
             <div class="keyboard-row">
-                <div class="key special" data-key="CapsLock">caps</div>
+                <div class="key caps special" data-key="CapsLock">caps</div>
                 <div class="key" data-key="a">a</div>
                 <div class="key" data-key="s">s</div>
                 <div class="key" data-key="d">d</div>
@@ -255,12 +452,12 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                 <div class="key" data-key="j">j</div>
                 <div class="key" data-key="k">k</div>
                 <div class="key" data-key="l">l</div>
-                <div class="key" data-key=";">;</div>
-                <div class="key" data-key="'">'</div>
-                <div class="key special" data-key="Enter">enter</div>
+                <div class="key special" data-key=";">;</div>
+                <div class="key special" data-key="'">'</div>
+                <div class="key enter special" data-key="Enter">enter</div>
             </div>
             <div class="keyboard-row">
-                <div class="key special" data-key="Shift">shift</div>
+                <div class="key shift" data-key="Shift">shift</div>
                 <div class="key" data-key="z">z</div>
                 <div class="key" data-key="x">x</div>
                 <div class="key" data-key="c">c</div>
@@ -271,10 +468,17 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                 <div class="key" data-key=",">,</div>
                 <div class="key" data-key=".">.</div>
                 <div class="key" data-key="/">/</div>
-                <div class="key special" data-key="Shift">shift</div>
+                <div class="key shift" data-key="Shift">shift</div>
             </div>
             <div class="keyboard-row">
-                <div class="key" data-key=" ">space</div>
+                <div class="key ctrl" data-key="Control">ctrl</div>
+                <div class="key win" data-key="Meta">win</div>
+                <div class="key alt" data-key="Alt">alt</div>
+                <div class="key space" data-key=" ">space</div>
+                <div class="key alt" data-key="Alt">alt</div>
+                <div class="key win" data-key="Meta">win</div>
+                <div class="key menu" data-key="ContextMenu">menu</div>
+                <div class="key ctrl" data-key="Control">ctrl</div>
             </div>
         </div>
 
@@ -410,6 +614,39 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         window.addEventListener('load', function() {
             console.log('Correct sound loaded:', correctSound.readyState);
             console.log('Wrong sound loaded:', wrongSound.readyState);
+        });
+
+        function changeTheme(theme) {
+            // Update body class
+            document.body.className = theme === 'dark' ? '' : `theme-${theme}`;
+            
+            // Update keyboard class
+            document.querySelector('.keyboard').className = `keyboard ${theme === 'dark' ? '' : `theme-${theme}`}`;
+            
+            // Update navbar class
+            const navbar = document.querySelector('.navbar');
+            navbar.className = `navbar navbar-expand-lg ${theme === 'dark' ? '' : `theme-${theme}`}`;
+        }
+
+        // Theme toggle functionality
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.getElementById('theme-options').classList.toggle('show');
+        });
+
+        // Close theme options when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.theme-selector-practice')) {
+                document.getElementById('theme-options').classList.remove('show');
+            }
+        });
+
+        // Theme option click handlers
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const theme = option.dataset.theme;
+                changeTheme(theme);
+                document.getElementById('theme-options').classList.remove('show');
+            });
         });
     </script>
 </body>

@@ -342,16 +342,9 @@ require_once 'includes/header.php';
                     </a>
                     
                 <?php endif; ?>
-                <a class="nav-link" href="<?php 
-                    if (!isset($_SESSION['user_id'])) {
-                        echo 'login.php';
-                    } else {
-                        $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
-                        $stmt->execute([$_SESSION['user_id']]);
-                        $user = $stmt->fetch();
-                        echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
-                    }
-                ?>" class="btn btn-primary">Premium Lessons</a>
+                <a class="nav-link" href="premium.php">
+                    <i class="fas fa-crown me-2"></i>Premium
+                </a>
                 
             </div>
         </div>
