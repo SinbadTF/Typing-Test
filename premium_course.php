@@ -634,6 +634,12 @@ if ($category === 'books') {
                             <i class="fas fa-certificate me-2"></i>Certification
                         </a>
                     </li>
+                    <li class="nav-item">
+                                    <a class="nav-link <?php echo $category === 'custom' ? 'active' : ''; ?>" 
+                                       href="?lang=<?php echo $lang; ?>&category=custom">
+                                        <i class="fas fa-keyboard me-2"></i>Custom Practice
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -756,6 +762,33 @@ if ($category === 'books') {
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- Add new Custom Practice feature box -->
+                    <div id="custom-practice-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-keyboard me-2"></i>Custom Practice</h2>
+                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto;">
+                            <div class="lesson-number">
+                                <i class="fas fa-pencil-alt" style="color: #f0b232; font-size: 2.5rem;"></i>
+                            </div>
+                            <h3 class="lesson-title">Create Your Own Practice</h3>
+                            <div class="lesson-difficulty">
+                                Features:
+                                <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                                    <li><i class="fas fa-file-alt me-2"></i>Custom Text Input</li>
+                                    <li><i class="fas fa-cog me-2"></i>Adjustable Settings</li>
+                                    <li><i class="fas fa-chart-line me-2"></i>Real-time Statistics</li>
+                                </ul>
+                            </div>
+                            <a href="premium_custom_practice.php" class="start-btn">
+                                Start Custom Practice
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
                 </div>
             </div>
         </div>
