@@ -751,6 +751,92 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             background: #2d1b2d;
             border: 1px solid #f67e7d;
         }
+
+        .results-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(32, 34, 37, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-card {
+            background: #2c2e31;
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(209, 208, 197, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-card h2 {
+            color: #d1d0c5;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-stat {
+            margin: 1.2rem 0;
+            font-size: 1.5rem;
+            color: #646669;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            border-radius: 8px;
+            background: rgba(32, 34, 37, 0.5);
+        }
+
+        .result-value {
+            font-weight: 600;
+            font-size: 2rem;
+        }
+
+        #finalWpm { color: #00ff88; }
+        #finalAccuracy { color: #007bff; }
+        #finalErrors { color: #ff4444; }
+        #finalTime { color: #ffaa00; }
+
+        .restart-button {
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            color: white;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-card {
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -817,6 +903,43 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+    
+
+    <div class="results-overlay" id="resultsOverlay">
+        <div class="results-card">
+            <h2>Typing Test Results</h2>
+            <div class="result-stat">
+                <span>Speed:</span>
+                <span class="result-value" id="finalWpm">0</span> WPM
+            </div>
+            <div class="result-stat">
+                <span>Accuracy:</span>
+                <span class="result-value" id="finalAccuracy">0%</span>
+            </div>
+            <div class="result-stat">
+                <span>Error:</span>
+                <span class="result-value" id="finalErrors">0</span>
+            </div>
+            <div class="result-stat">
+                <span>Time:</span>
+                <span class="result-value" id="finalTime">0s</span>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <button class="restart-button" onclick="initializePractice()">
+                    <i class="fas fa-redo me-2"></i>Try Again
+                </button>
+                <a href="japanese_course.php" class="restart-button">
+                    <i class="fas fa-book me-2"></i>Back to Course
+                </a>
+                <?php if ($nextLesson): ?>
+                    <a href="japanese_lesson.php?level=<?php echo htmlspecialchars($level); ?>&lesson=<?php echo htmlspecialchars($nextLesson['lesson_number']); ?>&id=<?php echo htmlspecialchars($nextLesson['id']); ?>" 
+                       class="restart-button">
+                        <i class="fas fa-arrow-right me-2"></i>Next Lesson
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 
     <script>
      const japaneseKeyMap = {
@@ -859,7 +982,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         let totalCharacters = 0;
         let startTime = null;
         let isTyping = false;
-        let inputBuffer = '';
 
         function createKeyboard() {
     const keyboard = document.querySelector('.keyboard');
@@ -952,7 +1074,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             totalCharacters = 0;
             startTime = null;
             isTyping = false;
-            inputBuffer = '';
 
             const letters = document.querySelectorAll('.letter');
             if (letters.length > 0) {
@@ -983,9 +1104,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             }
 
             if (event.key === 'Backspace') {
-                if (inputBuffer.length > 0) {
-                    inputBuffer = inputBuffer.slice(0, -1);
-                } else if (currentLetterIndex > 0) {
+                if (currentLetterIndex > 0) {
                     const prevLetter = letters[currentLetterIndex - 1];
                     prevLetter.classList.remove('correct', 'incorrect');
                     currentLetter.classList.remove('current');
@@ -996,43 +1115,25 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             }
 
             if (event.key.length === 1) {
-                inputBuffer += event.key.toLowerCase();
+                const mappedChar = japaneseKeyMap[event.key.toLowerCase()] || event.key;
                 const targetChar = currentLetter.textContent;
-                let matched = false;
 
-                // Try direct mapping first
-                if (japaneseKeyMap[event.key.toLowerCase()] === targetChar) {
-                    matched = true;
-                    inputBuffer = '';
-                } 
-                // Then try romaji combinations
-                else {
-                    for (let i = 1; i <= inputBuffer.length; i++) {
-                        const possibleRomaji = inputBuffer.slice(-i);
-                        if (japaneseKeyMap[possibleRomaji] === targetChar) {
-                            matched = true;
-                            inputBuffer = '';
-                            break;
-                        }
-                    }
-                }
-
-                if (matched) {
-                    currentLetter.classList.remove('current');
+                currentLetter.classList.remove('current');
+                if (mappedChar === targetChar) {
                     currentLetter.classList.add('correct');
-                    
-                    if (currentLetterIndex < letters.length - 1) {
-                        letters[currentLetterIndex + 1].classList.add('current');
-                        currentLetterIndex++;
-                    } else {
-                        finishPractice();
-                    }
-                } else if (inputBuffer.length >= 4) { // Reset buffer if too long
-                    inputBuffer = event.key.toLowerCase();
+                } else {
                     currentLetter.classList.add('incorrect');
                     mistakes++;
                 }
-
+                
+                // Always move to next character regardless of correctness
+                if (currentLetterIndex < letters.length - 1) {
+                    letters[currentLetterIndex + 1].classList.add('current');
+                    currentLetterIndex++;
+                } else {
+                    finishPractice();
+                }
+                
                 totalCharacters++;
                 updateAccuracy();
             }
@@ -1072,7 +1173,40 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         // Finish practice
         function finishPractice() {
             isTyping = false;
-            // Additional completion logic can be added here
+            const timeElapsed = (new Date() - startTime) / 1000;
+            const wpm = Math.round((totalCharacters / 5) / (timeElapsed / 60));
+            const accuracy = Math.round(((totalCharacters - mistakes) / totalCharacters) * 100);
+
+            document.getElementById('finalWpm').textContent = wpm;
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalTime').textContent = timeElapsed.toFixed(1) + 's';
+            document.getElementById('finalErrors').textContent = mistakes;
+            
+            const resultsOverlay = document.getElementById('resultsOverlay');
+            if (resultsOverlay) {
+                resultsOverlay.style.display = 'flex';
+            }
+
+            // Save progress
+            fetch('save_japanese_progress.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wpm: wpm,
+                    accuracy: accuracy,
+                    mistakes: mistakes,
+                    time_taken: timeElapsed
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to save progress');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
         // Event listeners
@@ -1081,9 +1215,8 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             initializePractice();
             document.addEventListener('keydown', handleTyping);
             
-            document.getElementById('restart-button').addEventListener('click', initializePractice);
-
             // Keep input field focused
+            const inputField = document.getElementById('input-field');
             document.addEventListener('click', () => {
                 inputField.focus();
             });
@@ -1103,90 +1236,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         document.addEventListener('keyup', (event) => {
             const key = document.querySelector(`[data-key="${event.key.toLowerCase()}"]`);
             if (key) key.classList.remove('active');
-        });
-
-        // Update the input event listener
-        document.getElementById('input-field').addEventListener('input', (e) => {
-            if (!isTyping) {
-                startTime = new Date();
-                isTyping = true;
-                timer = setInterval(updateTimer, 1000);
-            }
-
-            const letters = document.querySelectorAll('.letter');
-            const typed = e.target.value;
-
-            if (typed && currentLetterIndex < letters.length) {
-                totalCharacters++;
-                typedCharCount++;
-                const current = letters[currentLetterIndex];
-                
-                if (typed === current.textContent) {
-                    current.classList.add('correct');
-                } else {
-                    mistakes++;
-                    current.classList.add('incorrect');
-                }
-
-                current.classList.remove('current');
-                
-                if (letters[currentLetterIndex + 1]) {
-                    letters[currentLetterIndex + 1].classList.add('current');
-                    
-                    if (typedCharCount % CHARS_BEFORE_SCROLL === 0) {
-                        const wordsContainer = document.getElementById('words');
-                        wordsContainer.scrollBy({
-                            top: 25,
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-
-                currentLetterIndex++;
-                updateStats();
-                e.target.value = '';
-
-                // Check if typing is complete
-                if (currentLetterIndex >= letters.length) {
-                    console.log('Typing complete!'); // Debug log
-                    clearInterval(timer);
-                    
-                    // Show next button if accuracy is good enough
-                    const nextBtn = document.getElementById('next-btn');
-                    if (nextBtn && accuracy >= 80) {
-                        nextBtn.style.display = 'inline-block';
-                    }
-
-                    // Show results modal
-                    showResults();
-                }
-            }
-        });
-
-        function showResults() {
-            const timeElapsed = (new Date() - startTime) / 1000;
-            const wpm = Math.round((totalCharacters / 5) / (timeElapsed / 60));
-            const accuracy = Math.round(((totalCharacters - mistakes) / totalCharacters) * 100);
-
-            // Update results in modal
-            document.getElementById('accuracy-result').textContent = `${accuracy}%`;
-            document.getElementById('speed-result').textContent = `${wpm} WPM`;
-            document.getElementById('errors-result').textContent = mistakes;
-            document.getElementById('time-result').textContent = `${timeElapsed.toFixed(1)} s`;
-
-            // Show modal
-            const modal = document.getElementById('resultModal');
-            modal.style.display = 'block';
-            modal.classList.add('show');
-        }
-
-        // Add this to check if clicking outside modal should close it
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('resultModal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                modal.classList.remove('show');
-            }
         });
 
         // Theme handling

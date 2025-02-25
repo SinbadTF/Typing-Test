@@ -32,6 +32,15 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
             padding: 20px;
         }
 
+        .header-section {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
         .stats-container {
             display: flex;
             justify-content: center;
@@ -64,25 +73,40 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         .words {
             user-select: none;
             height: 120px;
-            overflow-y: auto;
+            overflow-y: auto !important;
             padding: 10px;
             margin-bottom: 1rem;
             scrollbar-width: thin;
             scrollbar-color: #646669 #323437;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            max-height: 150px !important;
+            position: relative;
+            border-radius: 8px;
+            background: transparent;
         }
 
         .words::-webkit-scrollbar {
-            width: 8px;
+            width: 8px !important;
+            display: block !important;
         }
 
         .words::-webkit-scrollbar-track {
-            background: #323437;
+            background: rgba(38, 40, 43, 0.95);
             border-radius: 4px;
         }
 
         .words::-webkit-scrollbar-thumb {
             background: #646669;
             border-radius: 4px;
+        }
+
+        .words::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
         }
 
         .letter {
@@ -247,6 +271,29 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         @keyframes blink {
             50% { opacity: 0; }
         }
+
+        .sound-toggle {
+            position: absolute;
+            right: 120px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #d1d0c5;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .sound-toggle:hover {
+            color: #4a9eff;
+        }
+
+        .sound-toggle.muted {
+            color: #646669;
+        }
     </style>
 </head>
 <body>
@@ -260,10 +307,18 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
     </audio>
 
     <div class="typing-container">
-        <div class="stats-container">
-            <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
-            <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
-            <div class="stat-item">time: <span class="stat-value" id="time">60</span></div>
+        <div class="header-section">
+            <div class="stats-container">
+                <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
+                <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
+                <div class="stat-item">time: <span class="stat-value" id="time">60</span></div>
+            </div>
+            <button class="sound-toggle" id="soundToggle">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <div class="theme-selector">
+                <!-- existing theme selector code -->
+            </div>
         </div>
 
         <div class="typing-area">
@@ -305,6 +360,14 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
     </div>
 
     <script>
+        // Add this event listener to maintain focus on the input field
+        document.addEventListener('click', (e) => {
+            // Only refocus if not clicking on a button or link
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+                document.getElementById('input-field').focus();
+            }
+        });
+
         const typingText = <?php echo json_encode($typingText); ?>;
         const words = document.getElementById('words');
         const input = document.getElementById('input-field');
@@ -499,6 +562,33 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
                 e.preventDefault();
                 initTest();
             }
+        });
+
+        // Sound toggle functionality
+        const soundToggle = document.getElementById('soundToggle');
+        let isMuted = localStorage.getItem('isMuted') === 'true';
+        
+        // Initialize sound state
+        function updateSoundIcon() {
+            const icon = soundToggle.querySelector('i');
+            icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            soundToggle.classList.toggle('muted', isMuted);
+            
+            // Update audio elements
+            keySound.muted = isMuted;
+            errorSound.muted = isMuted;
+        }
+        
+        // Set initial state
+        updateSoundIcon();
+        
+        // Toggle sound on click
+        soundToggle.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default button behavior
+            isMuted = !isMuted;
+            localStorage.setItem('isMuted', isMuted);
+            updateSoundIcon();
+            document.getElementById('input-field').focus(); // Refocus on input field
         });
 
         initTest();
