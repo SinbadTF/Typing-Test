@@ -47,6 +47,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
     <title>Typing Course - Learn to Type</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -54,19 +55,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
             min-height: 100vh;
             padding-bottom: 50px;
         }
-        .navbar {
-            position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    background: rgba(25, 25, 25, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
+
         /* Adjust main content spacing */
 
         .course-section {
@@ -75,7 +64,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
             margin: 0 auto;
         }
         .section-title {
-            margin-top: 100px;
+            margin-top: 70px;
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 3rem;
@@ -228,16 +217,19 @@ $advancedLessons = getLessons($pdo, 'advanced');
 
 
 .level-btn {
+    background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
     padding: 15px 40px;
     border: none;
-    border-radius: 5px;
-    background: rgba(35, 35, 35, 0.95);
-    color: white;
+  
+   font-size: 1rem;
+border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
     text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1.5px solid #007bff;
 }
 
 .level-btn:hover {
@@ -256,7 +248,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
     </style>
 </head>
 <body>
-    <?php include 'includes/navbar.php'; ?>
+<?php include 'includes/navbar.php'; ?>
 
         <h1 class="section-title">Typing Course</h1>
         <div class="container">

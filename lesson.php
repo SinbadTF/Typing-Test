@@ -143,7 +143,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         /* Adjust key sizes */
-        .key.tab { width: 82px; }
+        .key.tab { width: 60px; }
         .key.caps { width: 92px; }
         .key.enter { width: 98px; }
         .key.shift { width: 120px; }
@@ -173,13 +173,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             border-radius: 5px;
         }
 
-        .key.line { width: 22px; }
-        .key.backspace { width: 89px; }
-        .key.tab { width: 60px; }
-        .key.enter { width: 85px; }
-        .key.caps { width: 80px; }
-        .key.shift { width: 110px; }
-        .key.space { width: 700px; }
+     
 
         .key:hover {
             background-color: #666;
@@ -228,9 +222,9 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         /* Special key sizes */
-        .key.line { width: 40px; }
+        .key.line { width: 70px; }
         .key.backspace { width: 85px; }
-        .key.tab { width: 85px; }
+ 
         .key.caps { width: 85px; }
         .key.enter { width: 90px; }
         .key.shift { width: 110px; }
@@ -597,6 +591,9 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .btn-retry, .btn-course, .btn-next {
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 4px;
@@ -644,7 +641,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
        
         .modal-content {
             background-color: #323437;
-            color: #d1d0c5;
+          
             padding: 30px;
             margin: 10% auto;
             width: 400px;
@@ -654,18 +651,33 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .modal-content h2 {
+            
             margin-bottom: 20px;
-            color: #d1d0c5;
+            color: #007bff;
+            font-size: 1.7rem;
         }
 
         .modal-content p {
-            margin: 15px 0;
-            font-size: 1.1rem;
+            margin: 8px 0;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 50px;
         }
 
         .modal-content strong {
             color: #4a9eff;
+            width: 100px;
+            font-size: 1.4rem;
         }
+
+        .modal-content span {
+            color: #d1d0c5;
+            font-size: 1.4rem;
+        }
+
+     
 
         .modal-content button,
         .modal-content a {
@@ -692,7 +704,25 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             display: block !important;
         }
 
-   
+        .sound-toggle {
+            background: none;
+            border: none;
+            color: #d1d0c5;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s ease;
+            margin-left: 1rem; /* Add spacing between time and sound icon */
+        }
+
+        .sound-toggle:hover {
+            color: #4a9eff;
+        }
+
+        .sound-toggle.muted {
+            color: #646669;
+        }
+
     </style>
 </head>
 <body>
@@ -708,6 +738,9 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">0:00</span></div>
+                <button class="sound-toggle" id="soundToggle">
+                    <i class="fas fa-volume-up"></i>
+                </button>
             </div>
             <div class="theme-selector">
                 <button class="theme-button" id="theme-toggle">
@@ -718,7 +751,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                     <button class="theme-option" data-theme="light" data-color="#f0f0f0">Light</button>
                     <button class="theme-option" data-theme="midnight" data-color="#1a1b26">Midnight</button>
                     <button class="theme-option" data-theme="forest" data-color="#2b2f2b">Forest</button>
-                    <button class="theme-option" data-theme="sunset" data-color="#2d1b2d">Sunset</button>
+                    <button class="theme-option" data-theme="sunset" data-color="#2d1b2d">Violet</button>
                 </div>
             </div>
         </div>
@@ -760,7 +793,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="key" data-key="p">p</div>
                 <div class="key" data-key="[">[</div>
                 <div class="key" data-key="]">]</div>
-                <div class="key" data-key="\">]\</div>
+                <div class="key line" data-key="\">\</div>
             </div>
             <div class="keyboard-row">
                 <div class="key caps special" data-key="CapsLock">caps</div>
@@ -853,7 +886,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <div id="resultModal" class="modal">
         <div class="modal-content">
-            <h2>Typing Test Results</h2>
+            <h2>Typing Results</h2>
             <p><strong>Accuracy:</strong> <span id="accuracy-result">0%</span></p>
             <p><strong>Speed:</strong> <span id="speed-result">0 WPM</span></p>
             <p><strong>Errors:</strong> <span id="errors-result">0</span></p>
@@ -873,8 +906,24 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
 
+    <audio id="keySound" preload="auto">
+        <source src="assets/sounds/key-press.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="errorSound" preload="auto">
+        <source src="assets/sounds/error.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', (e) => {
+            if (e.target === document.getElementById('input-field') || 
+                e.ctrlKey || e.altKey || e.metaKey) {
+                return;
+            }
+            
+            document.getElementById('input-field').focus();
+        });
+
+    document.addEventListener('keydown', function(event) {
         if (event.getModifierState('CapsLock')) {
             document.getElementById('capsWarning').classList.add('show');
         }
@@ -1023,9 +1072,13 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 if (typed === current.textContent) {
                     current.classList.add('correct');
+                    keySound.currentTime = 0;
+                    keySound.play().catch(e => console.log('Sound play failed:', e));
                 } else {
                     mistakes++;
                     current.classList.add('incorrect');
+                    errorSound.currentTime = 0;
+                    errorSound.play().catch(e => console.log('Sound play failed:', e));
                 }
 
                 current.classList.remove('current');
@@ -1069,6 +1122,35 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             if (e.target === document.getElementById('resultsModal')) {
                 document.getElementById('resultsModal').style.display = 'none';
             }
+        });
+
+        // Add these variables with your other declarations
+        const keySound = document.getElementById('keySound');
+        const errorSound = document.getElementById('errorSound');
+        const soundToggle = document.getElementById('soundToggle');
+        let isMuted = localStorage.getItem('isMuted') === 'true';
+
+        // Add this function
+        function updateSoundIcon() {
+            const icon = soundToggle.querySelector('i');
+            icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            soundToggle.classList.toggle('muted', isMuted);
+            
+            // Update audio elements
+            keySound.muted = isMuted;
+            errorSound.muted = isMuted;
+        }
+
+        // Initialize sound state
+        updateSoundIcon();
+
+        // Add sound toggle event listener
+        soundToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            isMuted = !isMuted;
+            localStorage.setItem('isMuted', isMuted);
+            updateSoundIcon();
+            document.getElementById('input-field').focus();
         });
     </script>
     <script src="assets/js/lesson.js"></script>

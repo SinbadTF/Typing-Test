@@ -327,8 +327,11 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         </div>
 
         <div class="text-center">
+        <a href="index.php" class="restart-button">
+                    <i class="fas fa-home me-2"></i>Back
+                </a>
             <button class="restart-button" id="restart-button">
-                <i class="fas fa-redo me-2"></i>restart test
+                <i class="fas fa-redo me-2"></i>Restart Test
             </button>
         </div>
     </div>

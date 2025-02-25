@@ -61,19 +61,14 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         .stat-item {
             font-size: 1.5rem;
-            text-align: center;
+        
         }
 
-        .stat-item div:first-child {
-            color: #646669;
-            font-size: 1rem;
-            text-transform: lowercase;
-        }
 
         .stat-value {
             color: #d1d0c5;
             font-weight: 600;
-            font-size: 1.5rem;
+
         }
 
         .typing-area {
@@ -766,7 +761,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         .results-card {
-            background: #2c2e31;
+         
             padding: 2.5rem;
             border-radius: 15px;
             border: 1px solid rgba(209, 208, 197, 0.1);
@@ -837,6 +832,25 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         .results-card {
             animation: fadeIn 0.3s ease-out;
         }
+
+        .sound-toggle {
+            background: none;
+            border: none;
+            color: #d1d0c5;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .sound-toggle:hover {
+            color: #4a9eff;
+        }
+
+        .sound-toggle.muted {
+            color: #646669;
+        }
     </style>
 </head>
 <body>
@@ -853,7 +867,10 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">0:00</span></div>
-    </div>
+                <button class="sound-toggle" id="soundToggle">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
             <div class="theme-selector">
                 <button class="theme-button" id="theme-toggle">
                     <i class="fas fa-palette"></i> Theme
@@ -863,7 +880,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                     <button class="theme-option" data-theme="light">Light</button>
                     <button class="theme-option" data-theme="midnight">Midnight</button>
                     <button class="theme-option" data-theme="forest">Forest</button>
-                    <button class="theme-option" data-theme="sunset">Sunset</button>
+                    <button class="theme-option" data-theme="sunset">Violet</button>
                 </div>
             </div>
         </div>
@@ -880,28 +897,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     <div id="capsWarning" class="caps-warning">
         <i class="fas fa-exclamation-triangle me-2"></i>Caps Lock is ON
     </div>
-       <div id="resultModal" class="modal">
-        <div class="modal-content">
-            <h2>Typing Test Results</h2>
-            <p><strong>Accuracy:</strong> <span id="accuracy-result">0%</span></p>
-            <p><strong>Speed:</strong> <span id="speed-result">0 WPM</span></p>
-            <p><strong>Errors:</strong> <span id="errors-result">0</span></p>
-            <p><strong>Time:</strong> <span id="time-result">0 s</span></p>
-            <button onclick="location.reload()" class="btn-retry">
-                <i class="fas fa-redo"></i> Try Again
-            </button>
-            <a href="japanese_course.php" class="btn-course">
-                <i class="fas fa-book"></i> Back to Course
-            </a>
-            <div class="text-center mt-3">
-                <?php if ($nextLesson): ?>
-                    <a href=".php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
-                       id="next-btn" class="restart-button ms-3" style="display: none;">
-                        next lesson <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                <?php endif; ?>
-            </div>
-        </div>
+    
     </div>
     
 
@@ -940,6 +936,13 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+
+    <audio id="keySound" preload="auto">
+        <source src="assets/sounds/key-press.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="errorSound" preload="auto">
+        <source src="assets/sounds/error.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
      const japaneseKeyMap = {
@@ -1121,8 +1124,16 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 currentLetter.classList.remove('current');
                 if (mappedChar === targetChar) {
                     currentLetter.classList.add('correct');
+                    if (!isMuted) {
+                        keySound.currentTime = 0;
+                        keySound.play().catch(e => console.log('Sound play failed:', e));
+                    }
                 } else {
                     currentLetter.classList.add('incorrect');
+                    if (!isMuted) {
+                        errorSound.currentTime = 0;
+                        errorSound.play().catch(e => console.log('Sound play failed:', e));
+                    }
                     mistakes++;
                 }
                 
@@ -1328,6 +1339,35 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 document.documentElement.style.setProperty('--theme-text', colors.text);
                 document.documentElement.style.setProperty('--theme-primary', colors.primary);
             }
+        });
+
+        // Add these variables with your other declarations
+        const keySound = document.getElementById('keySound');
+        const errorSound = document.getElementById('errorSound');
+        const soundToggle = document.getElementById('soundToggle');
+        let isMuted = localStorage.getItem('isMuted') === 'true';
+
+        // Add this function
+        function updateSoundIcon() {
+            const icon = soundToggle.querySelector('i');
+            icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            soundToggle.classList.toggle('muted', isMuted);
+            
+            // Update audio elements
+            keySound.muted = isMuted;
+            errorSound.muted = isMuted;
+        }
+
+        // Initialize sound state
+        updateSoundIcon();
+
+        // Add sound toggle event listener
+        soundToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            isMuted = !isMuted;
+            localStorage.setItem('isMuted', isMuted);
+            updateSoundIcon();
+            document.getElementById('input-field').focus();
         });
     </script>
 </body>

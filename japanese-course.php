@@ -47,7 +47,8 @@ $advancedLessons = getLessons($pdo, 'advanced');
     <title>Japanese Typing Course - 日本語タイピング</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+    <link rel="stylesheet" href="assets/css/style.css">
+   <style>
         body {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             color: #ffffff;
@@ -142,7 +143,7 @@ $advancedLessons = getLessons($pdo, 'advanced');
             color: #28a745;
         }
         .section-title {
-            margin-top: 100px;
+            margin-top: 80px;
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 3rem;
@@ -211,16 +212,19 @@ $advancedLessons = getLessons($pdo, 'advanced');
 }
 
 .level-btn {
+    background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
     padding: 15px 40px;
     border: none;
-    border-radius: 5px;
-    background: rgba(35, 35, 35, 0.95);
-    color: white;
+  
+   font-size: 1rem;
+border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
     text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1.5px solid #007bff;
 }
 
 .level-btn:hover {

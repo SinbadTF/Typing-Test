@@ -73,7 +73,7 @@ require_once 'includes/header.php';
             height: 6px;
             background: linear-gradient(90deg, #007bff, #00ff88, #007bff);
             background-size: 200% 100%;
-            animation: gradient 3s linear infinite;
+          
         }
         .hero-title {
             font-size: 4.5rem;
