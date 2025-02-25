@@ -17,7 +17,8 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="assets/css/style.css">
+   <style>
         body {
             background-color: #323437;
             color: #d1d0c5;
@@ -115,9 +116,9 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         }
 
         .restart-button {
-            background: none;
-            border: 1px solid #646669;
-            color: #646669;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
             font-size: 1rem;
             cursor: pointer;
             padding: 0.5rem 1rem;
@@ -152,23 +153,95 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
 
         .results-card {
             background: #2c2e31;
-            padding: 2rem;
-            border-radius: 10px;
+            padding: 2.5rem;
+            border-radius: 15px;
             border: 1px solid rgba(209, 208, 197, 0.1);
             text-align: center;
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-card h2 {
+            color: #d1d0c5;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .result-stat {
-            margin: 1rem 0;
+            margin: 1.2rem 0;
             font-size: 1.5rem;
+            color: #646669;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            border-radius: 8px;
+            background: rgba(32, 34, 37, 0.5);
         }
 
         .result-value {
-            color: #d1d0c5;
             font-weight: 600;
             font-size: 2rem;
+        }
+
+        #finalWpm {
+            color: #00ff88;
+        }
+
+        #finalAccuracy {
+            color: #007bff;
+        }
+
+        #finalErrors {
+            color: #ff4444;
+        }
+
+        #finalTime {
+            color: #ffaa00;
+        }
+
+        .restart-button {
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+        }
+
+        .restart-button:active {
+            transform: translateY(0);
+        }
+
+        .d-flex.justify-content-center.gap-3.mt-4 {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-card {
+            animation: fadeIn 0.3s ease-out;
         }
 
         @keyframes blink {
@@ -213,6 +286,9 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
             </div>
             <div class="result-stat">
                 Accuracy: <span class="result-value" id="finalAccuracy">0%</span>
+            </div>
+            <div class="result-stat">
+                Errors: <span class="result-value" id="finalErrors">0</span>
             </div>
             <div class="result-stat">
                 Time: <span class="result-value" id="finalTime">0s</span>
@@ -301,6 +377,25 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
             const typed = input.value;
             const current = letters[currentIndex];
         
+            // Handle backspace
+            if (typed.length === 0 && currentIndex > 0) {
+                // Remove classes from current letter
+                current.classList.remove('current');
+                
+                // Move back to previous letter
+                currentIndex--;
+                const previousLetter = letters[currentIndex];
+                
+                // Remove correct/incorrect classes and add current class
+                previousLetter.classList.remove('correct', 'incorrect');
+                previousLetter.classList.add('current');
+                
+                // Play key sound
+                keySound.currentTime = 0;
+                keySound.play().catch(e => console.log('Sound play failed:', e));
+                return;
+            }
+        
             if (typed) {
                 totalChars++;
                 if (typed === letters[currentIndex].textContent) {
@@ -369,6 +464,7 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
             document.getElementById('finalWpm').textContent = finalWpm;
             document.getElementById('finalAccuracy').textContent = finalAccuracy + '%';
             document.getElementById('finalTime').textContent = timeUsed + 's';
+            document.getElementById('finalErrors').textContent = mistakes;
             resultsOverlay.style.display = 'flex';
             
             fetch('save_result.php', {

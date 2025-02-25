@@ -2,12 +2,7 @@
 session_start();
 require_once 'config/database.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['redirect_url'] = 'story_lesson.php';
-    header('Location: login.php');
-    exit();
-}
+
 
 // Check if story ID is provided
 if (!isset($_GET['story']) || !is_numeric($_GET['story'])) {

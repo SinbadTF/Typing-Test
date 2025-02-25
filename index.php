@@ -309,28 +309,6 @@ require_once 'includes/header.php';
         .feature-icon {
             animation: float 3s ease-in-out infinite;
         }
-
-        .theme-option {
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .theme-option:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .theme-option.active {
-            border: 2px solid #007bff;
-        }
-
-        .theme-option img {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 5px;
-        }
     </style>
 </head>
 <body>
@@ -364,9 +342,16 @@ require_once 'includes/header.php';
                     </a>
                     
                 <?php endif; ?>
-                <a class="nav-link" href="premium.php">
-                    <i class="fas fa-crown me-2"></i>Premium
-                </a>
+                <a class="nav-link" href="<?php 
+                    if (!isset($_SESSION['user_id'])) {
+                        echo 'login.php';
+                    } else {
+                        $stmt = $pdo->prepare("SELECT is_premium FROM users WHERE user_id = ?");
+                        $stmt->execute([$_SESSION['user_id']]);
+                        $user = $stmt->fetch();
+                        echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
+                    }
+                ?>" class="btn btn-primary">Premium Lessons</a>
                 
             </div>
         </div>
@@ -436,7 +421,7 @@ require_once 'includes/header.php';
                         <div class="lesson-content">
                             <h4>Proverb Typing</h4>
                             <p>Makes typing practice more engaging and educational.</p>
-                            <a href="proverb_course.php" class="btn btn-outline-primary btn-sm">Start Now</a>
+                            <a href="proverb_typing.php" class="btn btn-outline-primary btn-sm">Start Now</a>
                         </div>
                     </div>
                 </div>
@@ -507,7 +492,7 @@ require_once 'includes/header.php';
                         <a href="course.php" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-language me-2"></i>English
                         </a>
-                        <a href="japanese_course.php" class="btn btn-outline-light btn-lg">
+                        <a href="japanese-course.php" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-language me-2"></i>Japanese [日本語]
                         </a>
                         <a href="myanmar_course.php" class="btn btn-outline-light btn-lg">
@@ -525,30 +510,5 @@ require_once 'includes/header.php';
                 new bootstrap.Modal(document.getElementById('languageModal')).show();
             });
         </script>
-    <script>
-    document.querySelectorAll('.theme-option').forEach(option => {
-        option.addEventListener('click', function() {
-            const theme = this.getAttribute('data-theme');
-            // Remove active class from all themes
-            document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
-            // Add active class to selected theme
-            this.classList.add('active');
-            // Apply the theme
-            document.body.setAttribute('data-theme', theme);
-            // Store the preference
-            localStorage.setItem('preferred-theme', theme);
-        });
-    });
-
-    // Apply saved theme on page load
-    const savedTheme = localStorage.getItem('preferred-theme');
-    if (savedTheme) {
-        document.body.setAttribute('data-theme', savedTheme);
-        const activeTheme = document.querySelector(`[data-theme="${savedTheme}"]`);
-        if (activeTheme) {
-            activeTheme.classList.add('active');
-        }
-    }
-    </script>
     </body>
     </html>
