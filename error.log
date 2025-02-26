@@ -196,3 +196,31 @@
 [26-Feb-2025 08:41:36 UTC] Attempting to insert transaction record
 [26-Feb-2025 08:41:36 UTC] Transaction failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'screenshot' in 'field list'
 [26-Feb-2025 08:41:36 UTC] Transaction Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'screenshot' in 'field list'
+[26-Feb-2025 18:13:59 UTC] Database connection successful
+[26-Feb-2025 18:13:59 UTC] Session user_id: 6
+[26-Feb-2025 18:13:59 UTC] User found in database: 6
+[26-Feb-2025 18:13:59 UTC] POST data: Array
+(
+    [name] => Yoon
+    [phone] => 09880177223
+    [amount] => 10000
+)
+
+[26-Feb-2025 18:13:59 UTC] FILES data: Array
+(
+    [screenshot] => Array
+        (
+            [name] => kbzpay_logo.png
+            [full_path] => kbzpay_logo.png
+            [type] => image/png
+            [tmp_name] => /private/var/folders/6_/hjs7zhys4k33dn71rtz8sy6m0000gn/T/phpmesa3mlq0dv39TYFO5d
+            [error] => 0
+            [size] => 43508
+        )
+
+)
+
+[26-Feb-2025 18:13:59 UTC] Upload directory exists: yes
+[26-Feb-2025 18:13:59 UTC] Upload directory writable: yes
+[26-Feb-2025 18:13:59 UTC] Attempting to insert transaction record
+[26-Feb-2025 18:13:59 UTC] Transaction submitted successfully

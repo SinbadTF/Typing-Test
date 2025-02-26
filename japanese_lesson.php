@@ -1216,7 +1216,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Save response:', data);
+        console.log('wresponse:', data);
         if (!data.success) {
             console.error('Failed to save progress:', data.message);
         }

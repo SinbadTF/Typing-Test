@@ -310,7 +310,7 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         <div class="header-section">
             <div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
-                <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
+                <div class="stat-item">acc: <span class="stat-value" id="accuracy">0%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">60</span></div>
             </div>
             <button class="sound-toggle" id="soundToggle">
@@ -426,7 +426,7 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
             clearInterval(timer);
             timeDisplay.textContent = timeLeft;
             wpmDisplay.textContent = '0';
-            accuracyDisplay.textContent = '100%';
+            accuracyDisplay.textContent = '0%';
             
             input.value = '';
             input.focus();
@@ -512,7 +512,19 @@ $typingText = $text['content'] ?? "The quick brown fox jumps over the lazy dog."
         function updateStats() {
             const timeElapsed = (Date.now() - startTime) / 1000 / 60;
             const wpm = Math.round((currentIndex / 5) / timeElapsed);
-            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100) || 100;
+            
+            // Only calculate accuracy if typing has started
+            let accuracy = 0;
+            if (currentIndex > 0) {
+                let correct = 0;
+                const letters = words.querySelectorAll('.letter');
+                for (let i = 0; i < currentIndex; i++) {
+                    if (letters[i].classList.contains('correct')) {
+                        correct++;
+                    }
+                }
+                accuracy = Math.round((correct / currentIndex) * 100);
+            }
 
             wpmDisplay.textContent = wpm;
             accuracyDisplay.textContent = accuracy + '%';

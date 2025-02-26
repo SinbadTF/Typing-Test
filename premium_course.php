@@ -347,12 +347,7 @@ if ($category === 'books') {
                                         <i class="fas fa-code me-2"></i>Coding
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link <?php echo $category === 'knowledge' ? 'active' : ''; ?>" 
-                                       href="?lang=<?php echo $lang; ?>&category=knowledge">
-                                        <i class="fas fa-brain me-2"></i>Knowledge
-                                    </a>
-                                </li>
+                                
                                 <li class="nav-item">
                         <a class="nav-link <?php echo $category === 'certification' ? 'active' : ''; ?>" 
                            href="?lang=<?php echo $lang; ?>&category=certification">
@@ -498,38 +493,22 @@ if ($category === 'books') {
                         </div>
                     </div>
 
-                    <!-- Coding Section -->
-                    <div id="coding-section" class="category-section">
-                        <h2 class="category-title"><i class="fas fa-code me-2"></i>Programming Practice</h2>
-                        <div class="lessons-grid">
-                            <?php for ($i = 1; $i <= 9; $i++): ?>
-                                <div class="lesson-box">
-                                    <div class="lesson-number"><?php echo $i; ?></div>
-                                    <h3 class="lesson-title">Code <?php echo $i; ?></h3>
-                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=coding&lesson=<?php echo $i; ?>" 
-                                       class="start-btn">Start</a>
-                                </div>
-                            <?php endfor; ?>
+                   
+                    <div id="programming-section" class="category-section">
+                        <h2 class="category-title"><i class="fas fa-certificate me-2"></i>Programming Codes Practice</h2>
+                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                                <i class="fas fa-award" style="color: #f0b232; font-size: 3.5rem; margin-bottom: 20px;"></i>
+                                <h3 class="book-title" style="font-size: 1.2rem; margin: 15px 0;">Start Coding Practice</h3>
+                                
+                            </div>
+                            <a href="programming_test.php" class="start-btn" style="width: auto; padding: 8px 20px; margin: 15px 0;">
+                                Start Practice Codes
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Knowledge Section -->
-                    <div id="knowledge-section" class="category-section">
-                        <h2 class="category-title"><i class="fas fa-brain me-2"></i>Educational Content</h2>
-                        <div class="lessons-grid">
-                            <?php for ($i = 1; $i <= 9; $i++): ?>
-                                <div class="lesson-box">
-                                    <div class="lesson-number"><?php echo $i; ?></div>
-                                    <h3 class="lesson-title">Topic <?php echo $i; ?></h3>
-                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=knowledge&lesson=<?php echo $i; ?>" 
-                                       class="start-btn">Start</a>
-                                </div>
-                            <?php endfor; ?>
-                        </div>
-                    </div>
-                    
-
-                    <!-- Add this section before the closing div.col-md-9 -->
+                   
                     <div id="certification-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-certificate me-2"></i>Typing Certification</h2>
                         <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
@@ -551,7 +530,7 @@ if ($category === 'books') {
                         </div>
                     </div>
                     
-                    <!-- Add new Custom Practice feature box -->
+                   
                     <div id="custom-practice-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-keyboard me-2"></i>Custom Practice</h2>
                         <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">

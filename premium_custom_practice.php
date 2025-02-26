@@ -14,27 +14,16 @@ $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user || $user['is_premium'] != 1) {
-    header('Location: premium.php');
+    header('Location: transaction/index.php');
     exit();
 }
-
-// Get custom text from POST
-$customText = $_POST['custom_text'] ?? '';
-if (empty($customText)) {
-    header('Location: premium_course.php');
-    exit();
-}
-
-// Store custom text in session for practice
-$_SESSION['custom_text'] = $customText;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Practice - Typing Test</title>
+    <title>Custom Practice - Premium Feature</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,66 +36,9 @@ $_SESSION['custom_text'] = $customText;
         }
 
         .typing-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 8px;
-        }
-
-        .text-display {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 6px;
-            padding: 6px;
-            margin-bottom: 6px;
-            color: #d1d0c5;
-            font-size: 0.8rem;
-            line-height: 1.2;
-            height: 35px;
-            overflow: hidden;
-            position: relative;
-            white-space: pre-wrap;
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .text-display.scrolling {
-            overflow-y: hidden;
-        }
-
-        .typing-input {
-            width: 90%;
-            padding: 6px;
-            border: none;
-            border-radius: 6px;
-            background: rgba(30, 41, 59, 0.7);
-            color: #fff;
-            font-size: 0.8rem;
-            margin: 0 auto 6px;
-            display: block;
-        }
-
-        .typing-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(240, 178, 50, 0.3);
-        }
-
-        .word {
-            display: inline-block;
-            margin-right: 2px;
-            padding: 1px 2px;
-            border-radius: 2px;
-        }
-
-        .highlight {
-            background-color: rgba(240, 178, 50, 0.2);
-        }
-
-        .error {
-            background-color: rgba(255, 0, 0, 0.2);
-        }
-
-        .completed {
-            color: #6b7280;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
         }
 
         .stats-container {
@@ -124,6 +56,82 @@ $_SESSION['custom_text'] = $customText;
         .stat-value {
             color: #d1d0c5;
             font-weight: 600;
+        }
+
+        .typing-area {
+            position: relative;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            min-height: 140px;
+            margin-bottom: 2rem;
+            padding: 20px;
+            background: rgba(32, 34, 37, 0.95);
+            border-radius: 10px;
+            border: 1px solid rgba(209, 208, 197, 0.1);
+        }
+
+        .words {
+            user-select: none;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            min-height: 120px;
+            max-height: 150px; /* Reduced max height */
+            overflow-y: auto;
+            position: relative;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(38, 40, 43, 0.5);
+            white-space: pre-wrap; /* Preserve line breaks */
+            word-wrap: break-word; /* Break long words */
+        }
+
+        .words::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .words::-webkit-scrollbar-track {
+            background: rgba(38, 40, 43, 0.95);
+            border-radius: 4px;
+        }
+
+        .words::-webkit-scrollbar-thumb {
+            background: #646669;
+            border-radius: 4px;
+        }
+
+        .words::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
+        }
+
+        .letter {
+            position: relative;
+            color: #646669;
+        }
+
+        .letter.correct {
+            color: #d1d0c5;
+        }
+
+        .letter.incorrect {
+            color: #ca4754;
+            background: rgba(202, 71, 84, 0.2);
+            border-radius: 2px;
+        }
+
+        .letter.current {
+            color: #d1d0c5;
+        }
+
+        .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #d1d0c5;
+            animation: blink 1s infinite;
         }
 
         .keyboard {
@@ -242,6 +250,7 @@ $_SESSION['custom_text'] = $customText;
         }
 
         .theme-button {
+
             margin-top: 50px;
             background: #2c2e31;
             color: #d1d0c5;
@@ -427,100 +436,114 @@ $_SESSION['custom_text'] = $customText;
     <audio id="errorSound" preload="auto">
         <source src="assets/sounds/error.mp3" type="audio/mpeg">
     </audio>
-    <div class="container mt-5">
-        <div class="typing-container">
-            <div class="text-display" id="textDisplay"></div>
-            <input type="text" id="textInput" class="typing-input" placeholder="Start typing..." autocomplete="off">
-            
-            <div class="stats-container mt-4">
+    <div class="typing-container">
+        <div id="setup-area" class="setup-area">
+            <h2 class="text-center mb-4">Custom Practice Text</h2>
+            <textarea id="customText" class="custom-textarea" placeholder="Enter your practice text here..."></textarea>
+            <button class="action-button w-100" onclick="startPractice()">Start Practice</button>
+        </div>
+
+        <div class="theme-selector-practice" id="theme-selector-practice">
+            <button class="theme-button" id="theme-toggle">
+                <i class="fas fa-palette"></i>
+                Theme
+            </button>
+            <div class="theme-options" id="theme-options">
+                <button class="theme-option" data-theme="dark">Dark</button>
+                <button class="theme-option" data-theme="light">Light</button>
+                <button class="theme-option" data-theme="midnight">Midnight</button>
+                <button class="theme-option" data-theme="forest">Forest</button>
+                <button class="theme-option" data-theme="sunset">Sunset</button>
+            </div>
+        </div>
+
+        <div id="practice-area" class="typing-area" style="display: none;">
+            <div class="stats-container">
                 <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
                 <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
                 <div class="stat-item">time: <span class="stat-value" id="time">0</span></div>
             </div>
 
-            <div class="controls mt-4">
-                <button id="resetBtn" class="btn btn-primary">
+            <div class="words" id="words"></div>
+            <input type="text" class="input-field" id="input-field" autocomplete="off">
+
+            <div class="text-center mt-4">
+                <button class="action-button" onclick="resetPractice()">
                     <i class="fas fa-redo me-2"></i>Reset
                 </button>
-                <a href="premium_course.php" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back
-                </a>
             </div>
         </div>
-    </div>
 
-    <div class="keyboard" id="keyboard" style="display: none;">
-        <div class="keyboard-row">
-            <div class="key special" data-key="`">`</div>
-            <div class="key" data-key="1">1</div>
-            <div class="key" data-key="2">2</div>
-            <div class="key" data-key="3">3</div>
-            <div class="key" data-key="4">4</div>
-            <div class="key" data-key="5">5</div>
-            <div class="key" data-key="6">6</div>
-            <div class="key" data-key="7">7</div>
-            <div class="key" data-key="8">8</div>
-            <div class="key" data-key="9">9</div>
-            <div class="key" data-key="0">0</div>
-            <div class="key special" data-key="-">-</div>
-            <div class="key special" data-key="=">=</div>
-            <div class="key delete special" data-key="Backspace">delete</div>
+        
+            <div class="keyboard">
+            <div class="keyboard-row">
+                
+                <div class="key " data-key="`">`</div>
+                <div class="key" data-key="1">1</div>
+                <div class="key" data-key="2">2</div>
+                <div class="key" data-key="3">3</div>
+                <div class="key" data-key="4">4</div>
+                <div class="key" data-key="5">5</div>
+                <div class="key" data-key="6">6</div>
+                <div class="key" data-key="7">7</div>
+                <div class="key" data-key="8">8</div>
+                <div class="key" data-key="9">9</div>
+                <div class="key" data-key="0">0</div>
+                <div class="key " data-key="-">-</div>
+                <div class="key " data-key="=">=</div>
+                <div class="key delete special" data-key="Backspace">delete</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key tab " data-key="tab">  tab</div>
+                <div class="key" data-key="q">q</div>
+                <div class="key" data-key="w">w</div>
+                <div class="key" data-key="e">e</div>
+                <div class="key" data-key="r">r</div>
+                <div class="key" data-key="t">t</div>
+                <div class="key" data-key="y">y</div>
+                <div class="key" data-key="u">u</div>
+                <div class="key" data-key="i">i</div>
+                <div class="key" data-key="o">o</div>
+                <div class="key" data-key="p">p</div>
+                <div class="key" data-key="[">[</div>
+                <div class="key" data-key="]">]</div>
+                <div class="key line" data-key="\">\</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key caps special" data-key="CapsLock">caps</div>
+                <div class="key" data-key="a">a</div>
+                <div class="key" data-key="s">s</div>
+                <div class="key" data-key="d">d</div>
+                <div class="key" data-key="f">f</div>
+                <div class="key" data-key="g">g</div>
+                <div class="key" data-key="h">h</div>
+                <div class="key" data-key="j">j</div>
+                <div class="key" data-key="k">k</div>
+                <div class="key" data-key="l">l</div>
+                <div class="key " data-key=";">;</div>
+                <div class="key " data-key="'">'</div>
+                <div class="key enter special" data-key="Enter">enter</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key shift" data-key="Shift">Shift</div>
+                <div class="key" data-key="z">z</div>
+                <div class="key" data-key="x">x</div>
+                <div class="key" data-key="c">c</div>
+                <div class="key" data-key="v">v</div>
+                <div class="key" data-key="b">b</div>
+                <div class="key" data-key="n">n</div>
+                <div class="key" data-key="m">m</div>
+                <div class="key" data-key=",">,</div>
+                <div class="key" data-key=".">.</div>
+                <div class="key" data-key="/">/</div>
+                <div class="key shift" data-key="Shift">Shift</div>
+            </div>
+            <div class="keyboard-row">
+                
+                <div class="key space" data-key=" ">space</div>
+                
+            </div>
         </div>
-        <div class="keyboard-row">
-            <div class="key" data-key="q">q</div>
-            <div class="key" data-key="w">w</div>
-            <div class="key" data-key="e">e</div>
-            <div class="key" data-key="r">r</div>
-            <div class="key" data-key="t">t</div>
-            <div class="key" data-key="y">y</div>
-            <div class="key" data-key="u">u</div>
-            <div class="key" data-key="i">i</div>
-            <div class="key" data-key="o">o</div>
-            <div class="key" data-key="p">p</div>
-            <div class="key" data-key="[">[</div>
-            <div class="key" data-key="]">]</div>
-            <div class="key" data-key="\">\</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="key caps special" data-key="CapsLock">caps</div>
-            <div class="key" data-key="a">a</div>
-            <div class="key" data-key="s">s</div>
-            <div class="key" data-key="d">d</div>
-            <div class="key" data-key="f">f</div>
-            <div class="key" data-key="g">g</div>
-            <div class="key" data-key="h">h</div>
-            <div class="key" data-key="j">j</div>
-            <div class="key" data-key="k">k</div>
-            <div class="key" data-key="l">l</div>
-            <div class="key special" data-key=";">;</div>
-            <div class="key special" data-key="'">'</div>
-            <div class="key enter special" data-key="Enter">enter</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="key shift" data-key="Shift">shift</div>
-            <div class="key" data-key="z">z</div>
-            <div class="key" data-key="x">x</div>
-            <div class="key" data-key="c">c</div>
-            <div class="key" data-key="v">v</div>
-            <div class="key" data-key="b">b</div>
-            <div class="key" data-key="n">n</div>
-            <div class="key" data-key="m">m</div>
-            <div class="key" data-key=",">,</div>
-            <div class="key" data-key=".">.</div>
-            <div class="key" data-key="/">/</div>
-            <div class="key shift" data-key="Shift">shift</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="key ctrl" data-key="Control">ctrl</div>
-            <div class="key win" data-key="Meta">win</div>
-            <div class="key alt" data-key="Alt">alt</div>
-            <div class="key space" data-key=" ">space</div>
-            <div class="key alt" data-key="Alt">alt</div>
-            <div class="key win" data-key="Meta">win</div>
-            <div class="key menu" data-key="ContextMenu">menu</div>
-            <div class="key ctrl" data-key="Control">ctrl</div>
-        </div>
-    </div>
 
     <!-- Add this before closing </head> tag -->
     <script src="js/typing-sounds.js"></script>
@@ -533,11 +556,6 @@ $_SESSION['custom_text'] = $customText;
         let mistakes = 0;
         let isTyping = false;
         let totalChars = 0;
-        const textDisplay = document.getElementById('textDisplay');
-        const textInput = document.getElementById('textInput');
-        const originalText = <?php echo json_encode($customText); ?>;
-        let currentPosition = 0;
-        let lastScrollPosition = 0;
 
         function startPractice() {
             const text = document.getElementById('customText').value.trim();
@@ -684,70 +702,7 @@ $_SESSION['custom_text'] = $customText;
             if (key) key.classList.remove('active');
         });
         
-        // Initialize text display
-        function initializeText() {
-            const words = originalText.split(' ');
-            textDisplay.innerHTML = words.map((word, index) => 
-                `<span class="word" data-index="${index}">${word}</span>`
-            ).join(' ');
-        }
-
-        function updateVisibleText() {
-            const currentWord = textDisplay.querySelector(`[data-index="${currentPosition}"]`);
-            if (!currentWord) return;
-
-            const wordRect = currentWord.getBoundingClientRect();
-            const displayRect = textDisplay.getBoundingClientRect();
-            const wordTop = wordRect.top - displayRect.top;
-            
-            // If word is not fully visible
-            if (wordTop < 0 || wordTop + wordRect.height > displayRect.height) {
-                const newScrollTop = textDisplay.scrollTop + wordTop - 6;
-                
-                if (newScrollTop !== lastScrollPosition) {
-                    textDisplay.scrollTo({
-                        top: newScrollTop,
-                        behavior: 'smooth'
-                    });
-                    lastScrollPosition = newScrollTop;
-                }
-            }
-        }
-
-        textInput.addEventListener('input', (e) => {
-            const words = originalText.split(' ');
-            const typedWords = textInput.value.trim().split(' ');
-            
-            // Reset all words
-            textDisplay.querySelectorAll('.word').forEach(word => {
-                word.classList.remove('highlight', 'error', 'completed');
-            });
-            
-            // Update word styling
-            typedWords.forEach((word, index) => {
-                const wordElement = textDisplay.querySelector(`[data-index="${index}"]`);
-                if (wordElement) {
-                    if (word === words[index]) {
-                        wordElement.classList.add('completed');
-                        currentPosition = index + 1;
-                    } else {
-                        wordElement.classList.add('error');
-                    }
-                }
-            });
-            
-            // Highlight current word and scroll
-            const currentWord = textDisplay.querySelector(`[data-index="${currentPosition}"]`);
-            if (currentWord) {
-                currentWord.classList.add('highlight');
-                // Delay scroll slightly for smoother experience
-                setTimeout(updateVisibleText, 50);
-            }
-        });
-
-        // Initialize
-        initializeText();
-        textInput.focus();
+        
     </script>
 </body>
 </html>

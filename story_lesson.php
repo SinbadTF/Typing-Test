@@ -225,14 +225,15 @@ require_once 'includes/header.php';
         }
 
         .outside-buttons {
-            max-width: 600px;
+            max-width: 200px;
             margin: 20px auto;
             display: flex;
             justify-content: center;
-            gap: 15px;
         }
 
         .outside-button {
+            background-color: #6c757d;
+            color: #fff;
             font-size: 1rem;
             padding: 8px 16px;
             border: none;
@@ -245,32 +246,19 @@ require_once 'includes/header.php';
             transition: all 0.3s ease;
             min-width: 120px;
             justify-content: center;
+            pointer-events: auto !important;
         }
 
-        #restart-button {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        #restart-button:hover {
-            background-color: #0056b3;
-        }
-
-        .outside-button[href="story_mode.php"] {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        .outside-button[href="story_mode.php"]:hover {
+        .outside-button:hover {
             background-color: #5a6268;
         }
 
         .outside-button i {
             font-size: 0.9rem;
+            pointer-events: none;
         }
 
         .outside-button * {
-            pointer-events: none;
             user-select: none;
         }
 
@@ -458,7 +446,7 @@ require_once 'includes/header.php';
                     wpm: <span class="stat-value" id="wpm">0</span>
                 </div>
                 <div class="stat-item">
-                    acc: <span class="stat-value" id="accuracy">100%</span>
+                    acc: <span class="stat-value" id="accuracy">0%</span>
                 </div>
                 <div class="stat-item">
                     time: <span class="stat-value" id="timer">0:00</span>
@@ -475,21 +463,10 @@ require_once 'includes/header.php';
         </div>
 
         <div class="outside-buttons">
-            <button class="outside-button" id="restart-button">
-                <i class="fas fa-redo"></i>
-                restart story
-            </button>
-            <a href="story_mode.php" class="outside-button">
-                <i class="fas fa-arrow-left"></i>
-                back to stories
+            <a href="story_mode.php" class="outside-button" style="pointer-events: auto;">
+                <i class="fas fa-arrow-left" style="pointer-events: none;"></i>
+                Back to Stories
             </a>
-            <?php if ($nextStory): ?>
-            <a href="story_lesson.php?story=<?php echo $nextStory['id']; ?>" 
-               id="next-btn" class="outside-button" style="display: none;">
-                next story
-                <i class="fas fa-arrow-right"></i>
-            </a>
-            <?php endif; ?>
         </div>
     </div>
 
@@ -516,6 +493,10 @@ require_once 'includes/header.php';
                     <button class="modal-button retry-btn" onclick="location.reload()">
                         <i class="fas fa-redo"></i>
                         Retry
+                    </button>
+                    <button class="modal-button retry-btn" id="modal-restart-btn">
+                        <i class="fas fa-sync"></i>
+                        Restart Story
                     </button>
                     <?php if ($nextStory): ?>
                     <a href="story_lesson.php?story=<?php echo $nextStory['id']; ?>" 
@@ -659,18 +640,57 @@ require_once 'includes/header.php';
                 });
             }
 
-            // Handle restart button
-            document.getElementById('restart-button').addEventListener('click', () => {
-                location.reload();
-            });
+            // Add restart story function
+            function restartStory() {
+                // Reset all variables
+                isTyping = false;
+                currentIndex = 0;
+                startTime = null;
+                totalChars = 0;
+                mistakes = 0;
+                typedCharCount = 0;
+                
+                // Clear timer
+                clearInterval(timer);
+                document.getElementById('timer').textContent = '0:00';
+                
+                // Reset stats display
+                document.getElementById('wpm').textContent = '0';
+                document.getElementById('accuracy').textContent = '0%';
+                
+                // Reset text display
+                const letters = wordsContainer.querySelectorAll('.letter');
+                letters.forEach((letter, index) => {
+                    letter.classList.remove('correct', 'incorrect', 'current');
+                    if (index === 0) {
+                        letter.classList.add('current');
+                    }
+                });
 
-            // Ensure input field stays focused
-            document.addEventListener('click', () => {
+                // Hide results modal
+                const modal = document.getElementById('resultsModal');
+                modal.style.display = 'none';
+                
+                // Reset input and focus
+                inputField.value = '';
                 inputField.focus();
-            });
 
-            // Initial focus
-            inputField.focus();
+                // Reset scroll position
+                wordsContainer.scrollTo(0, 0);
+            }
+
+            // Add event listeners for both restart buttons
+            document.getElementById('modal-restart-btn').addEventListener('click', restartStory);
+
+            // Ensure input field stays focused, but allow clicking on buttons
+            document.addEventListener('click', (e) => {
+                const isButton = e.target.closest('button');
+                const isLink = e.target.closest('a');
+                
+                if (!isButton && !isLink) {
+                    inputField.focus();
+                }
+            });
         });
     </script>
 </body>

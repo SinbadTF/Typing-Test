@@ -947,7 +947,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         let mistakes = 0;
         let lastScrollPosition = 0;
         let typedCharCount = 0; // New counter for typed characters
-        const CHARS_BEFORE_SCROLL = 40; // Scroll every 20 characters typed
+        const CHARS_BEFORE_SCROLL = 55; // Scroll every 20 characters typed
 
         // Initialize the words container with the lesson text
         document.addEventListener('DOMContentLoaded', () => {
