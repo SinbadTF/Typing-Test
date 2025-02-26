@@ -83,6 +83,75 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             padding: 20px;
         }
 
+        .text-display {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 4px;
+            padding: 4px 6px;
+            margin-bottom: 8px;
+            color: #d1d0c5;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            height: 45px;
+            overflow-y: auto;
+            position: relative;
+            white-space: pre-wrap;
+            width: 45%;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Roboto Mono', monospace;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(240, 178, 50, 0.3) rgba(15, 23, 42, 0.7);
+        }
+
+        .text-display::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .text-display::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .text-display::-webkit-scrollbar-thumb {
+            background-color: rgba(240, 178, 50, 0.3);
+            border-radius: 2px;
+        }
+
+        .letter {
+            display: inline-block;
+            padding: 2px 0;
+            margin: 0 1px;
+            position: relative;
+            color: #646669;
+            transition: all 0.2s ease;
+        }
+
+        .letter.current {
+            color: #e2b714;
+            background-color: transparent;
+        }
+
+        .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 2px;
+            background-color: #e2b714;
+            animation: blink 1s infinite;
+            box-shadow: 0 0 8px rgba(226, 183, 20, 0.4);
+        }
+
+        .letter.correct {
+            color: #98c379;
+        }
+
+        .letter.incorrect {
+            color: #e06c75;
+            background: rgba(224, 108, 117, 0.2);
+            border-radius: 2px;
+        }
+
         .lesson-title {
             color: #e2b714;
             font-size: 1.8rem;
@@ -90,49 +159,38 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             text-align: center;
         }
 
-        .typing-text {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
-
         .stats-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
+            gap: 40px;
+            margin-bottom: 25px;
+            background: rgba(32, 34, 37, 0.95);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .stat-item {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            color: #8b8b8b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .stat-value {
             color: #e2b714;
             font-weight: 600;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(226, 183, 20, 0.2);
         }
 
         #input-field {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border: none;
-            padding: 15px;
-            color: #d1d0c5;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        #input-field:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #e2b714;
+            opacity: 0;
+            position: absolute;
+            width: 0;
+            height: 0;
         }
 
         .correct {
@@ -150,36 +208,35 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         }
 
         .keyboard {
-            margin: 30px auto;
-            max-width: 850px;
+            margin: 20px auto;
+            max-width: 750px;
             background: rgba(25, 25, 25, 0.95);
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transform-origin: top center;
         }
 
         .keyboard-row {
             display: flex;
             justify-content: center;
-            margin-bottom: 7px;
-            gap: 5px;
+            margin-bottom: 8px;
+            gap: 6px;
         }
 
         .key {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: #3c3c3c;
             border: none;
             border-radius: 4px;
+            color: #d1d0c5;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.1s ease;
-            position: relative;
-            box-shadow: 0 2px 0 #262626;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
 
         .key:active, .key.active {
@@ -189,14 +246,17 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             color: #ffffff;
         }
 
-        .key.tab { width: 75px; }
-        .key.caps { width: 85px; }
-        .key.enter { width: 90px; }
-        .key.shift { width: 105px; }
-        .key.ctrl, .key.win, .key.alt { width: 60px; }
-        .key.menu { width: 60px; }
-        .key.space { width: 320px; }
-        .key.delete { width: 85px; }
+        .key.tab, .key.caps, .key.enter, .key.shift, .key.ctrl, .key.win, .key.alt {
+            width: 70px;
+        }
+
+        .key.space {
+            width: 250px;
+        }
+
+        .key.delete {
+            width: 85px;
+        }
 
         .key.special {
             color: #a0a0a0;
@@ -583,7 +643,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         }
 
         .navbar.theme-sunset {
-            background-color: rgba(45, 27, 45, 0.95) !important;
+            background-color: rgba(45, 27, 45, 0.95) !important;-
         }
         .navbar.theme-sunset .nav-link,
         .navbar.theme-sunset .navbar-brand {
@@ -1060,6 +1120,731 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             color: #91fff1;
             font-weight: 500;
         }
+
+        /* Add these styles */
+        .words {
+            user-select: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            min-height: 80px;
+            max-height: 120px !important;
+            overflow-y: auto !important;
+            position: relative;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.7);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            width: 85%;
+            margin: 0 auto;
+            color: #d1d0c5;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .letter {
+            position: relative;
+            color: #646669;
+            padding: 2px 0;
+            margin: 0 1px;
+            transition: all 0.2s ease;
+        }
+
+        .letter.correct {
+            color: #98c379;
+        }
+
+        .letter.incorrect {
+            color: #e06c75;
+            background: rgba(224, 108, 117, 0.2);
+            border-radius: 2px;
+        }
+
+        .letter.current {
+            color: #e2b714;
+            background-color: transparent;
+        }
+
+        .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 2px;
+            background-color: #e2b714;
+            animation: blink 1s infinite;
+            box-shadow: 0 0 8px rgba(226, 183, 20, 0.4);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Add subtle animation for correct/incorrect transitions */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .letter.correct, .letter.incorrect {
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Results modal styles */
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .results-content {
+            background: linear-gradient(145deg, rgba(44, 46, 49, 0.95), rgba(35, 37, 40, 0.95));
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 90%;
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(226, 183, 20, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            color: #e2b714;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(226, 183, 20, 0.3);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(25, 25, 25, 0.5);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            color: #e2b714;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #d1d0c5;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: #8b8b8b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-retry, .btn-course {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-retry {
+            background: #e2b714;
+            color: #323437;
+        }
+
+        .btn-retry:hover {
+            background: #f0c324;
+            transform: translateY(-2px);
+        }
+
+        .btn-course {
+            background: rgba(255, 255, 255, 0.1);
+            color: #d1d0c5;
+            text-decoration: none;
+        }
+
+        .btn-course:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Galaxy Light Theme */
+        .keyboard.theme-galaxylight {
+            background: linear-gradient(145deg, rgba(240, 240, 255, 0.95), rgba(230, 230, 250, 0.95));
+            border: 1px solid rgba(176, 196, 222, 0.3);
+            box-shadow: 
+                0 10px 30px rgba(147, 112, 219, 0.15),
+                0 0 20px rgba(176, 196, 222, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .keyboard.theme-galaxylight .key {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 255, 0.9));
+            border: 1px solid rgba(176, 196, 222, 0.2);
+            color: #483d8b;
+            box-shadow: 
+                0 4px 6px rgba(147, 112, 219, 0.1),
+                0 0 10px rgba(176, 196, 222, 0.1);
+            text-shadow: 0 0 5px rgba(147, 112, 219, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .keyboard.theme-galaxylight .key:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 255, 0.95));
+            border-color: rgba(147, 112, 219, 0.3);
+            box-shadow: 
+                0 6px 12px rgba(147, 112, 219, 0.15),
+                0 0 15px rgba(176, 196, 222, 0.2);
+        }
+
+        .keyboard.theme-galaxylight .key:active,
+        .keyboard.theme-galaxylight .key.active {
+            transform: translateY(1px);
+            background: linear-gradient(145deg, #e6e6fa, #d8bfd8);
+            color: #483d8b;
+            box-shadow: 
+                0 0 20px rgba(147, 112, 219, 0.3),
+                0 0 10px rgba(176, 196, 222, 0.3) inset;
+            border-color: rgba(147, 112, 219, 0.4);
+            animation: galaxyLightPulse 0.5s ease;
+        }
+
+        /* Special keys styling */
+        .keyboard.theme-galaxylight .key.special {
+            background: linear-gradient(145deg, rgba(230, 230, 250, 0.95), rgba(220, 220, 245, 0.95));
+            color: #9370db;
+            font-weight: 500;
+            border-color: rgba(147, 112, 219, 0.25);
+        }
+
+        .keyboard.theme-galaxylight .key.space {
+            background: linear-gradient(145deg, rgba(240, 240, 255, 0.95), rgba(230, 230, 250, 0.95));
+            border-radius: 15px;
+            border-color: rgba(147, 112, 219, 0.25);
+            box-shadow: 
+                0 6px 12px rgba(147, 112, 219, 0.1),
+                0 0 20px rgba(176, 196, 222, 0.15);
+        }
+
+        .keyboard.theme-galaxylight .key.enter,
+        .keyboard.theme-galaxylight .key.shift,
+        .keyboard.theme-galaxylight .key.caps,
+        .keyboard.theme-galaxylight .key.tab {
+            background: linear-gradient(145deg, rgba(230, 230, 250, 0.95), rgba(220, 220, 245, 0.95));
+            color: #8a2be2;
+            font-weight: 500;
+            border-color: rgba(147, 112, 219, 0.25);
+        }
+
+        /* Animations */
+        @keyframes galaxyLightPulse {
+            0% { box-shadow: 0 0 5px rgba(147, 112, 219, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(147, 112, 219, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(147, 112, 219, 0.2); }
+        }
+
+        @keyframes galaxyLightFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        .keyboard.theme-galaxylight .key.wrong {
+            background: linear-gradient(145deg, #ffd1d1, #ffb3b3);
+            border-color: rgba(255, 99, 71, 0.4);
+            color: #dc143c;
+            animation: wrongShakeLight 0.3s ease;
+        }
+
+        @keyframes wrongShakeLight {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px) rotate(-1deg); }
+            75% { transform: translateX(2px) rotate(1deg); }
+        }
+
+        /* Hover effects */
+        .keyboard.theme-galaxylight .key:hover {
+            animation: galaxyLightFloat 1s ease infinite;
+        }
+
+        /* Active state with gradient animation */
+        .keyboard.theme-galaxylight .key.active {
+            background-size: 200% 200%;
+            animation: 
+                galaxyLightPulse 0.5s ease,
+                gradientShift 2s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Forest Dark Theme */
+        .keyboard.theme-galaxylight {
+            background: linear-gradient(145deg, rgba(22, 28, 25, 0.95), rgba(18, 24, 21, 0.95));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(76, 175, 80, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .keyboard.theme-galaxylight .key {
+            background: linear-gradient(145deg, rgba(34, 40, 37, 0.95), rgba(28, 34, 31, 0.95));
+            border: 1px solid rgba(76, 175, 80, 0.15);
+            color: #a5d6a7;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.2),
+                0 0 10px rgba(76, 175, 80, 0.05);
+            text-shadow: 0 0 5px rgba(165, 214, 167, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .keyboard.theme-galaxylight .key:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(145deg, rgba(40, 46, 43, 0.95), rgba(34, 40, 37, 0.95));
+            border-color: rgba(76, 175, 80, 0.3);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.25),
+                0 0 15px rgba(76, 175, 80, 0.15);
+        }
+
+        .keyboard.theme-galaxylight .key:active,
+        .keyboard.theme-galaxylight .key.active {
+            transform: translateY(1px);
+            background: linear-gradient(145deg, #2e7d32, #388e3c);
+            color: #e8f5e9;
+            box-shadow: 
+                0 0 20px rgba(76, 175, 80, 0.3),
+                0 0 10px rgba(76, 175, 80, 0.2) inset;
+            border-color: rgba(76, 175, 80, 0.4);
+            animation: forestGlow 0.5s ease;
+        }
+
+        /* Special keys styling */
+        .keyboard.theme-galaxylight .key.special {
+            background: linear-gradient(145deg, rgba(27, 33, 30, 0.95), rgba(22, 28, 25, 0.95));
+            color: #81c784;
+            font-weight: 500;
+            border-color: rgba(76, 175, 80, 0.25);
+        }
+
+        .keyboard.theme-galaxylight .key.space {
+            background: linear-gradient(145deg, rgba(34, 40, 37, 0.95), rgba(28, 34, 31, 0.95));
+            border-radius: 15px;
+            border-color: rgba(76, 175, 80, 0.25);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(76, 175, 80, 0.1);
+        }
+
+        .keyboard.theme-galaxylight .key.enter,
+        .keyboard.theme-galaxylight .key.shift,
+        .keyboard.theme-galaxylight .key.caps,
+        .keyboard.theme-galaxylight .key.tab {
+            background: linear-gradient(145deg, rgba(27, 33, 30, 0.95), rgba(22, 28, 25, 0.95));
+            color: #66bb6a;
+            font-weight: 500;
+            border-color: rgba(76, 175, 80, 0.25);
+        }
+
+        /* Animations */
+        @keyframes forestGlow {
+            0% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
+        }
+
+        @keyframes forestFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        .keyboard.theme-galaxylight .key.wrong {
+            background: linear-gradient(145deg, #c62828, #d32f2f);
+            border-color: rgba(244, 67, 54, 0.4);
+            color: #ffebee;
+            animation: wrongShakeForest 0.3s ease;
+        }
+
+        @keyframes wrongShakeForest {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px) rotate(-1deg); }
+            75% { transform: translateX(2px) rotate(1deg); }
+        }
+
+        /* Hover effects */
+        .keyboard.theme-galaxylight .key:hover {
+            animation: forestFloat 1s ease infinite;
+        }
+
+        /* Active state with gradient animation */
+        .keyboard.theme-galaxylight .key.active {
+            background-size: 200% 200%;
+            animation: 
+                forestGlow 0.5s ease,
+                gradientShift 2s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Galaxy Light Theme Text Area */
+        .theme-galaxylight .typing-area {
+            background: linear-gradient(145deg, rgba(22, 28, 45, 0.85), rgba(28, 34, 55, 0.85));
+            border: 1px solid rgba(147, 112, 219, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 
+                0 10px 30px rgba(147, 112, 219, 0.15),
+                0 0 40px rgba(138, 43, 226, 0.1);
+            backdrop-filter: blur(12px);
+        }
+
+        .theme-galaxylight .words {
+            background: linear-gradient(145deg, rgba(30, 36, 65, 0.9), rgba(35, 41, 75, 0.9));
+            border: 1px solid rgba(147, 112, 219, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 
+                0 8px 25px rgba(147, 112, 219, 0.1),
+                0 0 15px rgba(176, 196, 222, 0.1);
+            color: #e6e6fa;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            min-height: 100px;
+            max-height: 150px !important;
+        }
+
+        .theme-galaxylight .words::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .theme-galaxylight .words::-webkit-scrollbar-track {
+            background: rgba(30, 36, 65, 0.5);
+            border-radius: 4px;
+        }
+
+        .theme-galaxylight .words::-webkit-scrollbar-thumb {
+            background: linear-gradient(145deg, #9370db, #8a2be2);
+            border-radius: 4px;
+            border: 2px solid rgba(147, 112, 219, 0.2);
+            box-shadow: 0 0 10px rgba(147, 112, 219, 0.3);
+        }
+
+        .theme-galaxylight .letter {
+            color: #b19cd9;
+            text-shadow: 0 0 8px rgba(147, 112, 219, 0.3);
+            padding: 2px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-galaxylight .letter.current {
+            color: #e2b714;
+            background: rgba(147, 112, 219, 0.1);
+            position: relative;
+        }
+
+        .theme-galaxylight .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #e2b714, #ffd700);
+            box-shadow: 
+                0 0 10px rgba(226, 183, 20, 0.6),
+                0 0 20px rgba(226, 183, 20, 0.3);
+            animation: galaxyCursor 1s infinite;
+        }
+
+        .theme-galaxylight .letter.correct {
+            color: #98fb98;
+            text-shadow: 0 0 8px rgba(152, 251, 152, 0.3);
+        }
+
+        .theme-galaxylight .letter.incorrect {
+            color: #ff69b4;
+            background: rgba(255, 105, 180, 0.15);
+            border-radius: 3px;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+        }
+
+        /* Stats container for galaxy light theme */
+        .theme-galaxylight .stats-container {
+            background: linear-gradient(145deg, rgba(30, 36, 65, 0.9), rgba(35, 41, 75, 0.9));
+            border: 1px solid rgba(147, 112, 219, 0.3);
+            border-radius: 12px;
+            padding: 15px 30px;
+            box-shadow: 
+                0 8px 25px rgba(147, 112, 219, 0.15),
+                0 0 20px rgba(138, 43, 226, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .theme-galaxylight .stat-item {
+            color: #b19cd9;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(147, 112, 219, 0.2);
+        }
+
+        .theme-galaxylight .stat-value {
+            color: #e2b714;
+            font-weight: 600;
+            font-size: 1.3rem;
+            text-shadow: 
+                0 0 10px rgba(226, 183, 20, 0.4),
+                0 0 20px rgba(226, 183, 20, 0.2);
+        }
+
+        @keyframes galaxyCursor {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 
+                    0 0 10px rgba(226, 183, 20, 0.6),
+                    0 0 20px rgba(226, 183, 20, 0.3);
+            }
+            50% { 
+                opacity: 0.5;
+                box-shadow: 
+                    0 0 15px rgba(226, 183, 20, 0.8),
+                    0 0 30px rgba(226, 183, 20, 0.4);
+            }
+        }
+
+        /* Galaxy Theme Text Distinction */
+        .theme-galaxylight .typing-container {
+            background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(25, 25, 45, 0.9));
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 
+                0 15px 35px rgba(147, 112, 219, 0.2),
+                0 0 50px rgba(138, 43, 226, 0.15);
+            backdrop-filter: blur(15px);
+        }
+
+        .theme-galaxylight .words {
+            background: linear-gradient(145deg, rgba(28, 28, 50, 0.95), rgba(35, 35, 60, 0.95));
+            border: 1px solid rgba(147, 112, 219, 0.25);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 
+                0 10px 30px rgba(147, 112, 219, 0.15),
+                0 0 20px rgba(176, 196, 222, 0.15);
+            color: #d4d4ff;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            min-height: 120px;
+            max-height: 180px !important;
+            width: 75%;
+            margin: 0 auto;
+        }
+
+        .theme-galaxylight .letter {
+            color: #b8b8ff;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.4);
+            padding: 3px 5px;
+            margin: 0 2px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .theme-galaxylight .letter.current {
+            color: #ffd700;
+            background: rgba(147, 112, 219, 0.15);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            position: relative;
+        }
+
+        .theme-galaxylight .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ffd700, #ffa500);
+            box-shadow: 
+                0 0 10px rgba(255, 215, 0, 0.6),
+                0 0 20px rgba(255, 215, 0, 0.3);
+            animation: galaxyCursor 1s infinite;
+        }
+
+        .theme-galaxylight .letter.correct {
+            color: #90ee90;
+            text-shadow: 0 0 10px rgba(144, 238, 144, 0.4);
+        }
+
+        .theme-galaxylight .letter.incorrect {
+            color: #ff69b4;
+            background: rgba(255, 105, 180, 0.2);
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+            border-radius: 4px;
+        }
+
+        @keyframes galaxyCursor {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 
+                    0 0 10px rgba(255, 215, 0, 0.6),
+                    0 0 20px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                opacity: 0.5;
+                box-shadow: 
+                    0 0 15px rgba(255, 215, 0, 0.8),
+                    0 0 30px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        /* Space Theme Text Distinction - No Layout Background */
+        .theme-space .typing-container {
+            padding: 30px;
+        }
+
+        .theme-space .words {
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 
+                0 0 30px rgba(64, 224, 208, 0.15),
+                0 0 15px rgba(100, 255, 218, 0.1);
+            color: #e6fffa;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            min-height: 120px;
+            max-height: 180px !important;
+            width: 75%;
+            margin: 0 auto;
+        }
+
+        .theme-space .letter {
+            color: #b8fff9;
+            text-shadow: 0 0 10px rgba(64, 224, 208, 0.4);
+            padding: 3px 5px;
+            margin: 0 2px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .theme-space .letter.current {
+            color: #64ffda;
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+            position: relative;
+        }
+
+        .theme-space .letter.current::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #64ffda, #40e0d0);
+            box-shadow: 
+                0 0 10px rgba(100, 255, 218, 0.6),
+                0 0 20px rgba(100, 255, 218, 0.3);
+            animation: spaceCursor 1s infinite;
+        }
+
+        .theme-space .letter.correct {
+            color: #98ffd8;
+            text-shadow: 0 0 10px rgba(152, 255, 216, 0.4);
+        }
+
+        .theme-space .letter.incorrect {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+            border-radius: 4px;
+        }
+
+        .theme-space .stats-container {
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 15px 30px;
+            margin-bottom: 25px;
+        }
+
+        .theme-space .stat-item {
+            color: #b8fff9;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(64, 224, 208, 0.4);
+        }
+
+        .theme-space .stat-value {
+            color: #64ffda;
+            font-weight: 600;
+            font-size: 1.3rem;
+            text-shadow: 
+                0 0 10px rgba(100, 255, 218, 0.4),
+                0 0 20px rgba(100, 255, 218, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -1086,16 +1871,56 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         <h2 class="lesson-title"><?php echo htmlspecialchars($title); ?></h2>
         
         <div class="stats-container">
-            <div class="stat-item">WPM: <span class="stat-value" id="wpm">0</span></div>
-            <div class="stat-item">Accuracy: <span class="stat-value" id="accuracy">100%</span></div>
-            <div class="stat-item">Time: <span class="stat-value" id="timer">0:00</span></div>
+            <div class="stat-item">wpm: <span class="stat-value" id="wpm">0</span></div>
+            <div class="stat-item">acc: <span class="stat-value" id="accuracy">100%</span></div>
+            <div class="stat-item">time: <span class="stat-value" id="time">0:00</span></div>
         </div>
 
-        <div class="typing-text">
-            <div id="text-display"><?php echo htmlspecialchars($content); ?></div>
+        <div class="typing-area">
+            <div id="words" class="words"><?php echo htmlspecialchars($content); ?></div>
+            <input type="text" id="input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
 
-        <input type="text" id="input-field" placeholder="Start typing..." autocomplete="off">
+        <!-- Replace the existing results modal div with this -->
+        <div class="results-modal" id="resultsModal">
+            <div class="results-content">
+                <div class="results-header">
+                    <h2>Typing Results</h2>
+                    <p>Great job! Here's how you did:</p>
+                </div>
+                <div class="results-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="stat-value" id="final-wpm">0</div>
+                        <div class="stat-label">Words per minute</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-value" id="final-accuracy">0%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value" id="final-time">0:00</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                </div>
+                <div class="results-actions">
+                    <button class="btn-retry" onclick="location.reload()">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                    <a href="premium_course.php" class="btn-course">
+                        <i class="fas fa-book"></i> Back to Course
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <div class="keyboard">
             <div class="keyboard-row">
@@ -1181,7 +2006,7 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
     </div>
 
     <script>
-        const textDisplay = document.getElementById('text-display');
+        const wordsContainer = document.getElementById('words');
         const inputField = document.getElementById('input-field');
         const correctSound = document.getElementById('correctSound');
         const wrongSound = document.getElementById('wrongSound');
@@ -1190,71 +2015,94 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         let mistakes = 0;
         let startTime = null;
         let timerInterval = null;
+        let isTyping = false;
+        let timer = null;
+        let totalChars = 0;
 
-        // Split text into spans for individual character tracking
-        const text = textDisplay.textContent;
-        textDisplay.innerHTML = text.split('').map(char => 
-            `<span>${char}</span>`
-        ).join('');
-        const characters = textDisplay.getElementsByTagName('span');
+        function initializeText() {
+            const text = wordsContainer.textContent.trim();
+            
+            // Store the full text for later use
+            wordsContainer.dataset.fullText = text;
+            
+            // Clear existing content
+            wordsContainer.innerHTML = '';
+            
+            // Convert text to letter spans
+            const letters = text.split('').map((char, index) => 
+                `<span class="letter" data-index="${index}">${char}</span>`
+            ).join('');
+            
+            // Set the content
+            wordsContainer.innerHTML = letters;
+            
+            // Highlight first character
+            const firstLetter = wordsContainer.querySelector('.letter');
+            if (firstLetter) {
+                firstLetter.classList.add('current');
+            }
+        }
 
-        inputField.addEventListener('input', (e) => {
-            const typedChar = e.target.value;
-            const currentChar = text[currentIndex];
+        function updateDisplay(typedText) {
+            const fullText = wordsContainer.dataset.fullText;
+            const chars = wordsContainer.querySelectorAll('.letter');
+            const currentCharIndex = typedText.length;
+            
+            // Reset all characters
+            chars.forEach(char => char.classList.remove('current', 'correct', 'incorrect'));
+            
+            // Update character states
+            for (let i = 0; i < typedText.length; i++) {
+                if (i < chars.length) {
+                    if (typedText[i] === fullText[i]) {
+                        chars[i].classList.add('correct');
+                    } else {
+                        chars[i].classList.add('incorrect');
+                        mistakes++;
+                    }
+                }
+            }
+            
+            // Add more text if needed
+            if (currentCharIndex > chars.length - 20) {
+                const nextChars = fullText.slice(chars.length, chars.length + 20)
+                    .split('')
+                    .map((char, index) => 
+                        `<span class="letter" data-index="${chars.length + index}">${char}</span>`
+                    ).join('');
+                wordsContainer.insertAdjacentHTML('beforeend', nextChars);
+            }
+            
+            // Highlight current character
+            const currentChar = wordsContainer.querySelector(`[data-index="${currentCharIndex}"]`);
+            if (currentChar) {
+                currentChar.classList.add('current');
+                
+                // Auto-scroll
+                const containerRect = wordsContainer.getBoundingClientRect();
+                const charRect = currentChar.getBoundingClientRect();
+                
+                if (charRect.bottom > containerRect.bottom || charRect.top < containerRect.top) {
+                    const scrollAmount = charRect.top - containerRect.top - (containerRect.height / 3);
+                    wordsContainer.scrollTo({
+                        top: wordsContainer.scrollTop + scrollAmount,
+                        behavior: 'smooth'
+                    });
+                }
+            }
 
-            if (!startTime) {
+            // Start timer on first character
+            if (!startTime && typedText.length === 1) {
                 startTime = new Date();
                 startTimer();
             }
 
-            if (typedChar === currentChar) {
-                // Correct input
-                characters[currentIndex].classList.add('correct');
-                characters[currentIndex].classList.remove('current', 'incorrect');
-                currentIndex++;
-                if (currentIndex < text.length) {
-                    characters[currentIndex].classList.add('current');
-                }
-                correctSound.currentTime = 0;
-                correctSound.play();
-            } else {
-                // Wrong input
-                characters[currentIndex].classList.add('incorrect');
-                mistakes++;
-                wrongSound.currentTime = 0;
-                wrongSound.play();
-                
-                // Highlight wrong key on keyboard
-                const keyElement = document.querySelector(`.key[data-key="${typedChar}"]`);
-                if (keyElement) {
-                    keyElement.classList.add('wrong');
-                    setTimeout(() => keyElement.classList.remove('wrong'), 200);
-                }
-            }
-
-            // Clear input field
-            e.target.value = '';
-
-            // Update stats
-            updateStats();
-
-            // Check if typing is complete
-            if (currentIndex === text.length) {
-                finishTyping();
-            }
-        });
-
-        function updateStats() {
-            const timeElapsed = Math.round((new Date() - startTime) / 1000);
-            const wpm = Math.round((currentIndex * 60) / (5 * timeElapsed));
-            const accuracy = Math.round(((currentIndex - mistakes) / currentIndex) * 100);
-
-            document.getElementById('wpm').textContent = wpm || 0;
-            document.getElementById('accuracy').textContent = `${accuracy || 100}%`;
+            // Update keyboard highlighting
+            updateKeyboardHighlight(typedText[typedText.length - 1]);
         }
 
         function startTimer() {
-            const timerElement = document.getElementById('timer');
+            const timerElement = document.getElementById('time');
             let seconds = 0;
             timerInterval = setInterval(() => {
                 seconds++;
@@ -1337,6 +2185,204 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
                 document.getElementById('theme-options').classList.remove('show');
             });
         });
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeText();
+            inputField.focus();
+        });
+
+        // Update the input handler
+        inputField.addEventListener('input', (e) => {
+            if (!isTyping) {
+                startTime = new Date();
+                isTyping = true;
+                timer = setInterval(updateTimer, 1000);
+            }
+
+            const letters = document.querySelectorAll('.letter');
+            const typed = e.target.value;
+            const currentLetter = letters[currentIndex];
+
+            if (typed && currentIndex < letters.length) {
+                const typedChar = typed.charAt(typed.length - 1);
+                const fullText = wordsContainer.dataset.fullText;
+                
+                if (typedChar === fullText[currentIndex]) {
+                    // Correct typing
+                    currentLetter.classList.remove('current');
+                    currentLetter.classList.add('correct');
+                    correctSound.currentTime = 0;
+                    correctSound.play();
+                    
+                    // Move to next letter
+                    currentIndex++;
+                    totalChars++;
+                    
+                    // Highlight next letter if available
+                    if (currentIndex < letters.length) {
+                        const nextLetter = letters[currentIndex];
+                        nextLetter.classList.add('current');
+                        
+                        // Auto-scroll if needed
+                        const containerRect = wordsContainer.getBoundingClientRect();
+                        const nextRect = nextLetter.getBoundingClientRect();
+                        
+                        if (nextRect.bottom > containerRect.bottom || nextRect.top < containerRect.top) {
+                            const scrollOffset = nextRect.top - containerRect.top - (containerRect.height / 2);
+                            wordsContainer.scrollBy({
+                                top: scrollOffset,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                } else {
+                    // Incorrect typing
+                    currentLetter.classList.add('incorrect');
+                    mistakes++;
+                    wrongSound.currentTime = 0;
+                    wrongSound.play();
+                }
+
+                // Clear input field
+                e.target.value = '';
+                
+                // Update stats
+                updateStats();
+
+                // Check if typing is complete
+                if (currentIndex >= letters.length) {
+                    clearInterval(timer);
+                    showResults();
+                }
+            }
+        });
+
+        // Update stats calculation
+        function updateStats() {
+            if (!startTime) return;
+            
+            const timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
+            const wpm = Math.round((currentIndex / 5) / timeElapsed);
+            const accuracy = totalChars > 0 ? Math.round(((totalChars - mistakes) / totalChars) * 100) : 100;
+            
+            document.getElementById('wpm').textContent = wpm || 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        // Results functionality
+        function showResults() {
+            const timeElapsed = (new Date() - startTime) / 1000;
+            const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
+            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+
+            // Update results modal
+            document.getElementById('final-wpm').textContent = wpm;
+            document.getElementById('final-accuracy').textContent = accuracy + '%';
+            document.getElementById('final-time').textContent = 
+                `${Math.floor(timeElapsed / 60)}:${Math.floor(timeElapsed % 60).toString().padStart(2, '0')}`;
+
+            // Show modal
+            const resultsModal = document.getElementById('resultsModal');
+            resultsModal.style.display = 'flex';
+        }
+
+        // Update the timer
+        function updateTimer() {
+            const timeElapsed = (new Date() - startTime) / 1000;
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = Math.floor(timeElapsed % 60);
+            const timeElement = document.getElementById('time');
+            timeElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Add this function to handle backspace properly
+        inputField.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && currentIndex > 0) {
+                e.preventDefault();
+                
+                const letters = document.querySelectorAll('.letter');
+                const currentLetter = letters[currentIndex];
+                const previousLetter = letters[currentIndex - 1];
+                
+                // Remove current highlight
+                if (currentLetter) {
+                    currentLetter.classList.remove('current');
+                }
+                
+                // Reset previous letter
+                if (previousLetter) {
+                    previousLetter.classList.remove('correct', 'incorrect');
+                    previousLetter.classList.add('current');
+                    
+                    // Update counters
+                    currentIndex--;
+                    if (previousLetter.classList.contains('incorrect')) {
+                        mistakes--;
+                    }
+                    totalChars--;
+                    
+                    // Update stats
+                    updateStats();
+                    
+                    // Scroll if needed
+                    const containerRect = wordsContainer.getBoundingClientRect();
+                    const prevRect = previousLetter.getBoundingClientRect();
+                    
+                    if (prevRect.bottom > containerRect.bottom || prevRect.top < containerRect.top) {
+                        const scrollOffset = prevRect.top - containerRect.top - (containerRect.height / 2);
+                        wordsContainer.scrollBy({
+                            top: scrollOffset,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+        });
+
+        // Add these event listeners to handle clicking and focus
+        document.addEventListener('click', () => {
+            inputField.focus(); // Keep focus on input field when clicking anywhere
+        });
+
+        // Prevent focus loss when clicking on the text
+        wordsContainer.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // Prevent text selection
+            inputField.focus();
+        });
+
+        // Keep focus when clicking on the keyboard
+        document.querySelector('.keyboard').addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            inputField.focus();
+        });
+
+        // Prevent focus loss on results modal click
+        document.getElementById('resultsModal')?.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                e.preventDefault();
+                inputField.focus();
+            }
+        });
+
+        // Update the input field style to ensure it's accessible but invisible
+        const styleUpdate = `
+        #input-field {
+            opacity: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        `;
+
+        // Add the style to the existing styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = styleUpdate;
+        document.head.appendChild(styleElement);
     </script>
 </body>
 </html> 

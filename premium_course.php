@@ -199,8 +199,8 @@ if ($category === 'books') {
         /* Lesson Grid */
         .lessons-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
             padding: 10px;
         }
 
@@ -208,35 +208,68 @@ if ($category === 'books') {
             background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s ease;
+            text-align: center;
             position: relative;
             overflow: hidden;
-            text-align: center;
+            display: grid;
+            grid-template-rows: 240px auto 30px; /* Increased first row height */
+            height: 340px; /* Increased total height */
+            width: 100%;
+            gap: 8px;
+        }
+
+        /* Top part - Image container */
+        .book-cover-container {
+            width: 100%;
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .book-cover {
+            width: 160px; /* Increased width */
+            height: 220px; /* Increased height */
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        /* Middle part - Title */
+        .book-title {
+            font-size: 0.9rem;
+            color: #f0b232;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        /* Bottom part - Button */
+        .start-btn {
+            background: linear-gradient(45deg, #f0b232, #f7c157);
+            color: #0f172a;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            width: 60px;
+            align-self: center;
+            justify-self: center;
+            margin-bottom: 5px;
         }
 
         .lesson-box:hover:not(.locked) {
             transform: translateY(-10px);
             border-color: rgba(240, 178, 50, 0.3);
-        }
-
-        /* Buttons and Interactive Elements */
-        .start-btn {
-            background: linear-gradient(45deg, #f0b232, #f7c157);
-            color: #0f172a;
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.4s ease;
-        }
-
-        .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(240, 178, 50, 0.3);
-            color: #0f172a;
         }
 
         /* Responsive Design */
@@ -254,6 +287,23 @@ if ($category === 'books') {
 
         @media (max-width: 576px) {
             .lessons-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Update song cover styles */
+        .song-cover {
+            width: 180px; /* Increased width */
+            height: 180px; /* Increased height to match width for perfect circle */
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            margin: 20px auto; /* Add margin to center vertically */
+        }
+
+        /* Add hover effect for song covers */
+        .lesson-box:hover .song-cover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
@@ -326,27 +376,58 @@ if ($category === 'books') {
                     <div id="books-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-book me-2"></i>Classic Literature</h2>
                         <div class="lessons-grid">
-                            <?php for ($i = 1; $i <= 9; $i++): ?>
+                            <?php 
+                            $books = [
+                                [
+                                    'title' => 'Harry Potter1',
+                                    'image' => 'assets/images/books/harry.jpg'
+                                ],
+                                [
+                                    'title' => 'The Great Gatsby',
+                                    'image' => 'assets/images/books/great.jpg'
+                                ],
+                                [
+                                    'title' => 'Little Women',
+                                    'image' => 'assets/images/books/little.jpg'
+                                ],
+                                [
+                                    'title' => 'To Kill a Mockingbird',
+                                    'image' => 'assets/images/books/toKill.jpg'
+                                ],
+                                [
+                                    'title' => 'The Catcher in the Rye',
+                                    'image' => 'assets/images/books/catcher.jpg'
+                                ],
+                                [
+                                    'title' => 'Lord of the Flies',
+                                    'image' => 'assets/images/books/lord.jpg'
+                                ],
+                                [
+                                    'title' => 'The Hobbit',
+                                    'image' => 'assets/images/books/hobbit.jpg'
+                                ],
+                                [
+                                    'title' => 'Brave New World',
+                                    'image' => 'assets/images/books/brave-new-world.jpg'
+                                ],
+                                [
+                                    'title' => 'Animal Farm',
+                                    'image' => 'assets/images/books/animal-farm.jpg'
+                                ]
+                            ];
+
+                            foreach ($books as $index => $book): ?>
                                 <div class="lesson-box">
-                                    <div class="lesson-number"><?php echo $i; ?></div>
-                                    <h3 class="lesson-title">
-                                        <?php 
-                                        $title = "Book " . $i;
-                                        if (!empty($books)) {
-                                            foreach ($books as $book) {
-                                                if ((int)$book['lesson_number'] === $i) {
-                                                    $title = htmlspecialchars($book['title']);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        echo $title;
-                                        ?>
-                                    </h3>
-                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=<?php echo $i; ?>" 
+                                    <div class="book-cover-container">
+                                        <img src="<?php echo htmlspecialchars($book['image']); ?>" 
+                                             alt="<?php echo htmlspecialchars($book['title']); ?>" 
+                                             class="book-cover">
+                                    </div>
+                                    <h3 class="book-title"><?php echo htmlspecialchars($book['title']); ?></h3>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=books&lesson=<?php echo $index + 1; ?>" 
                                        class="start-btn">Start</a>
                                 </div>
-                            <?php endfor; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
 
@@ -355,33 +436,65 @@ if ($category === 'books') {
                         <h2 class="category-title"><i class="fas fa-music me-2"></i>Song Lyrics</h2>
                         <div class="lessons-grid">
                             <?php 
-                            // Define song lessons
                             $songLessons = [
-                                1 => ['title' => 'Perfect - Ed Sheeran', 'difficulty' => 'Easy'],
-                                2 => ['title' => 'Someone Like You - Adele', 'difficulty' => 'Medium'],
-                                3 => ['title' => 'Shape of You - Ed Sheeran', 'difficulty' => 'Medium'],
-                                4 => ['title' => 'All of Me - John Legend', 'difficulty' => 'Medium'],
-                                5 => ['title' => 'Hello - Adele', 'difficulty' => 'Hard'],
-                                6 => ['title' => 'Stay With Me - Sam Smith', 'difficulty' => 'Medium'],
-                                7 => ['title' => 'Thinking Out Loud - Ed Sheeran', 'difficulty' => 'Hard'],
-                                8 => ['title' => 'Rolling in the Deep - Adele', 'difficulty' => 'Hard'],
-                                9 => ['title' => 'Just the Way You Are - Bruno Mars', 'difficulty' => 'Medium']
+                                [
+                                    'title' => 'Perfect',
+                                    'image' => 'assets/images/songs/perfect.jpg'
+                                ],
+                                [
+                                    'title' => 'Someone Like You',
+                                    'image' => 'assets/images/songs/someoneLikeyou.jpg'
+                                ],
+                                [
+                                    'title' => 'Shape of You',
+                                    'image' => 'assets/images/songs/shape-of-you.jpg'
+                                ],
+                                [
+                                    'title' => 'All of Me',
+                                    'artist' => 'John Legend',
+                                    'image' => 'assets/images/songs/all-of-me.jpg'
+                                ],
+                                [
+                                    'title' => 'Hello',
+                                    'artist' => 'Adele',
+                                    'image' => 'assets/images/songs/hello.jpg'
+                                ],
+                                [
+                                    'title' => 'Stay With Me',
+                                    'artist' => 'Sam Smith',
+                                    'image' => 'assets/images/songs/stay-with-me.jpg'
+                                ],
+                                [
+                                    'title' => 'Thinking Out Loud',
+                                    'artist' => 'Ed Sheeran',
+                                    'image' => 'assets/images/songs/thinking-out-loud.jpg'
+                                ],
+                                [
+                                    'title' => 'Rolling in the Deep',
+                                    'artist' => 'Adele',
+                                    'image' => 'assets/images/songs/rolling-in-the-deep.jpg'
+                                ],
+                                [
+                                    'title' => 'Just the Way You Are',
+                                    'artist' => 'Bruno Mars',
+                                    'image' => 'assets/images/songs/just-the-way-you-are.jpg'
+                                ]
                             ];
 
-                            for ($i = 1; $i <= 9; $i++): 
-                            ?>
+                            foreach ($songLessons as $index => $song): ?>
                                 <div class="lesson-box">
-                                    <div class="lesson-number"><?php echo $i; ?></div>
-                                    <h3 class="lesson-title">
-                                        <?php echo htmlspecialchars($songLessons[$i]['title']); ?>
-                                    </h3>
-                                    <div class="lesson-difficulty">
-                                        <?php echo $songLessons[$i]['difficulty']; ?>
+                                    <div class="book-cover-container">
+                                        <img src="<?php echo htmlspecialchars($song['image']); ?>" 
+                                             alt="<?php echo htmlspecialchars($song['title']); ?>" 
+                                             class="song-cover">
                                     </div>
-                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=<?php echo $i; ?>" 
+                                    <h3 class="book-title">
+                                        <?php echo htmlspecialchars($song['title']); ?>
+                                    </h3>
+                                    <a href="premium_lesson.php?lang=<?php echo $lang; ?>&category=lyrics&lesson=<?php echo $index + 1; ?>" 
                                        class="start-btn">Start</a>
                                 </div>
-                            <?php endfor; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
 
