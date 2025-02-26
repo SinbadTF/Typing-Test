@@ -495,18 +495,19 @@ if ($category === 'books') {
 
                    
                     <div id="programming-section" class="category-section">
-                        <h2 class="category-title"><i class="fas fa-certificate me-2"></i>Programming Codes Practice</h2>
-                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
-                                <i class="fas fa-award" style="color: #f0b232; font-size: 3.5rem; margin-bottom: 20px;"></i>
-                                <h3 class="book-title" style="font-size: 1.2rem; margin: 15px 0;">Start Coding Practice</h3>
-                                
+                        <!-- Update the programming section ID to match the category -->
+                        <div id="coding-section" class="category-section">
+                            <h2 class="category-title"><i class="fas fa-code me-2"></i>Programming Codes Practice</h2>
+                            <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
+                                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                                    <i class="fas fa-code me-2" style="color: #f0b232; font-size: 3.5rem; margin-bottom: 20px;"></i>
+                                    <h3 class="book-title" style="font-size: 1.2rem; margin: 15px 0;">Start Coding Practice</h3>
+                                </div>
+                                <a href="programming_test.php" class="start-btn" style="width: auto; padding: 8px 20px; margin: 15px 0;">
+                                    Start Practice 
+                                </a>
                             </div>
-                            <a href="programming_test.php" class="start-btn" style="width: auto; padding: 8px 20px; margin: 15px 0;">
-                                Start Practice Codes
-                            </a>
                         </div>
-                    </div>
 
                    
                     <div id="certification-section" class="category-section">
@@ -531,7 +532,8 @@ if ($category === 'books') {
                     </div>
                     
                    
-                    <div id="custom-practice-section" class="category-section">
+                    <!-- Change from custom-practice-section to custom-section -->
+                    <div id="custom-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-keyboard me-2"></i>Custom Practice</h2>
                         <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
                             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
