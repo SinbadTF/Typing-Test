@@ -584,3 +584,21 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Create table for song lyrics
+CREATE TABLE `premium_songs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `difficulty` enum('Easy','Medium','Hard') DEFAULT 'Medium',
+  `language` varchar(10) DEFAULT 'en',
+  `lesson_number` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Insert sample songs
+INSERT INTO `premium_songs` (`title`, `artist`, `content`, `difficulty`, `language`, `lesson_number`) VALUES
+('Perfect', 'Ed Sheeran', 'I found a love for me\nDarling, just dive right in and follow my lead\nWell, I found a girl, beautiful and sweet\nOh, I never knew you were the someone waiting for me', 'Easy', 'en', 1),
+('All of Me', 'John Legend', 'What would I do without your smart mouth\nDrawing me in, and you kicking me out\nYou got my head spinning, no kidding\nI can\'t pin you down', 'Medium', 'en', 2);
