@@ -532,20 +532,20 @@ if ($category === 'books') {
                     <!-- Add this section before the closing div.col-md-9 -->
                     <div id="certification-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-certificate me-2"></i>Typing Certification</h2>
-                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto;">
-                            <div class="lesson-number">
-                                <i class="fas fa-award" style="color: #f0b232; font-size: 2.5rem;"></i>
+                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                                <i class="fas fa-award" style="color: #f0b232; font-size: 3.5rem; margin-bottom: 20px;"></i>
+                                <h3 class="book-title" style="font-size: 1.2rem; margin: 15px 0;">Official Typing Certificate</h3>
+                                <div class="lesson-difficulty" style="text-align: center; margin: 15px 0;">
+                                    <div style="font-weight: 600; color: #f0b232; margin-bottom: 10px;">Requirements:</div>
+                                    <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                                        <li style="margin: 8px 0;"><i class="fas fa-tachometer-alt me-2"></i>40 WPM</li>
+                                        <li style="margin: 8px 0;"><i class="fas fa-check-circle me-2"></i>95% Accuracy</li>
+                                        <li style="margin: 8px 0;"><i class="fas fa-clock me-2"></i>5 Minutes Test</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3 class="lesson-title">Official Typing Certificate</h3>
-                            <div class="lesson-difficulty">
-                                Requirements:
-                                <ul style="list-style: none; padding: 0; margin: 10px 0;">
-                                    <li><i class="fas fa-tachometer-alt me-2"></i>40 WPM</li>
-                                    <li><i class="fas fa-check-circle me-2"></i>95% Accuracy</li>
-                                    <li><i class="fas fa-clock me-2"></i>5 Minutes Test</li>
-                                </ul>
-                            </div>
-                            <a href="certificate_exam.php" class="start-btn">
+                            <a href="certificate_exam.php" class="start-btn" style="width: auto; padding: 8px 20px; margin: 15px 0;">
                                 Take Certification Exam
                             </a>
                         </div>
@@ -554,20 +554,20 @@ if ($category === 'books') {
                     <!-- Add new Custom Practice feature box -->
                     <div id="custom-practice-section" class="category-section">
                         <h2 class="category-title"><i class="fas fa-keyboard me-2"></i>Custom Practice</h2>
-                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto;">
-                            <div class="lesson-number">
-                                <i class="fas fa-pencil-alt" style="color: #f0b232; font-size: 2.5rem;"></i>
+                        <div class="lesson-box" style="max-width: 400px; margin: 0 auto; height: auto; display: flex; flex-direction: column; align-items: center;">
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                                <i class="fas fa-pencil-alt" style="color: #f0b232; font-size: 3.5rem; margin-bottom: 20px;"></i>
+                                <h3 class="book-title" style="font-size: 1.2rem; margin: 15px 0;">Create Your Own Practice</h3>
+                                <div class="lesson-difficulty" style="text-align: center; margin: 15px 0;">
+                                    <div style="font-weight: 600; color: #f0b232; margin-bottom: 10px;">Features:</div>
+                                    <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                                        <li style="margin: 8px 0;"><i class="fas fa-file-alt me-2"></i>Custom Text Input</li>
+                                        <li style="margin: 8px 0;"><i class="fas fa-cog me-2"></i>Adjustable Settings</li>
+                                        <li style="margin: 8px 0;"><i class="fas fa-chart-line me-2"></i>Real-time Statistics</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3 class="lesson-title">Create Your Own Practice</h3>
-                            <div class="lesson-difficulty">
-                                Features:
-                                <ul style="list-style: none; padding: 0; margin: 10px 0;">
-                                    <li><i class="fas fa-file-alt me-2"></i>Custom Text Input</li>
-                                    <li><i class="fas fa-cog me-2"></i>Adjustable Settings</li>
-                                    <li><i class="fas fa-chart-line me-2"></i>Real-time Statistics</li>
-                                </ul>
-                            </div>
-                            <a href="premium_custom_practice.php" class="start-btn">
+                            <a href="premium_custom_practice.php" class="start-btn" style="width: auto; padding: 8px 20px; margin: 15px 0;">
                                 Start Custom Practice
                             </a>
                         </div>

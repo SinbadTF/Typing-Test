@@ -924,7 +924,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <button class="restart-button" onclick="initializePractice()">
                     <i class="fas fa-redo me-2"></i>Try Again
                 </button>
-                <a href="japanese_course.php" class="restart-button">
+                <a href="japanese-course.php" class="restart-button">
                     <i class="fas fa-book me-2"></i>Back to Course
                 </a>
                 <?php if ($nextLesson): ?>
@@ -1183,43 +1183,48 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Finish practice
         function finishPractice() {
-            isTyping = false;
-            const timeElapsed = (new Date() - startTime) / 1000;
-            const wpm = Math.round((totalCharacters / 5) / (timeElapsed / 60));
-            const accuracy = Math.round(((totalCharacters - mistakes) / totalCharacters) * 100);
+    isTyping = false;
+    const timeElapsed = (new Date() - startTime) / 1000;
+    const wpm = Math.round((totalCharacters / 5) / (timeElapsed / 60));
+    const accuracy = Math.round(((totalCharacters - mistakes) / totalCharacters) * 100);
 
-            document.getElementById('finalWpm').textContent = wpm;
-            document.getElementById('finalAccuracy').textContent = accuracy + '%';
-            document.getElementById('finalTime').textContent = timeElapsed.toFixed(1) + 's';
-            document.getElementById('finalErrors').textContent = mistakes;
-            
-            const resultsOverlay = document.getElementById('resultsOverlay');
-            if (resultsOverlay) {
-                resultsOverlay.style.display = 'flex';
-            }
+    document.getElementById('finalWpm').textContent = wpm;
+    document.getElementById('finalAccuracy').textContent = accuracy + '%';
+    document.getElementById('finalTime').textContent = timeElapsed.toFixed(1) + 's';
+    document.getElementById('finalErrors').textContent = mistakes;
+    
+    const resultsOverlay = document.getElementById('resultsOverlay');
+    if (resultsOverlay) {
+        resultsOverlay.style.display = 'flex';
+    }
 
-            // Save progress
-            fetch('save_japanese_progress.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    wpm: wpm,
-                    accuracy: accuracy,
-                    mistakes: mistakes,
-                    time_taken: timeElapsed
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    console.error('Failed to save progress');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    // Save progress to database
+    const lessonId = <?php echo json_encode($lessonId); ?>;
+    
+    fetch('save_japanese_progress.php', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            lesson_id: lessonId,
+            wpm: wpm,
+            accuracy: accuracy,
+            mistakes: mistakes,
+            time_taken: timeElapsed
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Save response:', data);
+        if (!data.success) {
+            console.error('Failed to save progress:', data.message);
         }
-
+    })
+    .catch(error => {
+        console.error('Error saving progress:', error);
+    });
+}
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             createKeyboard();

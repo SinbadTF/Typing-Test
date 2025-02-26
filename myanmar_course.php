@@ -421,6 +421,31 @@ $advancedLessons = getLessons($pdo, 'advanced');
             });
         });
     });
+    // Save results to database
+    fetch('save_progress.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: <?php echo $_SESSION['user_id']; ?>,
+                lessonId: <?php echo $lessonId; ?>,
+                wpm: wpm,
+                accuracy: accuracy
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Progress saved successfully');
+                // Show next lesson button if accuracy is sufficient
+                if (accuracy >= 80) {
+                    document.getElementById('next-btn').style.display = 'inline-block';
+                }
+            } else {
+                console.error('Error saving progress:', data.message);
+            }
+        });
     </script>
 </body>
 </html>
