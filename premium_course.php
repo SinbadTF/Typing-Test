@@ -467,7 +467,7 @@ if ($category === 'books') {
                                 [
                                     'title' => 'Thinking Out Loud',
                                     'artist' => 'Ed Sheeran',
-                                    'image' => 'assets/images/songs/thinking-out-loud.jpg'
+                                    'image' => 'assets/images/songs/think-out-loud.jpg'
                                 ],
                                 [
                                     'title' => 'Rolling in the Deep',

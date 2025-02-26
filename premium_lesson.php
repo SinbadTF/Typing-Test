@@ -26,24 +26,39 @@ $lang = $_GET['lang'] ?? 'en';
 
 // Fetch lesson content based on category
 if ($category === 'books') {
-    
     $stmt = $pdo->prepare("SELECT * FROM premium_books WHERE language = ? AND lesson_number = ?");
     $stmt->execute([$lang, $lessonNumber]);
     $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
     $content = $lesson['content'] ?? '';
     $title = $lesson['title'] ?? '';
 } elseif ($category === 'lyrics') {
-    // Get song content from the songs array
-    $songLessons = [
-        1 => [
-            'title' => 'Perfect - Ed Sheeran',
-            'content' => "I found a love for me\nDarling, just dive right in and follow my lead\nWell, I found a girl, beautiful and sweet\nOh, I never knew you were the someone waiting for me",
-            'difficulty' => 'Easy'
-        ],
-        // Add more songs here
-    ];
-    $content = $songLessons[$lessonNumber]['content'] ?? '';
-    $title = $songLessons[$lessonNumber]['title'] ?? '';
+    // Method 1: Get from database
+    $stmt = $pdo->prepare("SELECT * FROM premium_songs WHERE language = ? AND lesson_number = ?");
+    $stmt->execute([$lang, $lessonNumber]);
+    $song = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Method 2: Fallback to hardcoded array if not found in database
+    if (!$song) {
+        $songLessons = [
+            1 => [
+                'title' => 'Perfect - Ed Sheeran',
+                'content' => "I found a love for me\nDarling, just dive right in and follow my lead\nWell, I found a girl, beautiful and sweet\nOh, I never knew you were the someone waiting for me",
+                'difficulty' => 'Easy'
+            ],
+            2 => [
+                'title' => 'All of Me - John Legend',
+                'content' => "What would I do without your smart mouth\nDrawing me in, and you kicking me out\nYou got my head spinning, no kidding\nI can't pin you down",
+                'difficulty' => 'Medium'
+            ],
+            // Add more songs here as fallback
+        ];
+        
+        $content = $songLessons[$lessonNumber]['content'] ?? '';
+        $title = $songLessons[$lessonNumber]['title'] ?? '';
+    } else {
+        $content = $song['content'];
+        $title = $song['title'] . ' - ' . $song['artist'];
+    }
 }
 
 // Add language-specific titles
@@ -1561,18 +1576,38 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         }
 
         .theme-galaxylight .words {
-            background: linear-gradient(145deg, rgba(30, 36, 65, 0.9), rgba(35, 41, 75, 0.9));
-            border: 1px solid rgba(147, 112, 219, 0.2);
-            border-radius: 10px;
-            padding: 20px;
+            border: 3px solid rgba(255, 220, 100, 0.6);
+            border-radius: 15px;
+            padding: 25px;
             box-shadow: 
-                0 8px 25px rgba(147, 112, 219, 0.1),
-                0 0 15px rgba(176, 196, 222, 0.1);
-            color: #e6e6fa;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            min-height: 100px;
-            max-height: 150px !important;
+                0 0 30px rgba(255, 220, 100, 0.3),
+                0 0 15px rgba(255, 182, 193, 0.2);
+            color: #2d2d2d;
+            font-size: 12px !important;
+            line-height: 1.4;
+            letter-spacing: -2.5px !important; /* Increased negative spacing */
+            min-height: 120px;
+            max-height: 180px !important;
+            width: 75%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .theme-galaxylight .letter {
+            color: #2d2d2d;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            padding: 0;
+            margin: 0;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 12px !important;
+            letter-spacing: -2.5px !important; /* Match words container */
+        }
+
+        .theme-galaxylight .words {
+            /* ... existing styles ... */
+            letter-spacing: -2px; /* Match letter spacing */
         }
 
         .theme-galaxylight .words::-webkit-scrollbar {
@@ -1589,15 +1624,6 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             border-radius: 4px;
             border: 2px solid rgba(147, 112, 219, 0.2);
             box-shadow: 0 0 10px rgba(147, 112, 219, 0.3);
-        }
-
-        .theme-galaxylight .letter {
-            color: #b19cd9;
-            text-shadow: 0 0 8px rgba(147, 112, 219, 0.3);
-            padding: 2px 4px;
-            margin: 0 1px;
-            border-radius: 3px;
-            transition: all 0.3s ease;
         }
 
         .theme-galaxylight .letter.current {
@@ -1844,6 +1870,217 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             text-shadow: 
                 0 0 10px rgba(100, 255, 218, 0.4),
                 0 0 20px rgba(100, 255, 218, 0.2);
+        }
+
+        /* Sweety Theme Text and Keyboard */
+        .theme-sweety .typing-container {
+            padding: 30px;
+        }
+
+        .theme-sweety .words {
+            border: 2px solid rgba(255, 105, 180, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 
+                0 0 30px rgba(255, 192, 203, 0.3),
+                0 0 15px rgba(255, 182, 193, 0.2);
+            color: #222222;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            letter-spacing: 0.4px;
+            min-height: 120px;
+            max-height: 180px !important;
+            width: 75%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .theme-sweety .letter {
+            color: #222222;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            padding: 2px 3px;
+            margin: 0 1px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .theme-sweety .letter.current {
+            color: #d4126e;
+            background: rgba(255, 105, 180, 0.15);
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            position: relative;
+            font-weight: 600;
+        }
+
+        .theme-sweety .letter.correct {
+            color: #0d6e29;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .theme-sweety .letter.incorrect {
+            color: #b30000;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            background: rgba(255, 0, 0, 0.15);
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* Keyboard styling */
+        .keyboard.theme-sweety {
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.95), rgba(255, 228, 238, 0.95));
+            border: 2px solid rgba(255, 105, 180, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 
+                0 10px 30px rgba(255, 182, 193, 0.3),
+                0 0 15px rgba(255, 192, 203, 0.2);
+        }
+
+        .keyboard.theme-sweety .key {
+            background: linear-gradient(135deg, #fff5f7, #ffe4e9);
+            color: #ff1493;
+            border: 1px solid rgba(255, 105, 180, 0.5);
+            border-radius: 8px;
+            box-shadow: 0 3px 0 rgba(255, 105, 180, 0.4);
+            transition: all 0.2s ease;
+            font-weight: 600;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+        }
+
+        .keyboard.theme-sweety .key:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #fff8fa, #ffe9ee);
+            box-shadow: 0 4px 0 rgba(255, 105, 180, 0.4);
+        }
+
+        .keyboard.theme-sweety .key:active,
+        .keyboard.theme-sweety .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .keyboard.theme-sweety .key.special {
+            background: linear-gradient(135deg, #fff0f5, #ffe0e9);
+            color: #ff1493;
+            font-weight: 700;
+        }
+
+        @keyframes sweetyCursor {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 
+                    0 0 10px rgba(255, 20, 147, 0.6),
+                    0 0 20px rgba(255, 20, 147, 0.3);
+            }
+            50% {
+                opacity: 0.5;
+                box-shadow: 
+                    0 0 15px rgba(255, 20, 147, 0.8),
+                    0 0 30px rgba(255, 20, 147, 0.4);
+            }
+        }
+
+        /* Kid Theme Text and Keyboard */
+        .theme-kid .typing-container {
+            padding: 30px;
+        }
+
+        .theme-kid .words {
+            border: 3px solid rgba(255, 220, 100, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 
+                0 0 30px rgba(255, 220, 100, 0.3),
+                0 0 15px rgba(255, 182, 193, 0.2);
+            color: #2d2d2d;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            letter-spacing: 0.2px;
+            min-height: 120px;
+            max-height: 180px !important;
+            width: 75%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .theme-kid .letter {
+            color: #2d2d2d;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            padding: 1px 2px;
+            margin: 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .theme-kid .letter.current {
+            color: #ff6b00;
+            background: rgba(255, 220, 100, 0.2);
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            position: relative;
+            font-weight: 700;
+        }
+
+        .theme-kid .letter.correct {
+            color: #008f32;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .theme-kid .letter.incorrect {
+            color: #cc0000;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+            background: rgba(255, 0, 0, 0.15);
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* Keyboard styling */
+        .keyboard.theme-kid {
+            background: linear-gradient(135deg, rgba(255, 252, 240, 0.95), rgba(255, 248, 228, 0.95));
+            border: 3px solid rgba(255, 220, 100, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 
+                0 10px 30px rgba(255, 220, 100, 0.3),
+                0 0 15px rgba(255, 182, 193, 0.2);
+        }
+
+        .keyboard.theme-kid .key {
+            background: linear-gradient(135deg, #fff8e6, #fff4d6);
+            color: #ff6b00;
+            border: 2px solid rgba(255, 220, 100, 0.6);
+            border-radius: 8px;
+            box-shadow: 0 3px 0 rgba(255, 220, 100, 0.5);
+            transition: all 0.2s ease;
+            font-weight: 600;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.9);
+        }
+
+        .keyboard.theme-kid .key:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #fffaf0, #fff6e0);
+            box-shadow: 0 4px 0 rgba(255, 220, 100, 0.5);
+        }
+
+        .keyboard.theme-kid .key:active,
+        .keyboard.theme-kid .key.active {
+            transform: translateY(2px);
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #fff;
+            box-shadow: none;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .keyboard.theme-kid .key.special {
+            background: linear-gradient(135deg, #fff9e6, #fff2d1);
+            color: #ff8c00;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -2264,7 +2501,11 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
             
             const timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
             const wpm = Math.round((currentIndex / 5) / timeElapsed);
-            const accuracy = totalChars > 0 ? Math.round(((totalChars - mistakes) / totalChars) * 100) : 100;
+            
+            // Calculate accuracy based on correct characters vs total typed characters
+            const totalTyped = totalChars;
+            const correctChars = totalTyped - mistakes;
+            const accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 100;
             
             document.getElementById('wpm').textContent = wpm || 0;
             document.getElementById('accuracy').textContent = accuracy + '%';
@@ -2274,7 +2515,11 @@ $pageTitle = $languageTitles[$lang] ?? $languageTitles['en'];
         function showResults() {
             const timeElapsed = (new Date() - startTime) / 1000;
             const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
-            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+            
+            // Calculate final accuracy
+            const totalTyped = totalChars;
+            const correctChars = totalTyped - mistakes;
+            const accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 100;
 
             // Update results modal
             document.getElementById('final-wpm').textContent = wpm;
