@@ -25,6 +25,7 @@ if (!$lesson) {
 $stmt = $pdo->prepare("SELECT id, lesson_number FROM lessons WHERE level = ? AND lesson_number > ? ORDER BY lesson_number ASC LIMIT 1");
 $stmt->execute([$level, $lessonNumber]);
 $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1026,35 +1027,46 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Replace your existing showResults function with this updated version
         function showResults() {
-            const timeElapsed = (new Date() - startTime) / 1000; // in seconds
-            const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
-            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+        const timeElapsed = (new Date() - startTime) / 1000;
+        const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
+        const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
 
-            // Update results in modal
-            document.getElementById('accuracy-result').textContent = accuracy + '%';
-            document.getElementById('speed-result').textContent = wpm + ' WPM';
-            document.getElementById('errors-result').textContent = mistakes;
-            document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
-
-            // Show/hide next lesson button based on accuracy
-            const nextBtn = document.getElementById('next-btn');
-            if (nextBtn) {
-                nextBtn.style.display = accuracy >= 80 ? 'inline-block' : 'none';
+        // Save results to database
+        fetch('save_progress.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: <?php echo $_SESSION['user_id']; ?>,
+                lessonId: <?php echo $lessonId; ?>,
+                wpm: wpm,
+                accuracy: accuracy
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Progress saved successfully');
+                // Show next lesson button if accuracy is sufficient
+                if (accuracy >= 80) {
+                    document.getElementById('next-btn').style.display = 'inline-block';
+                }
+            } else {
+                console.error('Error saving progress:', data.message);
             }
+        });
 
-            // Show the modal
-            const modal = document.getElementById('resultModal');
-            modal.style.display = 'block';
+        // Update modal content
+        document.getElementById('accuracy-result').textContent = accuracy + '%';
+        document.getElementById('speed-result').textContent = wpm + ' WPM';
+        document.getElementById('errors-result').textContent = mistakes;
+        document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
 
-            // Remove the click outside to close functionality
-            window.onclick = null; // Remove any existing click handler
-
-            // Prevent closing modal when clicking outside
-            modal.onclick = function(event) {
-                event.stopPropagation();
-            };
-        }
-
+        // Show the modal
+        const modal = document.getElementById('resultModal');
+        modal.style.display = 'block';
+    }
         document.getElementById('input-field').addEventListener('input', (e) => {
             if (!isTyping) {
                 startTime = new Date();
@@ -1153,6 +1165,58 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             document.getElementById('input-field').focus();
         });
     </script>
+    // ... existing code ...
+
+<script>
+    // ... existing script code ...
+
+    
+    function saveResults(wpm, accuracy) {
+    fetch('save_progress.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userId: <?php echo $_SESSION['user_id']; ?>,
+            lessonId: <?php echo $lessonId; ?>,
+            wpm: wpm,
+            accuracy: accuracy
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Progress saved successfully');
+            if (accuracy >= 80) {
+                document.getElementById('next-btn').style.display = 'inline-block';
+            }
+        } else {
+            console.error('Error saving progress:', data.message);
+        }
+    });
+    }
+
+    // Update the existing showResults function
+    function showResults() {
+        const timeElapsed = (new Date() - startTime) / 1000;
+        const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
+        const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+
+        // Save results to database
+        saveResults(wpm, accuracy);
+
+        // Update modal content
+        document.getElementById('accuracy-result').textContent = accuracy + '%';
+        document.getElementById('speed-result').textContent = wpm + ' WPM';
+        document.getElementById('errors-result').textContent = mistakes;
+        document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
+
+        // Show the modal
+        const modal = document.getElementById('resultModal');
+        modal.style.display = 'block';
+    }
+</script>
     <script src="assets/js/lesson.js"></script>
 </body>
 

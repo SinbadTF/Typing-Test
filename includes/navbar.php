@@ -5,19 +5,9 @@
         </a>
         <div class="navbar-nav ms-auto">
             <?php if (isset($_SESSION['user_id'])): ?>
-                <a class="nav-link d-flex align-items-center" href="profile.php">
-                    <?php if (isset($_SESSION['profile_image']) && $_SESSION['profile_image']): ?>
-                        <img src="uploads/profile_images/<?php echo htmlspecialchars($_SESSION['profile_image']); ?>" 
-                             class="rounded-circle me-2" 
-                             width="30" 
-                             height="30" 
-                             alt="Profile">
-                    <?php else: ?>
-                        <i class="fas fa-user-circle me-2"></i>
-                    <?php endif; ?>
-                    <?php echo htmlspecialchars($_SESSION['username']); ?>
+                <a class="nav-link" href="profile.php">
+                    <i class="fas fa-user me-2"></i><?php echo htmlspecialchars($_SESSION['username']); ?>
                 </a>
-                <a class="nav-link" href="check_premium_access.php">Premium Lessons</a>
                 <a class="nav-link" href="logout.php">
                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                 </a>
@@ -26,6 +16,12 @@
                     <i class="fas fa-sign-in-alt me-2"></i>Login
                 </a>
             <?php endif; ?>
+            <a class="nav-link" href="premium.php">
+                <i class="fas fa-crown me-2"></i>Premium
+            </a>
+            <a class="nav-link" href="about.php">
+                <i class="fas fa-info-circle me-2"></i>About Us
+            </a>
         </div>
     </div>
 </nav>

@@ -14,10 +14,10 @@ function getLessons($pdo, $level) {
         (SELECT lp.status FROM lesson_progress lp 
          WHERE lp.user_id = ? AND lp.lesson_id = l.id 
          ORDER BY lp.completed_at DESC LIMIT 1) as status,
-        (SELECT MAX(lp.wpm) FROM lesson_progress lp 
-         WHERE lp.user_id = ? AND lp.lesson_id = l.id) as best_wpm,
-        (SELECT MAX(lp.accuracy) FROM lesson_progress lp 
-         WHERE lp.user_id = ? AND lp.lesson_id = l.id) as best_accuracy
+        (SELECT ROUND(MAX(lp.wpm)) FROM lesson_progress lp 
+         WHERE lp.user_id = ? AND lp.lesson_id = l.id AND lp.status = 'completed') as best_wpm,
+        (SELECT ROUND(MAX(lp.accuracy)) FROM lesson_progress lp 
+         WHERE lp.user_id = ? AND lp.lesson_id = l.id AND lp.status = 'completed') as best_accuracy
         FROM lessons l 
         WHERE l.level = ? 
         ORDER BY l.lesson_number");
@@ -25,16 +25,17 @@ function getLessons($pdo, $level) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Function to check if the previous lesson is completed by AHH
+// Keep only this version of the function
 function isPreviousLessonCompleted($lessons, $currentLessonNumber) {
     if ($currentLessonNumber <= 1) return true;
     foreach ($lessons as $lesson) {
         if ($lesson['lesson_number'] === ($currentLessonNumber - 1)) {
-            return $lesson['status'] === 'completed';
+            return isset($lesson['status']) && $lesson['status'] === 'completed';
         }
     }
     return false;
-};
+}
+
 $basicLessons = getLessons($pdo, 'basic');
 $intermediateLessons = getLessons($pdo, 'intermediate');
 $advancedLessons = getLessons($pdo, 'advanced');
@@ -373,10 +374,10 @@ border-radius: 15px;
                                         <?php endif; ?>
                                     </div>
                                     <div class="lesson-name"><?php echo htmlspecialchars($lesson['title']); ?></div>
-                                    <?php if ($lesson['best_wpm']): ?>
+                                    <?php if (isset($lesson['best_wpm']) && $lesson['best_wpm'] > 0): ?>
                                     <div class="lesson-stats">
-                                        <span><i class="fas fa-tachometer-alt"></i> <?php echo round($lesson['best_wpm']); ?> WPM</span>
-                                        <span><i class="fas fa-bullseye"></i> <?php echo round($lesson['best_accuracy']); ?>%</span>
+                                        <span><i class="fas fa-tachometer-alt"></i> <?php echo $lesson['best_wpm']; ?> WPM</span>
+                                        <span><i class="fas fa-bullseye"></i> <?php echo $lesson['best_accuracy']; ?>%</span>
                                     </div>
                                     <?php endif; ?>
                                     <div class="lesson-status <?php echo $lesson['status'] === 'completed' ? 'completed' : ''; ?>">

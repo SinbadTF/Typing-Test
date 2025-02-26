@@ -9,6 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Validate required data
+if (!isset($data['userId']) || !isset($data['lessonId']) || !isset($data['wpm']) || !isset($data['accuracy'])) {
+    echo json_encode(['success' => false, 'message' => 'Missing required data']);
+    exit();
+}
+
 try {
     // Start transaction
     $pdo->beginTransaction();

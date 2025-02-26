@@ -318,8 +318,6 @@ require_once 'includes/header.php';
                 <i class="fas fa-keyboard me-2"></i>Boku no Typing
             </a>
             <div class="navbar-nav ms-auto">
-                
-                 
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a class="nav-link d-flex align-items-center" href="profile.php">
                         <?php if (isset($_SESSION['profile_image']) && $_SESSION['profile_image']): ?>
@@ -340,7 +338,6 @@ require_once 'includes/header.php';
                     <a class="nav-link" href="login.php">
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </a>
-                    
                 <?php endif; ?>
                 <a class="nav-link" href="<?php 
                     if (!isset($_SESSION['user_id'])) {
@@ -352,7 +349,9 @@ require_once 'includes/header.php';
                         echo ($user && $user['is_premium'] == 1) ? 'premium_course.php' : 'premium.php';
                     }
                 ?>" class="btn btn-primary">Premium Lessons</a>
-                
+                <a class="nav-link" href="about.php">
+                    <i class="fas fa-info-circle me-2"></i>About Us
+                </a>
             </div>
         </div>
     </nav>
