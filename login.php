@@ -174,16 +174,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-control {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
+            color: #ffffff !important;
             padding: 12px 15px;
             border-radius: 12px;
             transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .form-control:focus {
             background: rgba(15, 23, 42, 0.8);
             border-color: #007bff;
             box-shadow: 0 0 15px rgba(0, 123, 255, 0.2);
+            color: #ffffff !important;
+        }
+
+        .form-label {
+            color: #ffffff;
+            font-weight: 500;
         }
 
         .input-group-text {

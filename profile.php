@@ -43,27 +43,33 @@ $stmt = $pdo->prepare("SELECT username, email FROM users WHERE user_id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch();
 
-// Fetch typing statistics
-// Fetch user data including typing statistics
-// Update the SQL query to include is_premium
+
+// Fetch user data with typing statistics
 $stmt = $pdo->prepare("
     SELECT 
         u.username, 
         u.email, 
         u.profile_image,
         u.is_premium,
-        COALESCE(AVG(t.wpm), 0) as avg_speed,
-        COALESCE(MAX(t.wpm), 0) as best_speed,
-        COALESCE(AVG(t.accuracy), 0) as avg_accuracy,
-        COUNT(t.result_id) as tests_completed
+        ROUND(COALESCE(AVG(NULLIF(t.wpm, 0)), 0), 1) as avg_speed,
+        ROUND(COALESCE(MAX(t.wpm), 0), 1) as best_speed,
+        ROUND(COALESCE(AVG(NULLIF(t.accuracy, 0)), 0), 1) as avg_accuracy,
+        COUNT(DISTINCT t.result_id) as tests_completed
     FROM users u 
     LEFT JOIN typing_results t ON u.user_id = t.user_id 
     WHERE u.user_id = ?
-    GROUP BY u.user_id"
+    GROUP BY u.user_id, u.username, u.email, u.profile_image, u.is_premium"
 );
 $stmt->execute([$_SESSION['user_id']]);
-$userData = $stmt->fetch();
-$stats = $stmt->fetch();
+$userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Debug output
+if ($userData === false) {
+    error_log("No user data found for ID: " . $_SESSION['user_id']);
+}
+
+// Remove this line as it's not needed
+// $stats = $stmt->fetch();
 ?>
 
 <!DOCTYPE html>
@@ -163,13 +169,16 @@ $stats = $stmt->fetch();
 <body>
     <div class="container">
         <div class="profile-section">
-            <?php if (isset($_SESSION['profile_image']) && $_SESSION['profile_image']): ?>
-                <img src="uploads/profile_images/<?php echo htmlspecialchars($_SESSION['profile_image']); ?>" 
-                     class="profile-image" 
-                     alt="Profile">
-            <?php else: ?>
-                <i class="fas fa-user-circle" style="font-size: 150px; color: #007bff;"></i>
-            <?php endif; ?>
+            <div class="profile-image" style="display: flex; align-items: center; justify-content: center; background: rgba(45, 45, 45, 0.98);">
+                <?php if (isset($userData['profile_image']) && $userData['profile_image'] !== null): ?>
+                    <img src="uploads/profile_images/<?php echo htmlspecialchars($userData['profile_image']); ?>" 
+                         class="profile-image" 
+                         alt="Profile"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user\' style=\'font-size: 80px; color: #007bff;\'></i>';">
+                <?php else: ?>
+                    <i class="fas fa-user" style="font-size: 80px; color: #007bff;"></i>
+                <?php endif; ?>
+            </div>
             
            
             <h1 class="stats-title mb-4">
@@ -223,12 +232,6 @@ $stats = $stmt->fetch();
                     <i class="fas fa-home me-2"></i>Back to Home
                 </a>
             </div>
-
-          
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -261,12 +264,15 @@ $stats = $stmt->fetch();
         .form-control {
             background: rgba(45, 45, 45, 0.9);
             border: 1px solid rgba(220, 53, 69, 0.2);
-            color: #ffffff;
+            color: #ffffff !important; /* Make text white */
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6); /* Light gray placeholder text */
         }
         .form-control:focus {
             background: rgba(45, 45, 45, 0.9);
             border-color: #dc3545;
-            color: #ffffff;
+            color: #ffffff !important;
             box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
         }
     </style>
@@ -274,7 +280,7 @@ $stats = $stmt->fetch();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-```
+
 
  <style> section
 .premium-badge {

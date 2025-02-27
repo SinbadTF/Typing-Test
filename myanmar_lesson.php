@@ -1131,34 +1131,33 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             // Save progress to database via AJAX
             saveProgress(wpm, accuracy);
         }
-
         function saveProgress(wpm, accuracy) {
-            const lessonId = <?php echo json_encode($lessonId); ?>;
-            
-            fetch('save_progress.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `lesson_id=${lessonId}&wpm=${wpm}&accuracy=${accuracy}`
+        fetch('save_myanmar_progress.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                lesson_id: <?php echo $lessonId; ?>,
+                wpm: wpm,
+                accuracy: accuracy,
+                mistakes: mistakes,
+                time_spent: Math.floor((Date.now() - startTime) / 1000)
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Progress saved successfully');
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Progress saved successfully');
+                if (accuracy >= 80) {
+                    document.getElementById('next-btn').style.display = 'inline-block';
                 }
-            })
-            .catch(error => console.error('Error saving progress:', error));
-        }
-
-        // Add this to check if clicking outside modal should close it
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('resultModal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                modal.classList.remove('show');
+            } else {
+                console.error('Error saving progress:', data.message);
             }
         });
+    }
+        
 
         // Theme handling
         document.addEventListener('DOMContentLoaded', () => {

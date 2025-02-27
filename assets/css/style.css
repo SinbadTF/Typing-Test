@@ -266,6 +266,20 @@ body {
     font-size: 0.9rem;
     font-weight: bold;
 }
+.button-container {
+    margin-top: 2rem;
+}
+
+.button-container .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.button-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
 .stat-box p {
     font-size: 1.8rem;

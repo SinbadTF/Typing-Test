@@ -9,12 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 require_once 'config/database.php';
 function getLessons($pdo, $level) {
     $stmt = $pdo->prepare("SELECT l.*, 
-        (SELECT lp.status FROM lesson_progress lp 
+        (SELECT lp.status FROM myanmar_lesson_progress lp 
          WHERE lp.user_id = ? AND lp.lesson_id = l.id 
          ORDER BY lp.completed_at DESC LIMIT 1) as status,
-        (SELECT MAX(lp.wpm) FROM lesson_progress lp 
+        (SELECT MAX(lp.wpm) FROM myanmar_lesson_progress lp 
          WHERE lp.user_id = ? AND lp.lesson_id = l.id) as best_wpm,
-        (SELECT MAX(lp.accuracy) FROM lesson_progress lp 
+        (SELECT MAX(lp.accuracy) FROM myanmar_lesson_progress lp 
          WHERE lp.user_id = ? AND lp.lesson_id = l.id) as best_accuracy
         FROM myanmar_lessons l 
         WHERE l.level = ? 

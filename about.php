@@ -236,8 +236,8 @@ require_once 'config/database.php';
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right">
-                    <h1 class="hero-title">Our Journey to Excellence</h1>
-                    <p class="lead mb-4">Empowering millions to master the art of typing through innovative learning solutions and cutting-edge technology.</p>
+                    <h1 class="hero-title">Boku no Typing</h1>
+                    <p class="lead mb-4">Your ultimate destination for mastering typing skills in multiple languages. Practice with books, lyrics, coding examples, and custom texts to enhance your typing speed and accuracy.</p>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <img src="assets/images/about.jpg" alt="About Us" class="img-fluid floating-image">
@@ -248,31 +248,33 @@ require_once 'config/database.php';
 
     <section class="values-section">
         <div class="container">
-            <h2 class="text-center mb-5" data-aos="fade-up">Our Core Values</h2>
+            <h2 class="text-center mb-5" data-aos="fade-up">Key Features</h2>
             <div class="row">
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="value-card">
-                        <i class="fas fa-rocket value-icon"></i>
-                        <h3>Innovation</h3>
-                        <p>Cutting-Edge Tools and Features</p>
-                        <p>Gamified Learning</p>
-                        <p>Cross-Platform Accessibility</p>
+                        <i class="fas fa-language value-icon"></i>
+                        <h3>Multi-Language Support</h3>
+                        <p>English Typing Practice</p>
+                        <p>Myanmar Language Support</p>
+                        <p>Japanese Text Practice</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="value-card">
-                        <i class="fas fa-users value-icon"></i>
-                        <h3>Community</h3>
-                        <p>Support and Engagement</p>
+                        <i class="fas fa-graduation-cap value-icon"></i>
+                        <h3>Learning Resources</h3>
+                        <p>Classic Literature Excerpts</p>
+                        <p>Popular Song Lyrics</p>
+                        <p>Programming Code Samples</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="value-card">
-                        <i class="fas fa-star value-icon"></i>
-                        <h3>Excellence</h3>
-                        <p>High-Quality Content</p>
-                        <p>Certification and Recognition</p>
-                        <p>Commitment to Improvement</p>
+                        <i class="fas fa-certificate value-icon"></i>
+                        <h3>Professional Growth</h3>
+                        <p>Typing Certification</p>
+                        <p>Real-time Statistics</p>
+                        <p>Progress Tracking</p>
                     </div>
                 </div>
             </div>
@@ -281,60 +283,49 @@ require_once 'config/database.php';
 
     <section class="team-section">
         <div class="container">
-            <h2 class="text-center mb-5" data-aos="fade-up">Meet Our Team</h2>
+            <h2 class="text-center mb-5" data-aos="fade-up">Development Team</h2>
             <div class="row justify-content-center">
                 <div class="col mb-4" data-aos="fade-up">
                     <div class="team-member">
                         <img src="assets/images/team/member1.jpg" alt="Team Member" class="member-img">
-                        <h3>John Doe</h3>
-                        <p class="text-muted">Founder & CEO</p>
+                        <h3>Hein Htet Zaw</h3>
+                        <p class="text-muted">Lead Developer</p>
                         <div class="social-links mt-3">
+                            <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col mb-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="team-member">
                         <img src="assets/images/team/member2.jpg" alt="Team Member" class="member-img">
-                        <h3>Jane Smith</h3>
-                        <p class="text-muted">Lead Developer</p>
+                        <h3>Aung Kaung Myat</h3>
+                        <p class="text-muted">Backend Developer</p>
                         <div class="social-links mt-3">
+                            <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col mb-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="team-member">
                         <img src="assets/images/team/member3.jpg" alt="Team Member" class="member-img">
-                        <h3>Mike Johnson</h3>
-                        <p class="text-muted">UX Designer</p>
+                        <h3>Htet Myat Aung</h3>
+                        <p class="text-muted">Frontend Developer</p>
                         <div class="social-links mt-3">
+                            <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col mb-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="team-member">
                         <img src="assets/images/team/member4.jpg" alt="Team Member" class="member-img">
-                        <h3>Sarah Wilson</h3>
-                        <p class="text-muted">Content Manager</p>
+                        <h3>Thant Zin Oo</h3>
+                        <p class="text-muted">UI/UX Designer</p>
                         <div class="social-links mt-3">
+                            <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="team-member">
-                        <img src="assets/images/team/member5.jpg" alt="Team Member" class="member-img">
-                        <h3>David Brown</h3>
-                        <p class="text-muted">Technical Lead</p>
-                        <div class="social-links mt-3">
-                            <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
-                            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
