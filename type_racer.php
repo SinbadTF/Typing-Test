@@ -209,7 +209,6 @@ require_once 'config/database.php';
         <div class="game-over">
             <h2>Race Complete!</h2>
             <p>Your Time: <span class="final-time">0:00</span></p>
-            <p>Position: <span class="final-position">1st</span></p>
             <button class="btn-restart">Race Again</button>
         </div>
     </div>
@@ -261,8 +260,17 @@ require_once 'config/database.php';
         function moveAICars() {
             aiCars.forEach(car => {
                 const currentLeft = parseFloat(car.style.left) || 0;
-                const increment = Math.random() * 2;
-                const newLeft = Math.min(currentLeft + increment, 100);
+                // Make AI speed based on player's WPM
+                const playerWPM = parseInt(wpmElement.textContent);
+                const baseSpeed = (playerWPM > 0) ? (playerWPM / 150) : 0.2; // Reduced base speed
+                const randomFactor = Math.random() * 0.5; // Reduced randomness
+                const increment = baseSpeed + randomFactor;
+                
+                // Ensure AI cars don't move too fast
+                const maxIncrement = 0.8; // Maximum speed cap
+                const actualIncrement = Math.min(increment, maxIncrement);
+                
+                const newLeft = Math.min(currentLeft + actualIncrement, 100);
                 car.style.left = `${newLeft}%`;
             });
         }
@@ -285,16 +293,6 @@ require_once 'config/database.php';
             const seconds = Math.floor(timeElapsed % 60);
             document.querySelector('.final-time').textContent = 
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-            let position = 1;
-            aiCars.forEach(car => {
-                if (parseFloat(car.style.left) > parseFloat(playerCar.style.left)) {
-                    position++;
-                }
-            });
-
-            document.querySelector('.final-position').textContent = 
-                position === 1 ? '1st' : position === 2 ? '2nd' : '3rd';
 
             gameOverScreen.style.display = 'block';
             clearInterval(aiInterval);

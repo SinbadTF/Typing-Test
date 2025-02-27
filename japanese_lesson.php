@@ -905,8 +905,8 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="results-card">
             <h2>Typing Test Results</h2>
             <div class="result-stat">
-                <span>Speed:</span>
-                <span class="result-value" id="finalWpm">0</span> WPM
+                <span>Speed[WPM]:</span>
+                <span class="result-value" id="finalWpm">0</span>
             </div>
             <div class="result-stat">
                 <span>Accuracy:</span>
@@ -921,8 +921,8 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <span class="result-value" id="finalTime">0s</span>
             </div>
             <div class="d-flex justify-content-center gap-3 mt-4">
-                <button class="restart-button" onclick="initializePractice()">
-                    <i class="fas fa-redo me-2"></i>Try Again
+            <button class="restart-button" onclick="location.reload()">
+                    <i class="fas fa-redo me-2"></i>Again
                 </button>
                 <a href="japanese-course.php" class="restart-button">
                     <i class="fas fa-book me-2"></i>Back to Course
@@ -930,7 +930,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
                 <?php if ($nextLesson): ?>
                     <a href="japanese_lesson.php?level=<?php echo htmlspecialchars($level); ?>&lesson=<?php echo htmlspecialchars($nextLesson['lesson_number']); ?>&id=<?php echo htmlspecialchars($nextLesson['id']); ?>" 
                        class="restart-button">
-                        <i class="fas fa-arrow-right me-2"></i>Next Lesson
+                        <i class="fas fa-arrow-right me-2"></i>Next
                     </a>
                 <?php endif; ?>
             </div>

@@ -724,6 +724,87 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             color: #646669;
         }
 
+        .results-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(32, 34, 37, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-card {
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(209, 208, 197, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-card h2 {
+            color: #d1d0c5;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-stat {
+            margin: 1.2rem 0;
+            font-size: 1.5rem;
+            color: #646669;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            border-radius: 8px;
+            background: rgba(32, 34, 37, 0.5);
+        }
+
+        .result-value {
+            font-weight: 600;
+            font-size: 2rem;
+        }
+
+        #finalWpm { color: #00ff88; }
+        #finalAccuracy { color: #007bff; }
+        #finalErrors { color: #ff4444; }
+        #finalTime { color: #ffaa00; }
+
+        .restart-button {
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            color: white;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
     </style>
 </head>
 <body>
@@ -845,41 +926,37 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <div class="results-modal" id="resultsModal">
-        <div class="results-content">
-            <div class="results-header">
-                <h2>Test Results</h2>
+    <div class="results-overlay" id="resultsOverlay">
+        <div class="results-card">
+            <h2>Typing Test Results</h2>
+            <div class="result-stat">
+                <span>Speed[WPM]:</span>
+                <span class="result-value" id="finalWpm">0</span>
             </div>
-            <div class="results-stats">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    <div class="stat-value" id="final-wpm">0</div>
-                    <div class="stat-label">WPM</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
-                    <div class="stat-value" id="final-accuracy">0%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="stat-value" id="final-time">0:00</div>
-                    <div class="stat-label">Time</div>
-                </div>
+            <div class="result-stat">
+                <span>Accuracy:</span>
+                <span class="result-value" id="finalAccuracy">0%</span>
             </div>
-            <div class="feedback-message" id="feedbackMessage"></div>
-            <div class="results-actions">
-                <button class="btn-retry" onclick="location.reload()">
-                    <i class="fas fa-redo"></i> Try Again
+            <div class="result-stat">
+                <span>Error:</span>
+                <span class="result-value" id="finalErrors">0</span>
+            </div>
+            <div class="result-stat">
+                <span>Time:</span>
+                <span class="result-value" id="finalTime">0s</span>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <button class="restart-button" onclick="location.reload()">
+                    <i class="fas fa-redo me-2"></i>Again
                 </button>
-                <a href="myanmar_course.php" class="btn-course">
-                    <i class="fas fa-book"></i> Back to Course
+                <a href="course.php" class="restart-button">
+                    <i class="fas fa-book me-2"></i>Back to Course
                 </a>
                 <?php if ($nextLesson): ?>
-                <a href="myanmar_lesson.php?level=<?php echo $level; ?>&lesson=<?php echo $nextLesson['lesson_number']; ?>&id=<?php echo $nextLesson['id']; ?>" 
-                   id="next-lesson-btn" class="btn-next">
-                    Next Lesson <i class="fas fa-arrow-right"></i>
-                </a>
+                    <a href="lesson.php?level=<?php echo htmlspecialchars($level); ?>&lesson=<?php echo htmlspecialchars($nextLesson['lesson_number']); ?>&id=<?php echo htmlspecialchars($nextLesson['id']); ?>" 
+                       class="restart-button">
+                        <i class="fas fa-arrow-right me-2"></i>Next
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
@@ -889,7 +966,7 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="modal-content">
             <h2>Typing Results</h2>
             <p><strong>Accuracy:</strong> <span id="accuracy-result">0%</span></p>
-            <p><strong>Speed:</strong> <span id="speed-result">0 WPM</span></p>
+            <p><strong>Speed[WPM]:</strong> <span id="speed-result">0</span></p>
             <p><strong>Errors:</strong> <span id="errors-result">0</span></p>
             <p><strong>Time:</strong> <span id="time-result">0 s</span></p>
             <button onclick="location.reload()" class="btn-retry">
@@ -1027,46 +1104,44 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Replace your existing showResults function with this updated version
         function showResults() {
-        const timeElapsed = (new Date() - startTime) / 1000;
-        const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
-        const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
+            const timeElapsed = (new Date() - startTime) / 1000;
+            const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
+            const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
 
-        // Save results to database
-        fetch('save_progress.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: <?php echo $_SESSION['user_id']; ?>,
-                lessonId: <?php echo $lessonId; ?>,
-                wpm: wpm,
-                accuracy: accuracy
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Progress saved successfully');
-                // Show next lesson button if accuracy is sufficient
-                if (accuracy >= 80) {
-                    document.getElementById('next-btn').style.display = 'inline-block';
-                }
-            } else {
-                console.error('Error saving progress:', data.message);
+            document.getElementById('finalWpm').textContent = wpm;
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalTime').textContent = timeElapsed.toFixed(1) + 's';
+            document.getElementById('finalErrors').textContent = mistakes;
+            
+            const resultsOverlay = document.getElementById('resultsOverlay');
+            if (resultsOverlay) {
+                resultsOverlay.style.display = 'flex';
             }
-        });
 
-        // Update modal content
-        document.getElementById('accuracy-result').textContent = accuracy + '%';
-        document.getElementById('speed-result').textContent = wpm + ' WPM';
-        document.getElementById('errors-result').textContent = mistakes;
-        document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
-
-        // Show the modal
-        const modal = document.getElementById('resultModal');
-        modal.style.display = 'block';
-    }
+            // Save progress to database
+            fetch('save_progress.php', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    lesson_id: <?php echo json_encode($lessonId); ?>,
+                    wpm: wpm,
+                    accuracy: accuracy,
+                    mistakes: mistakes,
+                    time_taken: timeElapsed
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to save progress:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving progress:', error);
+            });
+        }
         document.getElementById('input-field').addEventListener('input', (e) => {
             if (!isTyping) {
                 startTime = new Date();
@@ -1130,9 +1205,9 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
         });
 
         // Add event listener to close modal when clicking outside
-        document.getElementById('resultsModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('resultsModal')) {
-                document.getElementById('resultsModal').style.display = 'none';
+        document.getElementById('resultsOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('resultsOverlay')) {
+                document.getElementById('resultsOverlay').style.display = 'none';
             }
         });
 
@@ -1165,58 +1240,6 @@ $nextLesson = $stmt->fetch(PDO::FETCH_ASSOC);
             document.getElementById('input-field').focus();
         });
     </script>
-    // ... existing code ...
-
-<script>
-    // ... existing script code ...
-
-    
-    function saveResults(wpm, accuracy) {
-    fetch('save_progress.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userId: <?php echo $_SESSION['user_id']; ?>,
-            lessonId: <?php echo $lessonId; ?>,
-            wpm: wpm,
-            accuracy: accuracy
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Progress saved successfully');
-            if (accuracy >= 80) {
-                document.getElementById('next-btn').style.display = 'inline-block';
-            }
-        } else {
-            console.error('Error saving progress:', data.message);
-        }
-    });
-    }
-
-    // Update the existing showResults function
-    function showResults() {
-        const timeElapsed = (new Date() - startTime) / 1000;
-        const wpm = Math.round((currentIndex / 5) / (timeElapsed / 60));
-        const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100);
-
-        // Save results to database
-        saveResults(wpm, accuracy);
-
-        // Update modal content
-        document.getElementById('accuracy-result').textContent = accuracy + '%';
-        document.getElementById('speed-result').textContent = wpm + ' WPM';
-        document.getElementById('errors-result').textContent = mistakes;
-        document.getElementById('time-result').textContent = timeElapsed.toFixed(1) + ' s';
-
-        // Show the modal
-        const modal = document.getElementById('resultModal');
-        modal.style.display = 'block';
-    }
-</script>
     <script src="assets/js/lesson.js"></script>
 </body>
 

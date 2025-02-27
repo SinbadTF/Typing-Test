@@ -232,17 +232,20 @@ $advancedLessons = getLessons($pdo, 'advanced');
 
 
     .level-btn {
-        padding: 15px 40px;
-        border: none;
-        border-radius: 5px;
-        background: rgba(35, 35, 35, 0.95);
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-        text-align: left;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    background: linear-gradient(45deg, #007bff, #00ff88);
+            border: none;
+            color: white;
+    padding: 15px 40px;
+    border: none;
+  
+   font-size: 1rem;
+border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+    border: 1.5px solid #007bff;
+}
 
     .level-btn:hover {
         background: rgba(45, 45, 45, 0.95);

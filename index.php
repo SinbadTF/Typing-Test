@@ -399,7 +399,7 @@ require_once 'includes/header.php';
                         </div>
                     </div>
                 </div>
-                <h2 class="section-title"> [ Free Practice ] What's New!!!</h2>
+                <h2 class="section-title">What's New !</h2>
                 <div class="col-md-6 mb-4">
                     <div class="lesson-card">
                         <div class="lesson-icon">

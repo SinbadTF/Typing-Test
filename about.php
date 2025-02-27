@@ -65,8 +65,8 @@ require_once 'config/database.php';
             display: flex;
             align-items: center;
             position: relative;
-            overflow: hidden;
             padding: 100px 0;
+            overflow: hidden;
         }
         .hero-section::before {
             content: '';
@@ -84,7 +84,121 @@ require_once 'config/database.php';
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: #d1d0c5;
+            margin-bottom: 1.5rem;
+        }
+        .hero-description {
+            font-size: 1.1rem;
+            color: #a1a1a1;
+            line-height: 1.6;
             margin-bottom: 2rem;
+        }
+        .hero-features {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d1d0c5;
+        }
+        .feature-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .image-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+        .image-container:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        .hero-image {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            transition: transform 0.5s ease;
+        }
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 198, 255, 0.1),
+                rgba(0, 114, 255, 0.1)
+            );
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .floating-text {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            animation: float 6s infinite;
+        }
+        .floating-text:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .floating-text:nth-child(2) {
+            top: 40%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        .floating-text:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(3deg);
+            }
+        }
+        @media (max-width: 991px) {
+            .hero-section {
+                padding: 60px 0;
+                min-height: auto;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .image-container {
+                margin-top: 3rem;
+                transform: none;
+            }
         }
         .timeline {
             position: relative;
@@ -103,29 +217,93 @@ require_once 'config/database.php';
         .timeline-item:hover {
             transform: translateY(-5px);
         }
-        <style>
-                /* Add these size adjustments */
-                .container {
-                    max-width: 1400px;
-                    padding: 0 15px;
-                }
-        .hero-section {
-            min-height: 60vh;
-            padding: 60px 0;
+        .container {
+            max-width: 1400px;
+            padding: 0 15px;
         }
         .values-section, .stats-section {
             padding: 50px 0;
             margin: 30px 0;
         }
-        /* Keep team member styles unchanged but add margin control */
-        .team-section {t
-            padding: 40px 0;
+        .team-section {
+            padding: 80px 0;
         }
         .team-section .row {
-            margin: 0 -10px;
+            margin: 0 -15px;
         }
-        .team-section .col {
-            padding: 0 10px;
+        .team-section .col-lg,
+        .team-section .col-md-4 {
+            padding: 0 15px;
+            margin-bottom: 30px;
+        }
+        .team-member {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            height: 100%;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .member-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid var(--primary-color);
+            padding: 5px;
+            transition: transform 0.3s ease;
+            object-fit: cover;
+        }
+        .team-member:hover .member-img {
+            transform: scale(1.1);
+        }
+        .team-member h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;  /* Changed from #d1d0c5 to white for better visibility */
+        }
+        .team-member p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: #a8a8a8;  /* Changed from #646669 to lighter gray */
+        }
+        .social-links {
+            margin-top: auto;
+        }
+        .social-links a {
+            transition: color 0.3s ease;
+            font-size: 1.2rem;
+        }
+        .social-links a:hover {
+            color: var(--primary-color) !important;
+        }
+        @media (max-width: 991px) {
+            .team-section .row {
+                justify-content: center;
+            }
+            
+            .team-section .col-md-4 {
+                width: 33.333%;
+            }
+        }
+        @media (max-width: 768px) {
+            .team-section .col-md-4 {
+                width: 50%;
+            }
+        }
+        @media (max-width: 576px) {
+            .team-section .col-md-4 {
+                width: 100%;
+            }
         }
     </style>
     <style>
@@ -226,7 +404,9 @@ require_once 'config/database.php';
         .floating-image {
             animation: float 6s ease-in-out infinite;
         }
-    </style>
+        .team-member .text-muted {
+    color: #d1d0c5 !important;  /* Override Bootstrap's text-muted with a lighter color */
+}
     </style>
 </head>
 <body>
@@ -237,10 +417,28 @@ require_once 'config/database.php';
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right">
                     <h1 class="hero-title">Boku no Typing</h1>
-                    <p class="lead mb-4">Your ultimate destination for mastering typing skills in multiple languages. Practice with books, lyrics, coding examples, and custom texts to enhance your typing speed and accuracy.</p>
+                    <p class="hero-subtitle mb-4">Your Ultimate Typing Practice Platform</p>
+                    <p class="hero-description">Master typing skills in multiple languages. Practice with books, lyrics, coding examples, and custom texts to enhance your typing speed and accuracy.</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <i class="fas fa-keyboard"></i>
+                            <span>Multi-Language Support</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Real-time Statistics</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>Achievement System</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
-                    <img src="assets/images/about.jpg" alt="About Us" class="img-fluid floating-image">
+                    <div class="image-container">
+                        <img src="assets/images/about.png" alt="About Us" class="hero-image floating-image">
+                        <div class="image-overlay"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -284,45 +482,56 @@ require_once 'config/database.php';
     <section class="team-section">
         <div class="container">
             <h2 class="text-center mb-5" data-aos="fade-up">Development Team</h2>
-            <div class="row justify-content-center">
-                <div class="col mb-4" data-aos="fade-up">
+            <div class="row g-4 justify-content-center align-items-stretch">
+                <div class="col-lg col-md-4" data-aos="fade-up">
                     <div class="team-member">
-                        <img src="assets/images/team/member1.jpg" alt="Team Member" class="member-img">
+                        <img src="assets/images/team/member1.png" alt="Team Member" class="member-img">
                         <h3>Hein Htet Zaw</h3>
-                        <p class="text-muted">Lead Developer</p>
+                       
+                        <div class="social-links mt-3">
+                            <a href="https://github.com/SinbadTF" class="text-light mx-2"><i class="fab fa-github"></i></a>
+                            <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-member">
+                        <img src="assets/images/team/member2.png" alt="Team Member" class="member-img">
+                        <h3>Htet Yupar Tun</h3>
+                        
                         <div class="social-links mt-3">
                             <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg col-md-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="team-member">
-                        <img src="assets/images/team/member2.jpg" alt="Team Member" class="member-img">
-                        <h3>Aung Kaung Myat</h3>
-                        <p class="text-muted">Backend Developer</p>
+                        <img src="assets/images/team/member3.png" alt="Team Member" class="member-img">
+                        <h3>Chaw Su Thwe</h3>
+                        
                         <div class="social-links mt-3">
                             <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg col-md-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="team-member">
-                        <img src="assets/images/team/member3.jpg" alt="Team Member" class="member-img">
-                        <h3>Htet Myat Aung</h3>
-                        <p class="text-muted">Frontend Developer</p>
+                        <img src="assets/images/team/member4.png" alt="Team Member" class="member-img">
+                        <h3>Yoon Wati Khin</h3>
+                        
                         <div class="social-links mt-3">
                             <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-lg col-md-4" data-aos="fade-up" data-aos-delay="400">
                     <div class="team-member">
-                        <img src="assets/images/team/member4.jpg" alt="Team Member" class="member-img">
-                        <h3>Thant Zin Oo</h3>
-                        <p class="text-muted">UI/UX Designer</p>
+                        <img src="assets/images/team/member5.png" alt="Team Member" class="member-img">
+                        <h3>Htet Mon Myint</h3>
+                       
                         <div class="social-links mt-3">
                             <a href="#" class="text-light mx-2"><i class="fab fa-github"></i></a>
                             <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
